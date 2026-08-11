@@ -1,0 +1,105 @@
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 700px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0,0,0,.3);
+}
+
+.register-card h2 {
+  text-align: center;
+  color:#07575A;
+  margin-bottom: 5px;
+}
+
+.register-card p {
+  text-align: center;
+  color: gray;
+  margin-bottom: 25px;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: .3s;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  border-color: #25abb0;
+  box-shadow: 0 0 6px #07575A;
+}
+
+.input-group span {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.show-pass {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg,#F5B942,#f3c569);
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: .95;
+  background: #07575A;
+
+}
+
+@media(max-width:768px){
+  .row{
+    flex-direction:column;
+  }
+
+  .register-card{
+    padding:25px;
+  }
+}

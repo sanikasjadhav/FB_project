@@ -1,0 +1,119 @@
+/* Navbar */
+
+.navbar{
+    height:80px;
+    background:#F5B73A;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;   /* Centers logo vertically */
+    padding:0 40px;       /* Remove top/bottom padding */
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    height:500%;
+}
+
+.logo img{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+    margin:0;
+    padding:0;
+    background:transparent;
+    transform:scale(1.05);
+}
+.logo img:hover{
+    transform:scale(1.20);
+}
+
+.logo h2{
+    margin-left:12px;
+    margin-top:0;
+    color:#135255;
+    margin-bottom:0;
+    line-height:1.1;
+}
+
+.logo-text p{
+    margin:2px 0 0;
+    color:#135255;
+    font-size:25px;
+    font-weight:600;
+}
+
+/* Navigation */
+
+.nav-links{
+    display:flex;
+    gap:30px;
+    list-style:none;
+}
+
+.nav-links li a{
+    text-decoration:none;
+    color:#135255;
+    font-size:17px;
+    font-weight:600;
+    padding:10px 16px;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active{
+    background:#ffffff;
+    color:#07575A;
+}
+
+/* Button */
+
+.download-btn{
+    background:#07575A;
+    color:#fff;
+    border:none;
+    padding:12px 24px;
+    border-radius:25px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.download-btn:hover{
+    background:#0b7c80;
+    transform:translateY(-2px);
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+.navbar{
+    padding:0 20px;
+}
+
+.logo img{
+    width:60px;
+    height:60px;
+}
+
+.logo-text h2{
+    font-size:22px;
+}
+
+.logo-text p{
+    font-size:12px;
+}
+
+.nav-links{
+    display:none;
+}
+
+.download-btn{
+    padding:10px 18px;
+}
+}
