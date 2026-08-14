@@ -283,3 +283,80 @@ class StudentLoginView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+# ---------------- Admin Login ----------------
+
+
+from tables.models import Admin
+
+
+class AdminLoginView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email and Password are required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            admin = Admin.objects.get(email=email)
+
+        except Admin.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin email not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if admin.user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin account is not connected to a login account."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        user = authenticate(
+            username=admin.user.username,
+            password=password
+        )
+
+        if user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid password."
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "success": True,
+                "message": "Admin Login Successful",
+
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+
+                "admin": {
+                    "id": admin.id,
+                    "name": admin.name,
+                    "email": admin.email,
+                    "phone": admin.phone
+                }
+            },
+            status=status.HTTP_200_OK
+        )

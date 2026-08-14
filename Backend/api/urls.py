@@ -1,26 +1,68 @@
 from django.urls import path
-from .views import (
-    AdminListCreateView, AdminDetailView,
-    StudentListCreateView, StudentDetailView, StudentRegisterView,
-    StudentLoginView,
-    CategoryListCreateView, CategoryDetailView,
-    CourseListCreateView, CourseDetailView,
-    BatchListCreateView, BatchDetailView,
-    EnrollmentListCreateView, EnrollmentDetailView,
-    PaymentListCreateView, PaymentDetailView,
-    CourseVideoListCreateView, CourseVideoDetailView,
-    StudyMaterialListCreateView, StudyMaterialDetailView,
-    CertificateListCreateView, CertificateDetailView,
-    FeedbackListCreateView, FeedbackDetailView,
-    GalleryListCreateView, GalleryDetailView,
-    ContactUsListCreateView, ContactUsDetailView,
-)
 
+from .views import (
+    AdminListCreateView,
+    AdminDetailView,
+    AdminLoginView,
+
+    StudentListCreateView,
+    StudentDetailView,
+    StudentRegisterView,
+    StudentLoginView,
+
+    CategoryListCreateView,
+    CategoryDetailView,
+
+    CourseListCreateView,
+    CourseDetailView,
+
+    BatchListCreateView,
+    BatchDetailView,
+
+    EnrollmentListCreateView,
+    EnrollmentDetailView,
+
+    PaymentListCreateView,
+    PaymentDetailView,
+
+    CourseVideoListCreateView,
+    CourseVideoDetailView,
+
+    StudyMaterialListCreateView,
+    StudyMaterialDetailView,
+
+    CertificateListCreateView,
+    CertificateDetailView,
+
+    FeedbackListCreateView,
+    FeedbackDetailView,
+
+    GalleryListCreateView,
+    GalleryDetailView,
+
+    ContactUsListCreateView,
+    ContactUsDetailView,
+)
 urlpatterns = [
     # Admin
-    path("admins/", AdminListCreateView.as_view(), name="admin-list"),
-    path("admins/<int:pk>/", AdminDetailView.as_view(), name="admin-detail"),
+    # Admin
+    path(
+        "admins/",
+        AdminListCreateView.as_view(),
+        name="admin-list"
+    ),
 
+    path(
+        "admins/<int:pk>/",
+        AdminDetailView.as_view(),
+        name="admin-detail"
+    ),
+
+    path(
+        "admin-login/",
+        AdminLoginView.as_view(),
+        name="admin-login"
+    ),
     # Student
     path("register/",StudentRegisterView.as_view(),name="student-register"),
     path("login/", StudentLoginView.as_view(), name="student-login"),
