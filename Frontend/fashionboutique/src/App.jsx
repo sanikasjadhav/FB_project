@@ -13,6 +13,11 @@ import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 
 import StudentDashboard from "./pages/StudentDashboard";
+import AdminLogin from "./pages/AdminLogin";
+
+// Admin Dashboard
+// Uncomment this after creating AdminDashboard.jsx
+// import AdminDashboard from "./pages/AdminDashboard";
 
 
 function App() {
@@ -20,22 +25,30 @@ function App() {
   const location = useLocation();
 
   /*
-    Dashboard pages
+    ================================
+    DASHBOARD PAGES
+    ================================
 
-    Navbar and Footer will be hidden
-    on these pages.
+    Navbar and Footer are hidden
+    on student/admin dashboard pages.
   */
 
   const dashboardPages = [
-    "/dashboard",
+    "/student-dashboard",
+
+    // Student dashboard pages
     "/mycourses",
     "/online",
     "/offline",
     "/payment",
     "/quiz",
     "/certificate",
-    "/profile"
+    "/profile",
+
+    // Admin pages
+    "/admin-dashboard"
   ];
+
 
   const isDashboardPage =
     dashboardPages.includes(location.pathname);
@@ -56,6 +69,10 @@ function App() {
           ========================= */}
 
       <Routes>
+
+        {/* =========================
+            WEBSITE PAGES
+            ========================= */}
 
         {/* Home */}
         <Route
@@ -92,14 +109,20 @@ function App() {
         />
 
 
-        {/* Login */}
+        {/* =========================
+            STUDENT LOGIN
+            ========================= */}
+
         <Route
           path="/login"
           element={<Login />}
         />
 
 
-        {/* Registration */}
+        {/* =========================
+            STUDENT REGISTRATION
+            ========================= */}
+
         <Route
           path="/registration"
           element={<Registration />}
@@ -111,18 +134,16 @@ function App() {
             ========================= */}
 
         <Route
-          path="/dashboard"
+          path="/student-dashboard"
           element={<StudentDashboard />}
         />
 
 
         {/* =========================
-            DASHBOARD OTHER PAGES
+            STUDENT DASHBOARD PAGES
             ========================= */}
 
-        {/* Add these components later */}
-
-        {/* 
+        {/*
         <Route
           path="/mycourses"
           element={<MyCourses />}
@@ -158,6 +179,32 @@ function App() {
           element={<Profile />}
         />
         */}
+
+
+        {/* =========================
+            ADMIN LOGIN
+            ========================= */}
+
+        <Route
+          path="/admin-login"
+          element={<AdminLogin />}
+        />
+
+
+        {/* =========================
+            ADMIN DASHBOARD
+            ========================= */}
+
+        {/*
+        Uncomment after creating
+        AdminDashboard.jsx
+
+        <Route
+          path="/admin-dashboard"
+          element={<AdminDashboard />}
+        />
+        */}
+
 
       </Routes>
 
