@@ -1,0 +1,439 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.online-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #f4f6f6;
+  padding: 35px 45px;
+  font-family: Arial, sans-serif;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.online-header {
+  width: 100%;
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 30px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.online-header h1 {
+  color: #063b3d;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.online-header p {
+  color: #777;
+  font-size: 15px;
+}
+
+.back-dashboard {
+  text-decoration: none;
+  background: #f5b942;
+  color: #063b3d;
+
+  padding: 12px 22px;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  transition: 0.3s;
+}
+
+.back-dashboard:hover {
+  background: #063b3d;
+  color: white;
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+.online-stats {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 22px;
+
+  margin-bottom: 35px;
+}
+
+.online-stat {
+  background: white;
+
+  min-height: 125px;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  border-left: 5px solid #f5b942;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.online-stat h2 {
+  color: #063b3d;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.online-stat p {
+  color: #777;
+  font-size: 14px;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.classes-section {
+  width: 100%;
+}
+
+.section-title {
+  margin-bottom: 22px;
+}
+
+.section-title h2 {
+  color: #063b3d;
+  font-size: 25px;
+  margin-bottom: 6px;
+}
+
+.section-title p {
+  color: #777;
+  font-size: 14px;
+}
+
+
+/* =========================
+   CLASSES GRID
+========================= */
+
+.classes-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 25px;
+}
+
+
+/* =========================
+   CLASS CARD
+========================= */
+
+.class-card {
+  width: 100%;
+
+  background: white;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.class-image {
+  width: 100%;
+  height: 190px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: #ddd;
+}
+
+.class-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.class-status {
+  position: absolute;
+
+  top: 14px;
+  right: 14px;
+
+  background: #f5b942;
+  color: #063b3d;
+
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: bold;
+}
+
+.completed-status {
+  background: #063b3d;
+  color: white;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.class-content {
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.class-content h3 {
+  color: #063b3d;
+
+  font-size: 20px;
+
+  line-height: 1.35;
+
+  margin-bottom: 13px;
+
+  min-height: 54px;
+}
+
+.instructor,
+.duration {
+  color: #777;
+
+  font-size: 13px;
+
+  margin-bottom: 9px;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.class-progress-title {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-top: 8px;
+
+  margin-bottom: 7px;
+}
+
+.class-progress-title span {
+  color: #555;
+
+  font-size: 13px;
+}
+
+.class-progress-title strong {
+  color: #063b3d;
+
+  font-size: 13px;
+}
+
+.class-content progress {
+  width: 100%;
+
+  height: 8px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  margin-bottom: 18px;
+}
+
+.class-content progress::-webkit-progress-bar {
+  background: #e5e5e5;
+
+  border-radius: 10px;
+}
+
+.class-content progress::-webkit-progress-value {
+  background: #f5b942;
+
+  border-radius: 10px;
+}
+
+.class-content progress::-moz-progress-bar {
+  background: #f5b942;
+
+  border-radius: 10px;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.watch-btn {
+  width: 100%;
+
+  min-height: 42px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.watch-btn:hover {
+  background: #063b3d;
+
+  color: white;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media screen and (max-width: 1100px) {
+
+  .online-page {
+    padding: 30px;
+  }
+
+  .online-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .classes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media screen and (max-width: 700px) {
+
+  .online-page {
+    padding: 20px 15px;
+  }
+
+  .online-header {
+    padding: 20px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .online-header h1 {
+    font-size: 27px;
+  }
+
+  .back-dashboard {
+    width: 100%;
+
+    text-align: center;
+  }
+
+  .online-stats {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .classes-grid {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media screen and (max-width: 400px) {
+
+  .online-page {
+    padding: 15px 10px;
+  }
+
+  .online-header {
+    padding: 18px;
+  }
+
+  .online-stat {
+    padding: 20px;
+  }
+
+  .class-content {
+    padding: 18px;
+  }
+
+}

@@ -1,9 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./StudentDashboard.css";
+import { useState } from "react";
 
 function StudentDashboard() {
+  const [student, setStudent] = useState(() => {
+            const savedStudent = localStorage.getItem("student");
+
+            return savedStudent
+              ? JSON.parse(savedStudent)
+              : null;
+            });
   return (
+
     <div className="dashboard">
 
       {/* SIDEBAR */}
@@ -46,7 +55,9 @@ function StudentDashboard() {
         <div className="welcome">
 
           <div>
-            <h1>Hello, Sanika </h1>
+            
+            <h1>Hello,{" "}
+          {student?.first_name || "Student"} 👋</h1>
 
             <p>
               Welcome to your Fashion Boutique Learning Dashboard.
