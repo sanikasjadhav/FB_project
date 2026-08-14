@@ -18,6 +18,7 @@ from tables.models import (
 from .serializers import (
     AdminSerializer,
     StudentSerializer,
+    StudentRegisterSerializer,
     CategorySerializer,
     CourseSerializer,
     BatchSerializer,
@@ -55,6 +56,11 @@ class StudentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     lookup_field= "pk"
+
+# ---------------- Student Registration ----------------
+class StudentRegisterView(generics.CreateAPIView):
+
+    serializer_class = StudentRegisterSerializer
 
 
 # ---------------- Category ----------------
@@ -190,57 +196,90 @@ class ContactUsDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
+from django.contrib.auth import authenticate
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from FB_project.models import Student
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from tables.models import Student
 
 
 class StudentLoginView(APIView):
+
     def post(self, request):
+
         email = request.data.get("email")
         password = request.data.get("password")
 
+        # Check required fields
         if not email or not password:
             return Response(
                 {
                     "success": False,
                     "message": "Email and Password are required."
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Find student by email
         try:
             student = Student.objects.get(email=email)
-
-            if student.password == password:
-                return Response(
-                    {
-                        "success": True,
-                        "message": "Login Successful",
-                        "student": {
-                            "id": student.id,
-                            "first_name": student.first_name,
-                            "last_name": student.last_name,
-                            "email": student.email,
-                        },
-                    },
-                    status=status.HTTP_200_OK,
-                )
-
-            return Response(
-                {
-                    "success": False,
-                    "message": "Invalid Password"
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
         except Student.DoesNotExist:
             return Response(
                 {
                     "success": False,
-                    "message": "Email not found"
+                    "message": "Email not found."
                 },
-                status=status.HTTP_404_NOT_FOUND,
+                status=status.HTTP_404_NOT_FOUND
             )
+
+        # Make sure Student has a Django User
+        if student.user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Student account is not connected to a login account."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Authenticate using Django's secure password system
+        user = authenticate(
+            username=student.user.username,
+            password=password
+        )
+
+        # Invalid password
+        if user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid password."
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Create JWT tokens
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "success": True,
+                "message": "Login Successful",
+
+                "access": str(refresh.access_token),
+
+                "refresh": str(refresh),
+
+                "student": {
+                    "id": student.id,
+                    "first_name": student.first_name,
+                    "last_name": student.last_name,
+                    "email": student.email
+                }
+            },
+            status=status.HTTP_200_OK
+        )

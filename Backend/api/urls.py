@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
     AdminListCreateView, AdminDetailView,
-    StudentListCreateView, StudentDetailView,
+    StudentListCreateView, StudentDetailView, StudentRegisterView,
+    StudentLoginView,
     CategoryListCreateView, CategoryDetailView,
     CourseListCreateView, CourseDetailView,
     BatchListCreateView, BatchDetailView,
@@ -14,7 +15,6 @@ from .views import (
     GalleryListCreateView, GalleryDetailView,
     ContactUsListCreateView, ContactUsDetailView,
 )
-from .views import StudentLoginView
 
 urlpatterns = [
     # Admin
@@ -22,6 +22,7 @@ urlpatterns = [
     path("admins/<int:pk>/", AdminDetailView.as_view(), name="admin-detail"),
 
     # Student
+    path("register/",StudentRegisterView.as_view(),name="student-register"),
     path("login/", StudentLoginView.as_view(), name="student-login"),
     path("students/", StudentListCreateView.as_view(), name="student-list"),
     path("students/<int:pk>/", StudentDetailView.as_view(), name="student-detail"),
