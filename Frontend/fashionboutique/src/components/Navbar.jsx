@@ -24,11 +24,26 @@ function Navbar() {
         <li><NavLink to="/contact">Contact</NavLink></li>
       </ul>
 
-      {/* Login */}
-      <Link to="/login">
-        <button className="download-btn">Login</button>
-      </Link>
+   
+      {/* Login Buttons */}
+      {/* Login Buttons */}
+      <div className="login-buttons">
 
+          {/* Student Login */}
+          <Link to="/login">
+              <button className="download-btn">
+                  Login
+              </button>
+          </Link>
+
+          {/* Admin Login */}
+          <Link to="/admin-login">
+              <button className="admin-login-btn">
+                  Admin Login
+              </button>
+          </Link>
+
+      </div>
     </nav>
   );
 }

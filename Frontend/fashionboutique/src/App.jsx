@@ -14,7 +14,8 @@ import Registration from "./pages/Registration";
 
 import StudentDashboard from "./pages/StudentDashboard";
 import AdminLogin from "./pages/AdminLogin";
-
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 // Admin Dashboard
 // Uncomment this after creating AdminDashboard.jsx
 // import AdminDashboard from "./pages/AdminDashboard";
@@ -122,12 +123,20 @@ function App() {
         {/* =========================
             STUDENT REGISTRATION
             ========================= */}
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+        <Route
+            path="/reset-password/:uid/:token"
+            element={<ResetPassword />}
+        />
 
         <Route
           path="/registration"
           element={<Registration />}
         />
-
+        
 
         {/* =========================
             STUDENT DASHBOARD

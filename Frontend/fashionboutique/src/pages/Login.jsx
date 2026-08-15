@@ -76,7 +76,7 @@ function Login() {
         alert("Login Successful!");
 
         // Go to dashboard
-        navigate("/dashboard");
+        navigate("/student-dashboard");
 
       } else {
         setError(
@@ -111,6 +111,7 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
 
+          {/* Email */}
           <input
             type="email"
             name="email"
@@ -119,6 +120,7 @@ function Login() {
             onChange={handleChange}
           />
 
+          {/* Password */}
           <input
             type="password"
             name="password"
@@ -127,6 +129,14 @@ function Login() {
             onChange={handleChange}
           />
 
+          {/* Forgot Password */}
+          <div className="forgot-password">
+            <Link to="/forgot-password">
+              Forgot Password?
+            </Link>
+          </div>
+
+          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}
@@ -136,6 +146,7 @@ function Login() {
 
         </form>
 
+        {/* Registration */}
         <p>
           Don't have an account?{" "}
 

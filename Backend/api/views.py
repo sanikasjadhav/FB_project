@@ -360,3 +360,132 @@ class AdminLoginView(APIView):
             },
             status=status.HTTP_200_OK
         )
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import User
+
+
+class ForgotPasswordView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+
+        if not email:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            student = Student.objects.get(email=email)
+
+        except Student.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "No student found with this email."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        user = student.user
+
+        if user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Student account is not connected to a login account."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        token = default_token_generator.make_token(user)
+
+        uid = urlsafe_base64_encode(
+            force_bytes(user.pk)
+        )
+
+        reset_link = (
+            f"http://localhost:5173/reset-password/{uid}/{token}"
+        )
+
+        print("\n====================================")
+        print("PASSWORD RESET LINK")
+        print(reset_link)
+        print("====================================\n")
+
+        return Response(
+            {
+                "success": True,
+                "message": "Password reset link generated successfully.",
+                "reset_link": reset_link
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class ResetPasswordView(APIView):
+
+    def post(self, request):
+
+        uid = request.data.get("uid")
+        token = request.data.get("token")
+        new_password = request.data.get("new_password")
+
+        if not uid or not token or not new_password:
+            return Response(
+                {
+                    "success": False,
+                    "message": "UID, token and new password are required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if len(new_password) < 8:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Password must be at least 8 characters."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user_id = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=user_id)
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid reset link."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not default_token_generator.check_token(user, token):
+            return Response(
+                {
+                    "success": False,
+                    "message": "Reset link is invalid or expired."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Password reset successfully. You can now login."
+            },
+            status=status.HTTP_200_OK
+        )

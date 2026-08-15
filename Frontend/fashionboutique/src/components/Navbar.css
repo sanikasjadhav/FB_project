@@ -12,7 +12,7 @@
 .logo{
     display:flex;
     align-items:center;
-    height:500%;
+    
 }
 
 .logo img{
@@ -87,6 +87,35 @@
     background:#0b7c80;
     transform:translateY(-2px);
 }
+/* Login Buttons */
+.login-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-buttons a {
+    text-decoration: none;
+}
+
+/* Admin Login Button */
+.admin-login-btn {
+    background: #07575A;
+    color: #ffffff;
+   
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+
+/* .admin-login-btn:hover {
+    background: #07575A;
+    color: #ffffff;
+    transform: translateY(-2px);
+} */
 
 /* Responsive */
 

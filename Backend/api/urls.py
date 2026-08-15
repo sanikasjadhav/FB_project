@@ -9,6 +9,8 @@ from .views import (
     StudentDetailView,
     StudentRegisterView,
     StudentLoginView,
+    ForgotPasswordView,
+    ResetPasswordView,
 
     CategoryListCreateView,
     CategoryDetailView,
@@ -66,9 +68,11 @@ urlpatterns = [
     # Student
     path("register/",StudentRegisterView.as_view(),name="student-register"),
     path("login/", StudentLoginView.as_view(), name="student-login"),
+    path("forgot-password/",ForgotPasswordView.as_view(), name="forgot-password"),
+    path("reset-password/",ResetPasswordView.as_view(),name="reset-password"),
     path("students/", StudentListCreateView.as_view(), name="student-list"),
     path("students/<int:pk>/", StudentDetailView.as_view(), name="student-detail"),
-
+    
     # Category
     path("categories/", CategoryListCreateView.as_view(), name="category-list"),
     path("categories/<int:pk>/", CategoryDetailView.as_view(), name="category-detail"),
