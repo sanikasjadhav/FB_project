@@ -4,6 +4,9 @@ from .views import (
     AdminListCreateView,
     AdminDetailView,
     AdminLoginView,
+    AdminForgotPasswordView,
+    AdminVerifyOTPView,
+    AdminResetPasswordView,
 
     StudentListCreateView,
     StudentDetailView,
@@ -11,6 +14,7 @@ from .views import (
     StudentLoginView,
     ForgotPasswordView,
     ResetPasswordView,
+    VerifyOTPView,
 
     CategoryListCreateView,
     CategoryDetailView,
@@ -65,11 +69,15 @@ urlpatterns = [
         AdminLoginView.as_view(),
         name="admin-login"
     ),
+    path("admin-forgot-password/", AdminForgotPasswordView.as_view()),
+    path("admin-verify-otp/", AdminVerifyOTPView.as_view()),
+    path("admin-reset-password/", AdminResetPasswordView.as_view()),
     # Student
     path("register/",StudentRegisterView.as_view(),name="student-register"),
     path("login/", StudentLoginView.as_view(), name="student-login"),
     path("forgot-password/",ForgotPasswordView.as_view(), name="forgot-password"),
     path("reset-password/",ResetPasswordView.as_view(),name="reset-password"),
+    path("verify-otp/", VerifyOTPView.as_view(), name="verify-otp"),
     path("students/", StudentListCreateView.as_view(), name="student-list"),
     path("students/<int:pk>/", StudentDetailView.as_view(), name="student-detail"),
     

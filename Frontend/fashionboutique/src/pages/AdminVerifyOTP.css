@@ -1,0 +1,103 @@
+.admin-verify-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #063B3D;
+}
+
+.admin-verify-card {
+  width: 400px;
+  padding: 35px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.admin-verify-card h2 {
+  color: #135255;
+  margin-bottom: 10px;
+}
+
+.admin-verify-card p {
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.admin-email {
+  display: block;
+  color: #135255;
+  margin-bottom: 25px;
+  word-break: break-word;
+}
+
+.admin-otp-input {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.admin-otp-input label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-otp-input input {
+  width: 100%;
+  padding: 13px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 5px;
+}
+
+.admin-verify-card button {
+  width: 100%;
+  padding: 12px;
+  background: #F5B942;
+  color: #135255;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-verify-card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-verify-error {
+  background: #ffe5e5;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.admin-verify-success {
+  background: #e5f7e5;
+  color: #2e7d32;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.admin-back-link {
+  margin-top: 18px;
+}
+
+.admin-back-link a {
+  color: #135255;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-back-link a:hover {
+  text-decoration: underline;
+}

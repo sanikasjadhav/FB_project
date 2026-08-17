@@ -56,7 +56,8 @@ class Student(models.Model):
     )
 
     phone = models.CharField(
-        max_length=15
+        max_length=12,
+        unique=True
     )
 
     gender = models.CharField(

@@ -16,6 +16,11 @@ import StudentDashboard from "./pages/StudentDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AdminForgotPassword from "./pages/AdminForgotPassword";
+import AdminVerifyOTP from "./pages/AdminVerifyOTP";
+import AdminResetPassword from "./pages/AdminResetPassword";
+import AdminDashboard from "./pages/AdminDashboard";
+
 // Admin Dashboard
 // Uncomment this after creating AdminDashboard.jsx
 // import AdminDashboard from "./pages/AdminDashboard";
@@ -198,8 +203,22 @@ function App() {
           path="/admin-login"
           element={<AdminLogin />}
         />
-
-
+        <Route
+          path="/admin-forgot-password"
+          element={<AdminForgotPassword />}
+        />
+        <Route
+          path="/admin-verify-otp"
+          element={<AdminVerifyOTP />}
+        />
+        <Route
+          path="/admin-reset-password"
+          element={<AdminResetPassword />}
+        />
+        <Route
+          path="/admin-dashboard"
+          element={<AdminDashboard />}
+        />
         {/* =========================
             ADMIN DASHBOARD
             ========================= */}

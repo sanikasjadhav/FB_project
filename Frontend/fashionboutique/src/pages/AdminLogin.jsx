@@ -13,6 +13,7 @@ function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -22,11 +23,13 @@ function AdminLogin() {
     setError("");
   };
 
+  // Handle Admin Login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
 
+    // Validation
     if (!formData.email || !formData.password) {
       setError("Please enter email and password.");
       return;
@@ -39,9 +42,11 @@ function AdminLogin() {
         "http://127.0.0.1:8000/api/admin-login/",
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -53,13 +58,15 @@ function AdminLogin() {
 
       console.log("Admin Login Response:", data);
 
+      // Login successful
       if (response.ok && data.success) {
-        // Save JWT tokens
+        // Save JWT access token
         localStorage.setItem(
           "adminAccessToken",
           data.access
         );
 
+        // Save JWT refresh token
         localStorage.setItem(
           "adminRefreshToken",
           data.refresh
@@ -73,19 +80,27 @@ function AdminLogin() {
 
         alert("Admin Login Successful!");
 
-        // Go to Admin Dashboard
+        // Navigate to Admin Dashboard
         navigate("/admin-dashboard");
-      } else {
+      }
+
+      // Login failed
+      else {
         setError(
           data.message || "Admin login failed."
         );
       }
+
     } catch (error) {
-      console.error("Admin login error:", error);
+      console.error(
+        "Admin login error:",
+        error
+      );
 
       setError(
         "Unable to connect to server. Please make sure Django is running."
       );
+
     } finally {
       setLoading(false);
     }
@@ -98,8 +113,11 @@ function AdminLogin() {
 
         <h2>Admin Login</h2>
 
-        <p>Fashion Boutique Administration</p>
+        <p>
+          Fashion Boutique Administration
+        </p>
 
+        {/* Error Message */}
         {error && (
           <div className="admin-login-error">
             {error}
@@ -108,6 +126,7 @@ function AdminLogin() {
 
         <form onSubmit={handleSubmit}>
 
+          {/* Email */}
           <div className="admin-input-group">
 
             <label>Email</label>
@@ -122,6 +141,7 @@ function AdminLogin() {
 
           </div>
 
+          {/* Password */}
           <div className="admin-input-group">
 
             <label>Password</label>
@@ -136,20 +156,36 @@ function AdminLogin() {
 
           </div>
 
+          {/* Forgot Password */}
+          <div className="admin-forgot-password">
+
+            <Link to="/admin-forgot-password">
+              Forgot Password?
+            </Link>
+
+          </div>
+
+          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Admin Login"}
+            {loading
+              ? "Logging in..."
+              : "Admin Login"}
           </button>
 
         </form>
 
+        {/* Student Login */}
         <p className="student-login-link">
+
           Student Login?{" "}
+
           <Link to="/login">
             Login here
           </Link>
+
         </p>
 
       </div>

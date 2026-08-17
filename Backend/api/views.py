@@ -1,4 +1,17 @@
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.cache import cache
+
+import random
+
+from rest_framework_simplejwt.tokens import RefreshToken
 from tables.models import (
     Admin,
     Student,
@@ -196,15 +209,7 @@ class ContactUsDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-from django.contrib.auth import authenticate
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from tables.models import Student
 
 
 class StudentLoginView(APIView):
@@ -306,6 +311,8 @@ class AdminLoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # IMPORTANT:
+        # Search ONLY in Admin table
         try:
             admin = Admin.objects.get(email=email)
 
@@ -318,6 +325,7 @@ class AdminLoginView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+        # Check Admin has Django User account
         if admin.user is None:
             return Response(
                 {
@@ -327,6 +335,7 @@ class AdminLoginView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
+        # Authenticate Admin's Django User
         user = authenticate(
             username=admin.user.username,
             password=password
@@ -341,6 +350,17 @@ class AdminLoginView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
+        # Check account is active
+        if not user.is_active:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin account is inactive."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Generate JWT
         refresh = RefreshToken.for_user(user)
 
         return Response(
@@ -360,13 +380,15 @@ class AdminLoginView(APIView):
             },
             status=status.HTTP_200_OK
         )
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth.models import User
+# ---------------- Student Forgot Password - OTP ----------------
 
+# =========================================================
+# STUDENT FORGOT PASSWORD - SEND OTP
+# =========================================================
+
+# ==============================
+# FORGOT PASSWORD - SEND OTP
+# ==============================
 
 class ForgotPasswordView(APIView):
 
@@ -406,46 +428,152 @@ class ForgotPasswordView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        token = default_token_generator.make_token(user)
+        # Generate 6 digit OTP
+        otp = str(random.randint(100000, 999999))
 
-        uid = urlsafe_base64_encode(
-            force_bytes(user.pk)
+        # Store OTP for 5 minutes
+        cache.set(
+            f"password_otp_{email}",
+            otp,
+            timeout=300
         )
 
-        reset_link = (
-            f"http://localhost:5173/reset-password/{uid}/{token}"
+        # Store email temporarily
+        cache.set(
+            f"password_reset_email_{email}",
+            email,
+            timeout=300
         )
 
-        print("\n====================================")
-        print("PASSWORD RESET LINK")
-        print(reset_link)
-        print("====================================\n")
+        # Send OTP
+        send_mail(
+            "Fashion Boutique - Password Reset OTP",
+
+            f"""Hello {user.first_name},
+
+                Your Fashion Boutique password reset OTP is:
+
+                {otp}
+
+                This OTP is valid for 5 minutes.
+
+                If you did not request a password reset, please ignore this email.
+
+                Regards,
+                Fashion Boutique
+                """,
+
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
 
         return Response(
             {
                 "success": True,
-                "message": "Password reset link generated successfully.",
-                "reset_link": reset_link
+                "message": "OTP sent successfully to your email."
+            },
+            status=status.HTTP_200_OK
+        )
+# =========================================================
+# STUDENT FORGOT PASSWORD - VERIFY OTP
+# =========================================================
+
+# ==============================
+# VERIFY OTP
+# ==============================
+
+class VerifyOTPView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+        otp = request.data.get("otp")
+
+        if not email or not otp:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email and OTP are required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        saved_otp = cache.get(f"password_otp_{email}")
+
+        if saved_otp is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "OTP expired. Please request a new OTP."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if str(otp) != str(saved_otp):
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid OTP."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # OTP is correct
+        cache.set(
+            f"password_otp_verified_{email}",
+            True,
+            timeout=300
+        )
+
+        # Remove OTP so it cannot be reused
+        cache.delete(f"password_otp_{email}")
+
+        return Response(
+            {
+                "success": True,
+                "message": "OTP verified successfully."
             },
             status=status.HTTP_200_OK
         )
 
 
+# =========================================================
+# STUDENT FORGOT PASSWORD - CHANGE PASSWORD
+# =========================================================
+
+# ==============================
+# RESET PASSWORD
+# ==============================
+
 class ResetPasswordView(APIView):
 
     def post(self, request):
 
-        uid = request.data.get("uid")
-        token = request.data.get("token")
+        email = request.data.get("email")
         new_password = request.data.get("new_password")
 
-        if not uid or not token or not new_password:
+        if not email or not new_password:
             return Response(
                 {
                     "success": False,
-                    "message": "UID, token and new password are required."
+                    "message": "Email and new password are required."
                 },
                 status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Check whether OTP was verified
+        verified = cache.get(
+            f"password_otp_verified_{email}"
+        )
+
+        if not verified:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Please verify OTP first."
+                },
+                status=status.HTTP_403_FORBIDDEN
             )
 
         if len(new_password) < 8:
@@ -458,34 +586,250 @@ class ResetPasswordView(APIView):
             )
 
         try:
-            user_id = urlsafe_base64_decode(uid).decode()
-            user = User.objects.get(pk=user_id)
+            student = Student.objects.get(email=email)
 
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except Student.DoesNotExist:
             return Response(
                 {
                     "success": False,
-                    "message": "Invalid reset link."
+                    "message": "Student not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        user = student.user
+
+        if user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Student login account not found."
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        if not default_token_generator.check_token(user, token):
-            return Response(
-                {
-                    "success": False,
-                    "message": "Reset link is invalid or expired."
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
+        # Change password
         user.set_password(new_password)
         user.save()
+
+        # Delete verification status
+        cache.delete(
+            f"password_otp_verified_{email}"
+        )
 
         return Response(
             {
                 "success": True,
-                "message": "Password reset successfully. You can now login."
+                "message": "Password changed successfully. You can now login."
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+
+
+class AdminForgotPasswordView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+
+        if not email:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            admin = Admin.objects.get(email=email)
+
+        except Admin.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin account not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if admin.user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin account is not connected to a login account."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        otp = str(random.randint(100000, 999999))
+
+        cache.set(
+            f"admin_password_otp_{email}",
+            otp,
+            timeout=300
+        )
+
+        send_mail(
+            "Fashion Boutique - Admin Password Reset OTP",
+
+            f"""Hello {admin.name},
+
+Your Fashion Boutique Admin password reset OTP is:
+
+{otp}
+
+This OTP is valid for 5 minutes.
+
+If you did not request a password reset, please ignore this email.
+
+Regards,
+Fashion Boutique
+""",
+
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": "OTP sent successfully to your admin email."
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+
+class AdminVerifyOTPView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+        otp = request.data.get("otp")
+
+        if not email or not otp:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email and OTP are required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        saved_otp = cache.get(
+            f"admin_password_otp_{email}"
+        )
+
+        if saved_otp is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "OTP expired. Please request a new OTP."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if str(otp) != str(saved_otp):
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid OTP."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        cache.set(
+            f"admin_password_otp_verified_{email}",
+            True,
+            timeout=300
+        )
+
+        cache.delete(
+            f"admin_password_otp_{email}"
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": "OTP verified successfully."
+            },
+            status=status.HTTP_200_OK
+        )
+
+class AdminResetPasswordView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+        new_password = request.data.get("new_password")
+
+        if not email or not new_password:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email and new password are required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        verified = cache.get(
+            f"admin_password_otp_verified_{email}"
+        )
+
+        if not verified:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Please verify OTP first."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        if len(new_password) < 8:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Password must be at least 8 characters."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            admin = Admin.objects.get(email=email)
+
+        except Admin.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin account not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if admin.user is None:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Admin login account not found."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        admin.user.set_password(new_password)
+        admin.user.save()
+
+        cache.delete(
+            f"admin_password_otp_verified_{email}"
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": "Admin password changed successfully."
             },
             status=status.HTTP_200_OK
         )
