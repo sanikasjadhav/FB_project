@@ -1,4 +1,6 @@
+from django.contrib import admin
 from django.urls import path
+
 
 from .views import (
     AdminListCreateView,
@@ -15,6 +17,7 @@ from .views import (
     ForgotPasswordView,
     ResetPasswordView,
     VerifyOTPView,
+    StudentPaymentsView,
 
     CategoryListCreateView,
     CategoryDetailView,
@@ -30,6 +33,9 @@ from .views import (
 
     PaymentListCreateView,
     PaymentDetailView,
+
+    CreateRazorpayOrderView,
+    VerifyRazorpayPaymentView,
 
     CourseVideoListCreateView,
     CourseVideoDetailView,
@@ -96,26 +102,56 @@ urlpatterns = [
     # Enrollment
     path("enrollments/", EnrollmentListCreateView.as_view(), name="enrollment-list"),
     path("enrollments/<int:pk>/", EnrollmentDetailView.as_view(), name="enrollment-detail"),
+        path(
+            "student-payments/",
+            StudentPaymentsView.as_view(),
+            name="student-payments"
+        ),     path(
+        "create-razorpay-order/",
+        CreateRazorpayOrderView.as_view(),
+        name="create-razorpay-order"
+    ),
 
+    path(
+        "verify-razorpay-payment/",
+        VerifyRazorpayPaymentView.as_view(),
+        name="verify-razorpay-payment"
+    ),
+    
     # Payment
     path("payments/", PaymentListCreateView.as_view(), name="payment-list"),
     path("payments/<int:pk>/", PaymentDetailView.as_view(), name="payment-detail"),
 
     # Course Video
-    path("videos/", CourseVideoListCreateView.as_view(), name="video-list"),
-    path("videos/<int:pk>/", CourseVideoDetailView.as_view(), name="video-detail"),
+    path(
+        "course-videos/",
+        CourseVideoListCreateView.as_view(),
+        name="course-videos"
+    ),
+
+    path(
+        "course-videos/<int:pk>/",
+        CourseVideoDetailView.as_view(),
+        name="course-video-detail"
+    ),
 
     # Study Material
-    path("materials/", StudyMaterialListCreateView.as_view(), name="material-list"),
-    path("materials/<int:pk>/", StudyMaterialDetailView.as_view(), name="material-detail"),
+    path(
+    "study-materials/",
+    StudyMaterialListCreateView.as_view(),
+    ),
 
+    path(
+        "study-materials/<int:pk>/",
+        StudyMaterialDetailView.as_view(),
+    ),
     # Certificate
     path("certificates/", CertificateListCreateView.as_view(), name="certificate-list"),
     path("certificates/<int:pk>/", CertificateDetailView.as_view(), name="certificate-detail"),
 
     # Feedback
-    path("feedbacks/", FeedbackListCreateView.as_view(), name="feedback-list"),
-    path("feedbacks/<int:pk>/", FeedbackDetailView.as_view(), name="feedback-detail"),
+    path("feedback/", FeedbackListCreateView.as_view(), name="feedback-list"),
+    path("feedback/<int:pk>/", FeedbackDetailView.as_view(), name="feedback-detail"),
 
     # Gallery
     path("gallery/", GalleryListCreateView.as_view(), name="gallery-list"),
@@ -125,3 +161,8 @@ urlpatterns = [
     path("contacts/", ContactUsListCreateView.as_view(), name="contact-list"),
     path("contacts/<int:pk>/", ContactUsDetailView.as_view(), name="contact-detail"),
 ]
+
+# =========================================================
+# MEDIA FILES
+# =========================================================
+

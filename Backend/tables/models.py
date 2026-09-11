@@ -83,12 +83,11 @@ class Category(models.Model):
 # ----------------------
 # Course
 # ----------------------
-class Course(models.Model):
+# ----------------------
+# Course
+# ----------------------
 
-    MODE_CHOICES = (
-        ("Online", "Online"),
-        ("Offline", "Offline"),
-    )
+class Course(models.Model):
 
     STATUS_CHOICES = (
         ("Active", "Active"),
@@ -101,12 +100,21 @@ class Course(models.Model):
         related_name="courses"
     )
 
-    course_name = models.CharField(max_length=200)
+    course_name = models.CharField(
+        max_length=200
+    )
+
     description = models.TextField()
-    duration = models.CharField(max_length=100)
-    fees = models.DecimalField(max_digits=10, decimal_places=2)
-    mode = models.CharField(max_length=20, choices=MODE_CHOICES)
-    # thumbnail = models.ImageField(upload_to="course_thumbnail/")
+
+    duration = models.CharField(
+        max_length=100
+    )
+
+    fees = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -115,8 +123,6 @@ class Course(models.Model):
 
     def __str__(self):
         return self.course_name
-
-
 # ----------------------
 # Batch
 # ----------------------
@@ -150,7 +156,16 @@ class Batch(models.Model):
 # ----------------------
 # Enrollment
 # ----------------------
+# ----------------------
+# Enrollment
+# ----------------------
+
 class Enrollment(models.Model):
+
+    MODE_CHOICES = (
+        ("Online", "Online"),
+        ("Offline", "Offline"),
+    )
 
     STATUS_CHOICES = (
         ("Pending", "Pending"),
@@ -179,7 +194,17 @@ class Enrollment(models.Model):
         related_name="enrollments"
     )
 
-    enrollment_date = models.DateField(auto_now_add=True)
+    # Student chooses Online or Offline during enrollment
+    mode = models.CharField(
+        max_length=20,
+        choices=MODE_CHOICES,
+        null=True,
+        blank=True
+    )
+
+    enrollment_date = models.DateField(
+        auto_now_add=True
+    )
 
     status = models.CharField(
         max_length=20,
@@ -189,89 +214,93 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.course}"
-
-
 # ----------------------
 # Payment
 # ----------------------
+
 class Payment(models.Model):
 
-    PAYMENT_STATUS = (
-        ("Pending", "Pending"),
-        ("Successful", "Successful"),
-        ("Failed", "Failed"),
-    )
-
-    enrollment = models.OneToOneField(
-        Enrollment,
+    student = models.ForeignKey(
+        Student,
         on_delete=models.CASCADE,
-        related_name="payment"
+        null=True,
+        blank=True,
+        related_name="payments"
     )
-
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-
-    payment_method = models.CharField(max_length=50)
-
-    transaction_id = models.CharField(
-        max_length=100,
-        unique=True
-    )
-
-    payment_status = models.CharField(
-        max_length=20,
-        choices=PAYMENT_STATUS
-    )
-
-    payment_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.transaction_id
-
-
-# ----------------------
-# Course Video
-# ----------------------
-class CourseVideo(models.Model):
 
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        related_name="videos"
+        null=True,
+        blank=True,
+        related_name="payments"
     )
 
-    title = models.CharField(max_length=200)
+    enrollment = models.ForeignKey(
+        Enrollment,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="payments"
+    )
 
-    youtube_url = models.URLField()
+    course_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
 
-    description = models.TextField()
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
 
-    video_order = models.PositiveIntegerField()
+    razorpay_order_id = models.CharField(
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True
+    )
+
+    razorpay_payment_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    razorpay_signature = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=50,
+        default="created"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
-        return self.title
-
-
+        return f"{self.course_name} - {self.amount}"
 # ----------------------
 # Study Material
 # ----------------------
 from django.core.validators import MaxValueValidator, MinValueValidator
-class StudyMaterial(models.Model):
 
+class StudyMaterial(models.Model):
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        related_name="materials"
+        related_name="study_materials"
     )
-
     title = models.CharField(max_length=200)
-
-    file = models.FileField(upload_to="study_material/")
+    file = models.FileField(upload_to="study_material")
 
     def __str__(self):
         return self.title
-
-
-    from django.core.validators import MaxValueValidator, MinValueValidator
 
 # ----------------------
 # Certificate
@@ -299,7 +328,35 @@ class Certificate(models.Model):
 
     def __str__(self):
         return self.certificate_number
+# ----------------------
+# Course Video
+# ----------------------
 
+class CourseVideo(models.Model):
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="videos"
+    )
+
+    title = models.CharField(
+        max_length=200
+    )
+
+    youtube_url = models.URLField()
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    video_order = models.PositiveIntegerField(
+        default=1
+    )
+
+    def __str__(self):
+        return f"{self.course.course_name} - {self.title}"
 
 # ----------------------
 # Feedback

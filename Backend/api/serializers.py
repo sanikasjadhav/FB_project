@@ -102,9 +102,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
 # ---------------- Course ----------------
 
+# ---------------- Course ----------------
+
 class CourseSerializer(serializers.ModelSerializer):
 
-    category = CategorySerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all()
+    )
 
     class Meta:
         model = Course
@@ -119,38 +123,142 @@ class BatchSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# ---------------- Enrollment ----------------
-
 class EnrollmentSerializer(serializers.ModelSerializer):
+
+    student_name = serializers.SerializerMethodField()
+    course_name = serializers.SerializerMethodField()
+    batch_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Enrollment
-        fields = "__all__"
+        fields = [
+            "id",
+            "student",
+            "student_name",
+            "course",
+            "course_name",
+            "batch",
+            "batch_name",
+            "mode",
+            "enrollment_date",
+            "status",
+        ]
 
+    def get_student_name(self, obj):
+        return f"{obj.student.first_name} {obj.student.last_name}"
 
-# ---------------- Payment ----------------
+    def get_course_name(self, obj):
+        return obj.course.course_name
+
+    def get_batch_name(self, obj):
+        if obj.batch:
+            return obj.batch.batch_name
+        return "No Batch"
 
 class PaymentSerializer(serializers.ModelSerializer):
+
+    student_name = serializers.SerializerMethodField()
+    course_name_display = serializers.SerializerMethodField()
+
     class Meta:
         model = Payment
-        fields = "__all__"
+        fields = [
+            "id",
+            "student",
+            "student_name",
+            "course",
+            "enrollment",
+            "course_name",
+            "course_name_display",
+            "amount",
+            "razorpay_order_id",
+            "razorpay_payment_id",
+            "razorpay_signature",
+            "status",
+            "created_at",
+        ]
 
+    def get_student_name(self, obj):
 
+        if obj.student:
+            return (
+                f"{obj.student.first_name} "
+                f"{obj.student.last_name}"
+            )
+
+        return "-"
+
+    def get_course_name_display(self, obj):
+
+        if obj.course:
+            return obj.course.course_name
+
+        return obj.course_name or "-"
 # ---------------- Course Video ----------------
 
 class CourseVideoSerializer(serializers.ModelSerializer):
+
+    course_name = serializers.CharField(
+        source="course.course_name",
+        read_only=True
+    )
+
     class Meta:
         model = CourseVideo
-        fields = "__all__"
+        fields = [
+            "id",
+            "course",
+            "course_name",
+            "title",
+            "youtube_url",
+            "description",
+            "video_order",
+        ]
+# ---------------- Study Material ----------------
 
+# ---------------- Study Material ----------------
 
 # ---------------- Study Material ----------------
 
 class StudyMaterialSerializer(serializers.ModelSerializer):
+
+    course_name = serializers.CharField(
+        source="course.course_name",
+        read_only=True
+    )
+
+    file = serializers.FileField(required=True)
+
     class Meta:
         model = StudyMaterial
-        fields = "__all__"
 
+        fields = [
+            "id",
+            "course",
+            "course_name",
+            "title",
+            "file",
+        ]
 
+    def to_representation(self, instance):
+
+        data = super().to_representation(instance)
+
+        if instance.file:
+
+            request = self.context.get("request")
+
+            if request:
+                data["file"] = request.build_absolute_uri(
+                    instance.file.url
+                )
+            else:
+                data["file"] = instance.file.url
+
+        else:
+            data["file"] = None
+
+        return data
 # ---------------- Certificate ----------------
 
 class CertificateSerializer(serializers.ModelSerializer):
@@ -161,11 +269,34 @@ class CertificateSerializer(serializers.ModelSerializer):
 
 # ---------------- Feedback ----------------
 
+# ---------------- Feedback ----------------
+
 class FeedbackSerializer(serializers.ModelSerializer):
+
+    student_name = serializers.SerializerMethodField()
+    course_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Feedback
-        fields = "__all__"
+        fields = [
+            "id",
+            "student",
+            "student_name",
+            "course",
+            "course_name",
+            "rating",
+            "feedback",
+        ]
 
+    def get_student_name(self, obj):
+        if obj.student:
+            return f"{obj.student.first_name} {obj.student.last_name}"
+        return "-"
+
+    def get_course_name(self, obj):
+        if obj.course:
+            return obj.course.course_name
+        return "-"
 
 # ---------------- Gallery ----------------
 

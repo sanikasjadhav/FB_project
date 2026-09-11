@@ -2,14 +2,19 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from decimal import Decimal
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.cache import cache
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 import random
+import razorpay
+import hmac
+import hashlib
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from tables.models import (
@@ -138,9 +143,25 @@ class PaymentDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 # ---------------- Course Video ----------------
 class CourseVideoListCreateView(generics.ListCreateAPIView):
-    queryset = CourseVideo.objects.all()
+
     serializer_class = CourseVideoSerializer
 
+    def get_queryset(self):
+
+        queryset = CourseVideo.objects.all().order_by(
+            "video_order"
+        )
+
+        course_id = self.request.query_params.get(
+            "course"
+        )
+
+        if course_id:
+            queryset = queryset.filter(
+                course_id=course_id
+            )
+
+        return queryset
 
 class CourseVideoDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CourseVideo.objects.all()
@@ -149,17 +170,50 @@ class CourseVideoDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # ---------------- Study Material ----------------
+# ---------------- Study Material ----------------
+# =========================================================
+# STUDY MATERIAL
+# =========================================================
+
 class StudyMaterialListCreateView(generics.ListCreateAPIView):
-    queryset = StudyMaterial.objects.all()
+
+    queryset = StudyMaterial.objects.select_related("course").all()
+
     serializer_class = StudyMaterialSerializer
+
+    parser_classes = [
+        MultiPartParser,
+        FormParser,
+    ]
+
+    def get_queryset(self):
+
+        queryset = StudyMaterial.objects.select_related(
+            "course"
+        ).all()
+
+        course_id = self.request.query_params.get("course")
+
+        if course_id:
+            queryset = queryset.filter(
+                course_id=course_id
+            )
+
+        return queryset.order_by("id")
 
 
 class StudyMaterialDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = StudyMaterial.objects.all()
+
+    queryset = StudyMaterial.objects.select_related(
+        "course"
+    ).all()
+
     serializer_class = StudyMaterialSerializer
 
-    lookup_field= "pk"
-
+    parser_classes = [
+        MultiPartParser,
+        FormParser,
+    ]
 # ---------------- Certificate ----------------
 class CertificateListCreateView(generics.ListCreateAPIView):
     queryset = Certificate.objects.all()
@@ -198,15 +252,17 @@ class GalleryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 # ---------------- Contact ----------------
 class ContactUsListCreateView(generics.ListCreateAPIView):
-    queryset = ContactUs.objects.all()
+
+    queryset = ContactUs.objects.all().order_by("-id")
+
     serializer_class = ContactUsSerializer
 
 
 class ContactUsDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ContactUs.objects.all()
-    serializer_class = ContactUsSerializer
-    lookup_field= "pk"
 
+    queryset = ContactUs.objects.all()
+
+    serializer_class = ContactUsSerializer
 
 
 
@@ -830,6 +886,437 @@ class AdminResetPasswordView(APIView):
             {
                 "success": True,
                 "message": "Admin password changed successfully."
+            },
+            status=status.HTTP_200_OK
+        )
+    
+
+
+
+
+
+    
+    
+# =========================================================
+# RAZORPAY CREATE ORDER
+# =========================================================
+
+# =========================================================
+# RAZORPAY CREATE ORDER
+# =========================================================
+
+class CreateRazorpayOrderView(APIView):
+
+    def post(self, request):
+
+        try:
+
+            amount = request.data.get("amount")
+            course_id = request.data.get("course_id")
+            course_name = request.data.get("course_name")
+            student_id = request.data.get("student_id")
+            mode = request.data.get("mode")
+            batch_id = request.data.get("batch_id")
+
+            print("========== RAZORPAY ORDER ==========")
+            print("Amount:", amount)
+            print("Course ID:", course_id)
+            print("Course:", course_name)
+            print("Student ID:", student_id)
+            print("Mode:", mode)
+            print("Batch ID:", batch_id)
+
+            # -----------------------------------------
+            # REQUIRED DATA
+            # -----------------------------------------
+
+            if not amount:
+                return Response(
+                    {
+                        "success": False,
+                        "error": "Amount is required"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if not course_id:
+                return Response(
+                    {
+                        "success": False,
+                        "error": "Course ID is required"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if not student_id:
+                return Response(
+                    {
+                        "success": False,
+                        "error": "Student ID is required"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # -----------------------------------------
+            # FIND STUDENT
+            # -----------------------------------------
+
+            try:
+                student = Student.objects.get(
+                    id=student_id
+                )
+            except Student.DoesNotExist:
+
+                return Response(
+                    {
+                        "success": False,
+                        "error": "Student not found"
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            # -----------------------------------------
+            # FIND COURSE
+            # -----------------------------------------
+
+            try:
+                course = Course.objects.get(
+                    id=course_id
+                )
+            except Course.DoesNotExist:
+
+                return Response(
+                    {
+                        "success": False,
+                        "error": "Course not found"
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            # -----------------------------------------
+            # CHECK ALREADY PAID
+            # -----------------------------------------
+
+            already_paid = Payment.objects.filter(
+                student=student,
+                course=course,
+                status="paid"
+            ).exists()
+
+            if already_paid:
+
+                return Response(
+                    {
+                        "success": False,
+                        "already_paid": True,
+                        "error": "You have already paid for this course."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # -----------------------------------------
+            # FIND OR CREATE ENROLLMENT
+            # -----------------------------------------
+
+            enrollment = Enrollment.objects.filter(
+                student=student,
+                course=course
+            ).first()
+
+            if not enrollment:
+
+                batch = None
+
+                if batch_id:
+                    try:
+                        batch = Batch.objects.get(
+                            id=batch_id
+                        )
+                    except Batch.DoesNotExist:
+                        batch = None
+
+                enrollment = Enrollment.objects.create(
+                    student=student,
+                    course=course,
+                    batch=batch,
+                    mode=mode,
+                    status="Pending"
+                )
+
+            else:
+
+                # Update enrollment information
+                enrollment.mode = mode
+
+                if batch_id:
+                    try:
+                        enrollment.batch = Batch.objects.get(
+                            id=batch_id
+                        )
+                    except Batch.DoesNotExist:
+                        pass
+
+                enrollment.save()
+
+            # -----------------------------------------
+            # AMOUNT
+            # -----------------------------------------
+
+            amount_decimal = Decimal(str(amount))
+            amount_paise = int(amount_decimal * 100)
+
+            # -----------------------------------------
+            # RAZORPAY
+            # -----------------------------------------
+
+            client = razorpay.Client(
+                auth=(
+                    settings.RAZORPAY_KEY_ID,
+                    settings.RAZORPAY_KEY_SECRET
+                )
+            )
+
+            razorpay_order = client.order.create(
+                {
+                    "amount": amount_paise,
+                    "currency": "INR",
+                    "payment_capture": 1
+                }
+            )
+
+            print(
+                "Razorpay order:",
+                razorpay_order
+            )
+
+            # -----------------------------------------
+            # SAVE PAYMENT
+            # -----------------------------------------
+
+            payment = Payment.objects.create(
+                student=student,
+                course=course,
+                enrollment=enrollment,
+                course_name=course.course_name,
+                amount=amount_decimal,
+                razorpay_order_id=razorpay_order["id"],
+                status="created"
+            )
+
+            print(
+                "Payment saved:",
+                payment.id
+            )
+
+            # -----------------------------------------
+            # RESPONSE
+            # -----------------------------------------
+
+            return Response(
+                {
+                    "success": True,
+                    "order_id": razorpay_order["id"],
+                    "amount": amount_paise,
+                    "currency": "INR",
+                    "key_id": settings.RAZORPAY_KEY_ID,
+                    "payment_id": payment.id,
+                    "enrollment_id": enrollment.id
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        except Exception as e:
+
+            print("RAZORPAY ERROR:", str(e))
+
+            return Response(
+                {
+                    "success": False,
+                    "error": str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+# =========================================================
+# RAZORPAY VERIFY PAYMENT
+# =========================================================
+
+class VerifyRazorpayPaymentView(APIView):
+
+    def post(self, request):
+
+        try:
+
+            razorpay_order_id = request.data.get(
+                "razorpay_order_id"
+            )
+
+            razorpay_payment_id = request.data.get(
+                "razorpay_payment_id"
+            )
+
+            razorpay_signature = request.data.get(
+                "razorpay_signature"
+            )
+
+            if (
+                not razorpay_order_id
+                or not razorpay_payment_id
+                or not razorpay_signature
+            ):
+
+                return Response(
+                    {
+                        "success": False,
+                        "message": "Payment details are required"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # -----------------------------------------
+            # FIND PAYMENT
+            # -----------------------------------------
+
+            payment = Payment.objects.get(
+                razorpay_order_id=razorpay_order_id
+            )
+
+            # -----------------------------------------
+            # VERIFY SIGNATURE
+            # -----------------------------------------
+
+            generated_signature = hmac.new(
+                settings.RAZORPAY_KEY_SECRET.encode(),
+                f"{payment.razorpay_order_id}|{razorpay_payment_id}".encode(),
+                hashlib.sha256
+            ).hexdigest()
+
+            if hmac.compare_digest(
+                generated_signature,
+                razorpay_signature
+            ):
+
+                # -----------------------------------------
+                # PAYMENT SUCCESS
+                # -----------------------------------------
+
+                payment.razorpay_payment_id = (
+                    razorpay_payment_id
+                )
+
+                payment.razorpay_signature = (
+                    razorpay_signature
+                )
+
+                payment.status = "paid"
+
+                payment.save()
+
+                # -----------------------------------------
+                # UPDATE ENROLLMENT
+                # -----------------------------------------
+
+                if payment.enrollment:
+
+                    payment.enrollment.status = "Enrolled"
+
+                    payment.enrollment.save()
+
+                    print(
+                        "Enrollment activated:",
+                        payment.enrollment.id
+                    )
+
+                # -----------------------------------------
+                # SUCCESS
+                # -----------------------------------------
+
+                return Response(
+                    {
+                        "success": True,
+                        "message": "Payment verified successfully",
+                        "payment_id": razorpay_payment_id,
+                        "enrollment_id": (
+                            payment.enrollment.id
+                            if payment.enrollment
+                            else None
+                        )
+                    },
+                    status=status.HTTP_200_OK
+                )
+
+            # -----------------------------------------
+            # INVALID SIGNATURE
+            # -----------------------------------------
+
+            payment.status = "failed"
+            payment.save()
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Payment verification failed"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Payment.DoesNotExist:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Payment order not found"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        except Exception as e:
+
+            print(
+                "Verification error:",
+                str(e)
+            )
+
+            return Response(
+                {
+                    "success": False,
+                    "message": str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+
+
+
+class StudentPaymentsView(APIView):
+
+    def get(self, request):
+
+        student_id = request.GET.get("student_id")
+
+        if not student_id:
+            return Response(
+                {
+                    "success": False,
+                    "error": "Student ID is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        payments = Payment.objects.filter(
+            student_id=student_id
+        ).order_by("-created_at")
+
+        serializer = PaymentSerializer(
+            payments,
+            many=True
+        )
+
+        return Response(
+            {
+                "success": True,
+                "payments": serializer.data
             },
             status=status.HTTP_200_OK
         )
