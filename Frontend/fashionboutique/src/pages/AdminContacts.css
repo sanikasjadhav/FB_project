@@ -1,0 +1,644 @@
+/* =========================================================
+   ADMIN CONTACTS PAGE
+========================================================= */
+
+.admin-contacts-layout {
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+
+  background: #f5f6f6;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN BODY
+========================================================= */
+
+.admin-contacts-body {
+  flex: 1;
+
+  min-width: 0;
+  min-height: 100vh;
+
+  margin-left: 260px;
+
+  padding: 35px 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.contacts-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.contacts-header h1 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 30px;
+
+  font-weight: 700;
+}
+
+.contacts-header p {
+  margin: 7px 0 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.contacts-count {
+  background: #f5b942;
+
+  color: #063b3d;
+
+  padding: 10px 18px;
+
+  border-radius: 25px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.contacts-alert {
+  width: 100%;
+
+  padding: 14px 18px;
+
+  margin-bottom: 20px;
+
+  border-radius: 7px;
+
+  box-sizing: border-box;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.contacts-alert.success {
+  background: #e2f5e7;
+
+  color: #21853d;
+
+  border: 1px solid #c6e8cf;
+}
+
+.contacts-alert.error {
+  background: #ffe4e4;
+
+  color: #c0392b;
+
+  border: 1px solid #f2c2c2;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.contacts-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  padding: 28px;
+
+  margin-bottom: 25px;
+
+  border-radius: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================================================
+   CARD TITLE
+========================================================= */
+
+.contacts-card-title {
+  margin-bottom: 25px;
+}
+
+.contacts-card-title h2 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+.contacts-card-title p {
+  margin: 7px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   EDIT FORM
+========================================================= */
+
+.contacts-edit-form {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* =========================================================
+   CONTACT INPUT
+========================================================= */
+
+.contact-input {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.contact-input-full {
+  grid-column: 1 / -1;
+}
+
+.contact-input label {
+  margin-bottom: 8px;
+
+  color: #333;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.contact-input label span {
+  color: #d63031;
+}
+
+
+/* =========================================================
+   INPUT / TEXTAREA
+========================================================= */
+
+.contact-input input,
+.contact-input textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+.contact-input input {
+  height: 45px;
+
+  padding: 0 12px;
+}
+
+.contact-input textarea {
+  padding: 12px;
+
+  min-height: 110px;
+
+  resize: vertical;
+}
+
+.contact-input input:focus,
+.contact-input textarea:focus {
+  border-color: #f5b942;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(245, 185, 66, 0.13);
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.contact-form-buttons {
+  grid-column: 1 / -1;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 5px;
+}
+
+
+/* =========================================================
+   UPDATE BUTTON
+========================================================= */
+
+.update-contact-btn {
+  min-width: 160px;
+
+  height: 45px;
+
+  padding: 0 22px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.update-contact-btn:hover {
+  background: #e3a82f;
+
+  transform: translateY(-1px);
+}
+
+.update-contact-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+========================================================= */
+
+.cancel-contact-btn {
+  min-width: 100px;
+
+  height: 45px;
+
+  padding: 0 20px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #555;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.cancel-contact-btn:hover {
+  background: #f2f2f2;
+
+  border-color: #ccc;
+}
+
+.cancel-contact-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.contacts-table-container {
+  width: 100%;
+
+  overflow-x: auto;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.contacts-table-container table {
+  width: 100%;
+
+  min-width: 1100px;
+
+  border-collapse: collapse;
+}
+
+.contacts-table-container thead {
+  background: #063b3d;
+}
+
+.contacts-table-container th {
+  padding: 14px;
+
+  background: #063b3d;
+
+  color: #ffffff;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.contacts-table-container td {
+  padding: 14px;
+
+  color: #444;
+
+  font-size: 14px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  vertical-align: middle;
+}
+
+.contacts-table-container tbody tr {
+  transition: 0.2s ease;
+}
+
+.contacts-table-container tbody tr:hover {
+  background: #fffaf0;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.contact-message {
+  max-width: 300px;
+
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.contact-action-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   EDIT BUTTON
+========================================================= */
+
+.edit-contact-btn {
+  border: none;
+
+  padding: 8px 14px;
+
+  border-radius: 6px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.edit-contact-btn:hover {
+  background: #e3a82f;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.delete-contact-btn {
+  border: none;
+
+  padding: 8px 14px;
+
+  border-radius: 6px;
+
+  background: #ffe1e1;
+
+  color: #c0392b;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.delete-contact-btn:hover {
+  background: #ffcccc;
+
+  color: #a93226;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.contacts-empty {
+  text-align: center;
+
+  padding: 40px !important;
+
+  color: #888 !important;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .admin-contacts-body {
+    margin-left: 240px;
+
+    padding: 30px;
+  }
+
+  .contacts-edit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-input-full {
+    grid-column: auto;
+  }
+
+  .contact-form-buttons {
+    grid-column: auto;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .admin-contacts-body {
+    margin-left: 220px;
+
+    padding: 25px;
+  }
+
+  .contacts-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .contacts-count {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    text-align: center;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .admin-contacts-body {
+    margin-left: 0;
+
+    padding: 20px 15px;
+  }
+
+  .contacts-card {
+    padding: 20px 16px;
+  }
+
+  .contacts-header h1 {
+    font-size: 25px;
+  }
+
+  .contacts-card-title h2 {
+    font-size: 19px;
+  }
+
+  .contact-form-buttons {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .update-contact-btn,
+  .cancel-contact-btn {
+    width: 100%;
+  }
+
+  .contact-action-buttons {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .edit-contact-btn,
+  .delete-contact-btn {
+    width: 100%;
+  }
+}

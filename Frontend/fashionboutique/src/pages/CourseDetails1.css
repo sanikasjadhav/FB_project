@@ -1,0 +1,388 @@
+/* =====================================================
+   PAGE
+===================================================== */
+
+.course-details-page {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f6f6;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.course-details-main {
+  margin-left: 285px;
+  width: calc(100% - 285px);
+  min-height: 100vh;
+  padding: 40px 48px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.course-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.course-details-header h1 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 34px;
+}
+
+.course-details-header p {
+  margin-top: 8px;
+  color: #777;
+  font-size: 16px;
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back-course-btn {
+  border: none;
+  background: #063b3d;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-course-btn:hover {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+
+/* =====================================================
+   COURSE CARD
+===================================================== */
+
+.course-details-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 42% 58%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  max-width: 1100px;
+}
+
+
+/* =====================================================
+   LEFT
+===================================================== */
+
+.course-details-left {
+  background: #063b3d;
+  color: white;
+  padding: 55px 45px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.course-large-circle {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  background: #f5b942;
+  color: #063b3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 58px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.course-details-left h2 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.course-full-description {
+  line-height: 1.7;
+  font-size: 16px;
+  color: #eeeeee;
+}
+
+
+/* =====================================================
+   RIGHT
+===================================================== */
+
+.course-details-right {
+  padding: 45px;
+}
+
+
+/* =====================================================
+   INFORMATION
+===================================================== */
+
+.course-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.course-info-row span {
+  color: #777;
+  font-size: 16px;
+}
+
+.course-info-row strong {
+  color: #063b3d;
+}
+
+.details-fee {
+  color: #d89400 !important;
+  font-size: 20px;
+}
+
+.details-status {
+  color: green !important;
+}
+
+
+/* =====================================================
+   MODE
+===================================================== */
+
+.mode-section {
+  margin-top: 30px;
+}
+
+.mode-section h3 {
+  color: #063b3d;
+  margin-bottom: 18px;
+  font-size: 21px;
+}
+
+.mode-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.mode-card {
+  border: 2px solid #dddddd;
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mode-card:hover {
+  border-color: #f5b942;
+}
+
+.mode-card.selected {
+  border-color: #f5b942;
+  background: #fff8e6;
+}
+
+.mode-card input {
+  margin-top: 5px;
+  accent-color: #f5b942;
+}
+
+.mode-card h4 {
+  margin: 0 0 6px;
+  color: #063b3d;
+  font-size: 17px;
+}
+
+.mode-card p {
+  margin: 0;
+  color: #777;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   ENROLL BUTTON
+===================================================== */
+
+.enroll-course-btn {
+  width: 100%;
+  border: none;
+  background: #f5b942;
+  color: #063b3d;
+  padding: 16px;
+  margin-top: 30px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.enroll-course-btn:hover {
+  background: #063b3d;
+  color: white;
+}
+
+
+/* =====================================================
+   FLOW
+===================================================== */
+
+.course-flow {
+  max-width: 1100px;
+  background: white;
+  margin-top: 30px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.course-flow h2 {
+  color: #063b3d;
+  margin-bottom: 25px;
+}
+
+.flow-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flow-item {
+  text-align: center;
+}
+
+.flow-item span {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #f5b942;
+  color: #063b3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-weight: 700;
+}
+
+.flow-item p {
+  margin-top: 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+.flow-arrow {
+  font-size: 25px;
+  color: #063b3d;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.course-loading {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  color: #063b3d;
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.course-error {
+  background: white;
+  padding: 50px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.course-error h2 {
+  color: #063b3d;
+}
+
+.course-error p {
+  color: #777;
+}
+
+.course-error button {
+  margin-top: 20px;
+  border: none;
+  background: #063b3d;
+  color: white;
+  padding: 13px 25px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .course-details-main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 30px;
+  }
+
+  .course-details-card {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-options {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .course-details-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .course-details-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .flow-items {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+  }
+
+}

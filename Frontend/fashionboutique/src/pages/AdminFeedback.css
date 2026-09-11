@@ -1,0 +1,646 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.admin-feedback-layout {
+  min-height: 100vh;
+
+  width: 100%;
+
+  display: flex;
+
+  background: #f5f6f6;
+}
+
+
+/* =========================================
+   MAIN BODY
+========================================= */
+
+.admin-feedback-body {
+  flex: 1;
+
+  min-width: 0;
+
+  min-height: 100vh;
+
+  margin-left: 260px;
+
+  padding: 35px 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.feedback-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.feedback-header h1 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 30px;
+
+  font-weight: 700;
+}
+
+.feedback-header p {
+  margin: 7px 0 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.feedback-count {
+  background: #f5b942;
+
+  color: #063b3d;
+
+  padding: 10px 18px;
+
+  border-radius: 25px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   ALERT
+========================================= */
+
+.feedback-alert {
+  padding: 14px 18px;
+
+  margin-bottom: 20px;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+}
+
+.feedback-alert.success {
+  background: #e2f5e7;
+
+  color: #21853d;
+}
+
+.feedback-alert.error {
+  background: #ffe4e4;
+
+  color: #c0392b;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.feedback-card {
+  width: 100%;
+
+  background: white;
+
+  padding: 28px;
+
+  margin-bottom: 25px;
+
+  border-radius: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================================
+   CARD TITLE
+========================================= */
+
+.feedback-card-title {
+  margin-bottom: 25px;
+}
+
+.feedback-card-title h2 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+.feedback-card-title p {
+  margin: 6px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   EDIT FORM
+========================================= */
+
+.feedback-edit-form {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.feedback-input {
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.feedback-input label {
+  margin-bottom: 8px;
+
+  color: #333;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.feedback-input label span {
+  color: #d63031;
+}
+
+.feedback-input input,
+.feedback-input select,
+.feedback-input textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.feedback-input input,
+.feedback-input select {
+  height: 45px;
+
+  padding: 0 12px;
+}
+
+.feedback-input textarea {
+  min-height: 100px;
+
+  padding: 12px;
+
+  resize: vertical;
+
+  font-family: Arial, sans-serif;
+
+  line-height: 1.5;
+}
+
+.feedback-input input:focus,
+.feedback-input select:focus,
+.feedback-input textarea:focus {
+  border-color: #f5b942;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(245, 185, 66, 0.12);
+}
+
+.feedback-input input[readonly] {
+  background: #f5f5f5;
+
+  color: #777;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   TEXTAREA
+========================================= */
+
+.feedback-textarea {
+  grid-column: 1 / -1;
+}
+
+
+/* =========================================
+   EDIT BUTTON GROUP
+========================================= */
+
+.feedback-edit-buttons {
+  grid-column: 1 / -1;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+
+/* =========================================
+   UPDATE BUTTON
+========================================= */
+
+.update-feedback-btn {
+  min-width: 170px;
+
+  height: 45px;
+
+  padding: 0 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #063b3d;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.update-feedback-btn:hover {
+  background: #104e50;
+
+  transform: translateY(-1px);
+}
+
+.update-feedback-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================================
+   CANCEL BUTTON
+========================================= */
+
+.cancel-feedback-btn {
+  min-width: 100px;
+
+  height: 45px;
+
+  padding: 0 20px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #f5f5f5;
+
+  color: #555;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.cancel-feedback-btn:hover {
+  background: #e5e5e5;
+
+  color: #333;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.feedback-table-container {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.feedback-table-container table {
+  width: 100%;
+
+  min-width: 900px;
+
+  border-collapse: collapse;
+}
+
+.feedback-table-container thead {
+  background: #063b3d;
+}
+
+.feedback-table-container th {
+  padding: 14px 15px;
+
+  background: #063b3d;
+
+  color: white;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.feedback-table-container td {
+  padding: 15px;
+
+  border-bottom: 1px solid #eee;
+
+  color: #444;
+
+  font-size: 14px;
+}
+
+.feedback-table-container tbody tr:hover {
+  background: #fafafa;
+}
+
+
+/* =========================================
+   FEEDBACK MESSAGE
+========================================= */
+
+.feedback-message {
+  max-width: 350px;
+
+  white-space: normal;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   RATING
+========================================= */
+
+.feedback-rating {
+  display: inline-block;
+
+  min-width: 45px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  background: #fff2cc;
+
+  color: #a66a00;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.feedback-action-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+/* =========================================
+   EDIT BUTTON
+========================================= */
+
+.edit-feedback-btn {
+  min-width: 62px;
+
+  height: 34px;
+
+  padding: 0 13px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.edit-feedback-btn:hover {
+  background: #e3a82f;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 3px 8px
+    rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.delete-feedback-btn {
+  min-width: 62px;
+
+  height: 34px;
+
+  padding: 0 13px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #ffe1e1;
+
+  color: #c0392b;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.delete-feedback-btn:hover {
+  background: #c0392b;
+
+  color: white;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 3px 8px
+    rgba(192, 57, 43, 0.2);
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.feedback-empty {
+  text-align: center;
+
+  padding: 40px !important;
+
+  color: #888 !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .admin-feedback-body {
+    margin-left: 240px;
+
+    padding: 30px;
+  }
+
+}
+
+
+@media (max-width: 800px) {
+
+  .admin-feedback-body {
+    margin-left: 220px;
+
+    padding: 25px;
+  }
+
+  .feedback-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .feedback-edit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-textarea {
+    grid-column: auto;
+  }
+
+  .feedback-edit-buttons {
+    grid-column: auto;
+
+    justify-content: stretch;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .admin-feedback-body {
+    margin-left: 200px;
+
+    padding: 18px;
+  }
+
+  .feedback-card {
+    padding: 20px;
+  }
+
+  .feedback-header h1 {
+    font-size: 24px;
+  }
+
+  .feedback-edit-buttons {
+    flex-direction: column;
+  }
+
+  .update-feedback-btn,
+  .cancel-feedback-btn {
+    width: 100%;
+  }
+
+  .feedback-action-buttons {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 6px;
+  }
+
+  .edit-feedback-btn,
+  .delete-feedback-btn {
+    width: 100%;
+  }
+
+}

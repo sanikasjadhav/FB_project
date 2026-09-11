@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import AdminSidebar from "../components/AdminSidebar";
 import "./AdminDashboard.css";
+
 
 function AdminDashboard() {
   const navigate = useNavigate();
 
   const [admin, setAdmin] = useState(null);
 
+
+  /* =========================
+     CHECK ADMIN LOGIN
+  ========================= */
+
   useEffect(() => {
     const token = localStorage.getItem("adminAccessToken");
     const adminData = localStorage.getItem("admin");
 
-    // Admin is not logged in
     if (!token || !adminData) {
       navigate("/admin-login");
       return;
@@ -30,25 +37,19 @@ function AdminDashboard() {
     }
   }, [navigate]);
 
-  // =========================
-  // LOGOUT
-  // =========================
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminAccessToken");
-    localStorage.removeItem("adminRefreshToken");
-    localStorage.removeItem("admin");
-
-    navigate("/admin-login");
-  };
-
-  // =========================
-  // NAVIGATION
-  // =========================
+  /* =========================
+     NAVIGATION
+  ========================= */
 
   const goTo = (path) => {
     navigate(path);
   };
+
+
+  /* =========================
+     LOADING
+  ========================= */
 
   if (!admin) {
     return (
@@ -58,187 +59,35 @@ function AdminDashboard() {
     );
   }
 
+
   return (
     <div className="admin-dashboard">
 
-      {/* ================================================= */}
-      {/* SIDEBAR */}
-      {/* ================================================= */}
+      {/* =========================
+          COMMON SIDEBAR
+      ========================= */}
 
-      <aside className="admin-sidebar">
+      <AdminSidebar />
 
-        {/* Logo */}
-        <div className="admin-logo">
 
-          <h2>Fashion Boutique</h2>
-
-          <span>Admin Panel</span>
-
-        </div>
-
-        {/* Navigation */}
-        <nav className="admin-navigation">
-
-          <button
-            className="sidebar-link active"
-            onClick={() =>
-              goTo("/admin-dashboard")
-            }
-          >
-            🏠
-            <span>Dashboard</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-students")
-            }
-          >
-            👩‍🎓
-            <span>Students</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-categories")
-            }
-          >
-            📂
-            <span>Categories</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-courses")
-            }
-          >
-            📚
-            <span>Courses</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-batches")
-            }
-          >
-            🗓️
-            <span>Batches</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-enrollments")
-            }
-          >
-            📝
-            <span>Enrollments</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-payments")
-            }
-          >
-            💳
-            <span>Payments</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-videos")
-            }
-          >
-            🎥
-            <span>Course Videos</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-materials")
-            }
-          >
-            📖
-            <span>Study Materials</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-certificates")
-            }
-          >
-            🏆
-            <span>Certificates</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-feedback")
-            }
-          >
-            💬
-            <span>Feedback</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-gallery")
-            }
-          >
-            🖼️
-            <span>Gallery</span>
-          </button>
-
-          <button
-            className="sidebar-link"
-            onClick={() =>
-              goTo("/admin-contacts")
-            }
-          >
-            📩
-            <span>Contact Messages</span>
-          </button>
-
-        </nav>
-
-        {/* Logout */}
-        <div className="admin-sidebar-bottom">
-
-          <button
-            className="admin-logout"
-            onClick={handleLogout}
-          >
-            🚪
-            <span>Logout</span>
-          </button>
-
-        </div>
-
-      </aside>
-
-      {/* ================================================= */}
-      {/* MAIN CONTENT */}
-      {/* ================================================= */}
+      {/* =========================
+          MAIN CONTENT
+      ========================= */}
 
       <main className="admin-main">
 
-        {/* ================= HEADER ================= */}
+
+        {/* =========================
+            HEADER
+        ========================= */}
 
         <header className="admin-header">
 
           <div className="admin-header-left">
 
-            <h1>Admin Dashboard</h1>
+            <h1>
+              Admin Dashboard
+            </h1>
 
             <p>
               Welcome back,{" "}
@@ -249,17 +98,17 @@ function AdminDashboard() {
 
           </div>
 
+
           <div className="admin-profile">
 
             <div className="admin-avatar">
 
               {admin.name
-                ? admin.name
-                    .charAt(0)
-                    .toUpperCase()
+                ? admin.name.charAt(0).toUpperCase()
                 : "A"}
 
             </div>
+
 
             <div className="admin-profile-info">
 
@@ -277,7 +126,11 @@ function AdminDashboard() {
 
         </header>
 
-        {/* ================= WELCOME ================= */}
+
+
+        {/* =========================
+            WELCOME SECTION
+        ========================= */}
 
         <section className="admin-welcome">
 
@@ -296,15 +149,23 @@ function AdminDashboard() {
 
           </div>
 
+
           <div className="welcome-icon">
             👗
           </div>
 
         </section>
 
-        {/* ================= STAT CARDS ================= */}
+
+
+        {/* =========================
+            STAT CARDS
+        ========================= */}
 
         <section className="admin-stats">
+
+
+          {/* STUDENTS */}
 
           <div
             className="stat-card"
@@ -319,7 +180,9 @@ function AdminDashboard() {
 
             <div className="stat-content">
 
-              <h3>Students</h3>
+              <h3>
+                Students
+              </h3>
 
               <p>
                 Manage student accounts
@@ -328,6 +191,9 @@ function AdminDashboard() {
             </div>
 
           </div>
+
+
+          {/* COURSES */}
 
           <div
             className="stat-card"
@@ -342,7 +208,9 @@ function AdminDashboard() {
 
             <div className="stat-content">
 
-              <h3>Courses</h3>
+              <h3>
+                Courses
+              </h3>
 
               <p>
                 Manage courses
@@ -351,6 +219,9 @@ function AdminDashboard() {
             </div>
 
           </div>
+
+
+          {/* BATCHES */}
 
           <div
             className="stat-card"
@@ -365,7 +236,9 @@ function AdminDashboard() {
 
             <div className="stat-content">
 
-              <h3>Batches</h3>
+              <h3>
+                Batches
+              </h3>
 
               <p>
                 Manage course batches
@@ -374,6 +247,9 @@ function AdminDashboard() {
             </div>
 
           </div>
+
+
+          {/* PAYMENTS */}
 
           <div
             className="stat-card"
@@ -388,7 +264,9 @@ function AdminDashboard() {
 
             <div className="stat-content">
 
-              <h3>Payments</h3>
+              <h3>
+                Payments
+              </h3>
 
               <p>
                 Manage student payments
@@ -400,13 +278,19 @@ function AdminDashboard() {
 
         </section>
 
-        {/* ================= QUICK ACTIONS ================= */}
+
+
+        {/* =========================
+            QUICK ACTIONS
+        ========================= */}
 
         <section className="quick-actions">
 
           <div className="section-title">
 
-            <h2>Quick Actions</h2>
+            <h2>
+              Quick Actions
+            </h2>
 
             <p>
               Quickly access your admin
@@ -415,13 +299,18 @@ function AdminDashboard() {
 
           </div>
 
+
           <div className="quick-grid">
+
+
+            {/* STUDENTS */}
 
             <button
               onClick={() =>
                 goTo("/admin-students")
               }
             >
+
               <span className="quick-icon">
                 👩‍🎓
               </span>
@@ -434,13 +323,18 @@ function AdminDashboard() {
                 View and manage registered
                 students.
               </small>
+
             </button>
+
+
+            {/* CATEGORIES */}
 
             <button
               onClick={() =>
                 goTo("/admin-categories")
               }
             >
+
               <span className="quick-icon">
                 📂
               </span>
@@ -452,13 +346,18 @@ function AdminDashboard() {
               <small>
                 Manage course categories.
               </small>
+
             </button>
+
+
+            {/* COURSES */}
 
             <button
               onClick={() =>
                 goTo("/admin-courses")
               }
             >
+
               <span className="quick-icon">
                 📚
               </span>
@@ -470,13 +369,18 @@ function AdminDashboard() {
               <small>
                 Add and manage courses.
               </small>
+
             </button>
+
+
+            {/* BATCHES */}
 
             <button
               onClick={() =>
                 goTo("/admin-batches")
               }
             >
+
               <span className="quick-icon">
                 🗓️
               </span>
@@ -489,13 +393,18 @@ function AdminDashboard() {
                 Manage offline and online
                 batches.
               </small>
+
             </button>
+
+
+            {/* ENROLLMENTS */}
 
             <button
               onClick={() =>
                 goTo("/admin-enrollments")
               }
             >
+
               <span className="quick-icon">
                 📝
               </span>
@@ -507,13 +416,18 @@ function AdminDashboard() {
               <small>
                 Manage student enrollments.
               </small>
+
             </button>
+
+
+            {/* PAYMENTS */}
 
             <button
               onClick={() =>
                 goTo("/admin-payments")
               }
             >
+
               <span className="quick-icon">
                 💳
               </span>
@@ -525,13 +439,18 @@ function AdminDashboard() {
               <small>
                 View payment information.
               </small>
+
             </button>
+
+
+            {/* VIDEOS */}
 
             <button
               onClick={() =>
                 goTo("/admin-videos")
               }
             >
+
               <span className="quick-icon">
                 🎥
               </span>
@@ -543,13 +462,18 @@ function AdminDashboard() {
               <small>
                 Manage online course videos.
               </small>
+
             </button>
+
+
+            {/* MATERIALS */}
 
             <button
               onClick={() =>
                 goTo("/admin-materials")
               }
             >
+
               <span className="quick-icon">
                 📖
               </span>
@@ -561,13 +485,18 @@ function AdminDashboard() {
               <small>
                 Manage course study materials.
               </small>
+
             </button>
+
+
+            {/* CERTIFICATES */}
 
             <button
               onClick={() =>
                 goTo("/admin-certificates")
               }
             >
+
               <span className="quick-icon">
                 🏆
               </span>
@@ -579,13 +508,18 @@ function AdminDashboard() {
               <small>
                 Manage student certificates.
               </small>
+
             </button>
+
+
+            {/* FEEDBACK */}
 
             <button
               onClick={() =>
                 goTo("/admin-feedback")
               }
             >
+
               <span className="quick-icon">
                 💬
               </span>
@@ -597,13 +531,18 @@ function AdminDashboard() {
               <small>
                 View student feedback.
               </small>
+
             </button>
+
+
+            {/* GALLERY */}
 
             <button
               onClick={() =>
                 goTo("/admin-gallery")
               }
             >
+
               <span className="quick-icon">
                 🖼️
               </span>
@@ -615,13 +554,18 @@ function AdminDashboard() {
               <small>
                 Manage website gallery.
               </small>
+
             </button>
+
+
+            {/* CONTACT */}
 
             <button
               onClick={() =>
                 goTo("/admin-contacts")
               }
             >
+
               <span className="quick-icon">
                 📩
               </span>
@@ -633,19 +577,54 @@ function AdminDashboard() {
               <small>
                 View customer contact messages.
               </small>
+
+            </button>
+
+
+            {/* REPORTS */}
+
+            <button
+              onClick={() =>
+                goTo("/admin-reports")
+              }
+            >
+
+              <span className="quick-icon">
+                📊
+              </span>
+
+              <strong>
+                Reports
+              </strong>
+
+              <small>
+                View student, course and
+                payment reports.
+              </small>
+
             </button>
 
           </div>
 
         </section>
 
-        {/* ================= ADMIN INFORMATION ================= */}
+
+
+        {/* =========================
+            ADMIN INFORMATION
+        ========================= */}
 
         <section className="admin-information">
 
-          <h2>Admin Information</h2>
+          <h2>
+            Admin Information
+          </h2>
+
 
           <div className="info-grid">
+
+
+            {/* ADMIN ID */}
 
             <div className="info-item">
 
@@ -659,6 +638,9 @@ function AdminDashboard() {
 
             </div>
 
+
+            {/* ADMIN NAME */}
+
             <div className="info-item">
 
               <label>
@@ -670,6 +652,9 @@ function AdminDashboard() {
               </p>
 
             </div>
+
+
+            {/* EMAIL */}
 
             <div className="info-item">
 
@@ -683,6 +668,9 @@ function AdminDashboard() {
 
             </div>
 
+
+            {/* PHONE */}
+
             <div className="info-item">
 
               <label>
@@ -690,7 +678,7 @@ function AdminDashboard() {
               </label>
 
               <p>
-                {admin.phone}
+                {admin.phone || "Not available"}
               </p>
 
             </div>
@@ -699,10 +687,12 @@ function AdminDashboard() {
 
         </section>
 
+
       </main>
 
     </div>
   );
 }
+
 
 export default AdminDashboard;

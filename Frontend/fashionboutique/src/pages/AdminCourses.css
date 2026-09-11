@@ -1,0 +1,688 @@
+/* =========================================================
+   ADMIN COURSES PAGE
+========================================================= */
+
+.admin-courses-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background: #f5f6f6;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   Sidebar width = 260px
+========================================================= */
+
+.admin-courses-main {
+  width: calc(100% - 260px);
+  min-height: 100vh;
+
+  margin-left: 260px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.courses-header {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+/* HEADER TITLE */
+
+.courses-header h1 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 28px;
+
+  font-weight: 700;
+}
+
+
+/* HEADER DESCRIPTION */
+
+.courses-header p {
+  margin: 7px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ADD COURSE BUTTON
+========================================================= */
+
+.add-course-btn {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #135255;
+
+  font-weight: 600;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+
+.add-course-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   COURSE FORM CARD
+========================================================= */
+
+.course-form-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   FORM TITLE
+========================================================= */
+
+.course-form-title {
+  margin-bottom: 20px;
+}
+
+
+.course-form-title h2 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #135255;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   FORM INPUTS
+========================================================= */
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  color: #333333;
+
+  background: #ffffff;
+
+  transition: all 0.2s ease;
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #999999;
+}
+
+
+.form-group textarea {
+  resize: vertical;
+
+  min-height: 100px;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #f5b942;
+
+  box-shadow:
+    0 0 0 2px rgba(245, 185, 66, 0.15);
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.course-form-buttons {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+
+/* SAVE BUTTON */
+
+.save-course-btn {
+  padding: 11px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #135255;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+
+.save-course-btn:hover {
+  opacity: 0.9;
+
+  transform: translateY(-1px);
+}
+
+
+/* CANCEL BUTTON */
+
+.cancel-course-btn {
+  padding: 11px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #eeeeee;
+
+  color: #555555;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+
+.cancel-course-btn:hover {
+  background: #dddddd;
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.course-table-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   TABLE HEADING
+========================================================= */
+
+.course-table-heading {
+  margin-bottom: 20px;
+}
+
+
+.course-table-heading h2 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+
+.course-table-heading p {
+  margin: 5px 0 0;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.course-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.course-table {
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+}
+
+
+/* TABLE HEADER */
+
+.course-table th {
+  padding: 14px;
+
+  background: #063b3d;
+
+  color: #ffffff;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* TABLE BODY */
+
+.course-table td {
+  padding: 14px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+
+/* ROW HOVER */
+
+.course-table tbody tr:hover {
+  background: #fafafa;
+}
+
+
+/* COURSE NAME */
+
+.course-table td strong {
+  color: #135255;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.course-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* EDIT BUTTON */
+
+.edit-course-btn {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 7px 11px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  background: #f5b942;
+
+  color: #135255;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+
+/* DELETE BUTTON */
+
+.delete-course-btn {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 7px 11px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  background: #ffe5e5;
+
+  color: #c62828;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+
+/* BUTTON HOVER */
+
+.edit-course-btn:hover,
+.delete-course-btn:hover {
+  opacity: 0.85;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   NO COURSES
+========================================================= */
+
+.no-courses {
+  padding: 60px 20px !important;
+
+  text-align: center;
+
+  color: #777777 !important;
+}
+
+
+.no-course-icon {
+  font-size: 45px;
+
+  margin-bottom: 10px;
+}
+
+
+.no-courses h3 {
+  margin: 0 0 7px;
+
+  color: #135255;
+
+  font-size: 18px;
+}
+
+
+.no-courses p {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #777777;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-page-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #f5f6f6;
+
+  color: #135255;
+
+  font-size: 20px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   IMPORTANT
+   Prevent content from going underneath sidebar
+========================================================= */
+
+.admin-courses-page * {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .admin-courses-main {
+    width: calc(100% - 240px);
+
+    margin-left: 240px;
+
+    padding: 25px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .admin-courses-main {
+    width: calc(100% - 220px);
+
+    margin-left: 220px;
+
+    padding: 20px;
+  }
+
+
+  .courses-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+
+  .add-course-btn {
+    width: auto;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .admin-courses-main {
+    width: calc(100% - 200px);
+
+    margin-left: 200px;
+
+    padding: 15px;
+  }
+
+
+  .courses-header {
+    padding: 18px;
+  }
+
+
+  .courses-header h1 {
+    font-size: 24px;
+  }
+
+
+  .course-form-card {
+    padding: 18px;
+  }
+
+
+  .course-table-card {
+    padding: 15px;
+  }
+
+
+  .course-form-buttons {
+    flex-direction: column;
+  }
+
+
+  .save-course-btn,
+  .cancel-course-btn {
+    width: 100%;
+  }
+
+}

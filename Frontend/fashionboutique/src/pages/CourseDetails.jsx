@@ -10,7 +10,7 @@ function CourseDetails() {
       <div className="details-container">
         <h2>Course Not Found</h2>
         <Link to="/courses" className="back-btn">
-          Back to Courses
+          Back to Courses Catagories
         </Link>
       </div>
     );
@@ -53,7 +53,7 @@ function CourseDetails() {
 
         </div>
 
-        <Link to="/register" className="register-btn">
+        <Link to="/registration" className="register-btn">
           Register Now
         </Link>
 

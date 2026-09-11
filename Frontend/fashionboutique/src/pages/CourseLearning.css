@@ -1,0 +1,630 @@
+/* =========================================================
+   COURSE LEARNING PAGE
+========================================================= */
+
+.course-learning-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #f5f7f7;
+  display: flex;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.course-learning-main {
+  margin-left: 285px;
+  width: calc(100% - 285px);
+  min-height: 100vh;
+
+  padding: 40px 45px 60px;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.learning-header {
+  width: 100%;
+  margin-bottom: 35px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-course-button {
+  width: 100%;
+
+  padding: 14px 20px;
+
+  margin-bottom: 20px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #f5b942;
+  color: #ffffff;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.back-course-button:hover {
+  background: #e7a82e;
+}
+
+
+/* =========================================================
+   COURSE TITLE
+========================================================= */
+
+.learning-header h1 {
+  margin: 0 0 8px;
+
+  color: #063b3d;
+
+  font-size: 36px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.learning-header p {
+  margin: 0;
+
+  color: #6d7778;
+
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.learning-section {
+  width: 100%;
+
+  margin-bottom: 45px;
+}
+
+.learning-section h2 {
+  margin: 0 0 22px;
+
+  color: #063b3d;
+
+  font-size: 26px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   VIDEO GRID
+========================================================= */
+
+.video-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(350px, 1fr));
+
+  gap: 28px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   VIDEO CARD
+========================================================= */
+
+.video-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  border-radius: 15px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08);
+
+  border: 1px solid #e6eeee;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 9px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   VIDEO CONTAINER
+========================================================= */
+
+.video-container {
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  background: #dddddd;
+
+  overflow: hidden;
+
+  position: relative;
+}
+
+
+/* =========================================================
+   YOUTUBE IFRAME
+========================================================= */
+
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+
+  border: none;
+
+  display: block;
+}
+
+
+/* =========================================================
+   VIDEO CONTENT
+========================================================= */
+
+.video-content {
+  padding: 20px 22px 23px;
+}
+
+.video-number {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #11777a;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.video-content h3 {
+  margin: 0 0 8px;
+
+  color: #063b3d;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  word-break: break-word;
+}
+
+.video-content p {
+  margin: 0;
+
+  color: #6d7778;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   EMPTY MESSAGE
+========================================================= */
+
+.learning-empty {
+  width: 100%;
+
+  padding: 30px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  color: #6d7778;
+
+  font-size: 16px;
+
+  text-align: center;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================================
+   STUDY MATERIAL LIST
+========================================================= */
+
+.material-list {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   MATERIAL CARD
+========================================================= */
+
+.material-card {
+  width: 100%;
+
+  padding: 18px 22px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.07);
+
+  border: 1px solid #e6eeee;
+}
+
+.material-info {
+  min-width: 0;
+}
+
+.material-card h3 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 18px;
+
+  font-weight: 600;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   MATERIAL BUTTON
+========================================================= */
+
+.material-btn {
+  flex-shrink: 0;
+
+  display: inline-block;
+
+  padding: 10px 20px;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  transition: 0.25s ease;
+}
+
+.material-btn:hover {
+  background: #e7a82e;
+}
+
+
+/* =========================================================
+   COMPLETE COURSE BOX
+========================================================= */
+
+.complete-course-box {
+  width: 100%;
+
+  margin-top: 25px;
+
+  padding: 30px;
+
+  background: #ffffff;
+
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08);
+
+  border: 1px solid #e6eeee;
+}
+
+.complete-course-box h2 {
+  margin: 0 0 10px;
+
+  color: #063b3d;
+
+  font-size: 24px;
+}
+
+.complete-course-box p {
+  margin: 0 0 22px;
+
+  color: #6d7778;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   COMPLETE COURSE BUTTON
+========================================================= */
+
+.complete-course-box button {
+  width: 100%;
+
+  padding: 14px 20px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #f5b942;
+
+  color: #ffffff;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.complete-course-box button:hover {
+  background: #e7a82e;
+}
+
+.complete-course-box button:disabled {
+  background: #aeb7b7;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.learning-message {
+  min-height: 400px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #063b3d;
+
+  font-size: 20px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.course-error {
+  max-width: 650px;
+
+  margin: 80px auto;
+
+  padding: 45px 35px;
+
+  background: #ffffff;
+
+  border-radius: 15px;
+
+  text-align: center;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.08);
+
+  box-sizing: border-box;
+}
+
+.course-error h2 {
+  margin: 0 0 15px;
+
+  color: #063b3d;
+
+  font-size: 27px;
+}
+
+.course-error p {
+  margin: 0 0 25px;
+
+  color: #6d7778;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   RETRY BUTTON
+========================================================= */
+
+.retry-button {
+  padding: 12px 25px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.retry-button:hover {
+  background: #e7a82e;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .course-learning-main {
+    margin-left: 285px;
+
+    width: calc(100% - 285px);
+
+    padding: 35px 30px 50px;
+  }
+
+  .video-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .course-learning-page {
+    display: block;
+  }
+
+  .course-learning-main {
+    margin-left: 0;
+
+    width: 100%;
+
+    padding: 25px 20px 45px;
+  }
+
+  .learning-header h1 {
+    font-size: 30px;
+  }
+
+  .learning-header p {
+    font-size: 15px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+  .learning-section h2 {
+    font-size: 23px;
+  }
+
+  .material-card {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .material-btn {
+    text-align: center;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .course-learning-main {
+    padding: 20px 15px 40px;
+  }
+
+  .learning-header h1 {
+    font-size: 26px;
+  }
+
+  .back-course-button {
+    font-size: 15px;
+
+    padding: 12px 15px;
+  }
+
+  .video-content {
+    padding: 17px;
+  }
+
+  .video-content h3 {
+    font-size: 19px;
+  }
+
+  .complete-course-box {
+    padding: 25px 18px;
+  }
+
+}

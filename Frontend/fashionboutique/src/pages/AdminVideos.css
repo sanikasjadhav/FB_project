@@ -1,0 +1,650 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.admin-videos-layout {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #f5f6f6;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   MAIN BODY
+========================================= */
+
+.admin-videos-body {
+  flex: 1;
+
+  min-width: 0;
+  min-height: 100vh;
+
+  margin-left: 260px;
+
+  padding: 32px 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.videos-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 28px;
+}
+
+.videos-header h1 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.videos-header p {
+  margin: 7px 0 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.video-count {
+  padding: 10px 18px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  border-radius: 25px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   ALERT
+========================================= */
+
+.video-alert {
+  padding: 14px 18px;
+
+  margin-bottom: 20px;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+}
+
+.video-alert.success {
+  background: #e2f5e7;
+
+  color: #21853d;
+}
+
+.video-alert.error {
+  background: #ffe4e4;
+
+  color: #c0392b;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.video-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  padding: 28px;
+
+  margin-bottom: 25px;
+
+  border-radius: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================================
+   CARD TITLE
+========================================= */
+
+.video-card-title {
+  margin-bottom: 25px;
+}
+
+.video-card-title h2 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 21px;
+}
+
+.video-card-title p {
+  margin: 6px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.video-form {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.video-full {
+  grid-column: 1 / -1;
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.video-input {
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.video-input label {
+  margin-bottom: 8px;
+
+  color: #333;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.video-input label span {
+  color: #d63031;
+}
+
+.video-input input,
+.video-input select,
+.video-input textarea {
+  width: 100%;
+
+  padding: 11px 13px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 14px;
+
+  outline: none;
+
+  font-family: inherit;
+}
+
+.video-input input,
+.video-input select {
+  height: 45px;
+}
+
+.video-input textarea {
+  resize: vertical;
+
+  min-height: 90px;
+}
+
+.video-input input:focus,
+.video-input select:focus,
+.video-input textarea:focus {
+  border-color: #f5b942;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(245, 185, 66, 0.12);
+}
+
+
+/* =========================================
+   FORM BUTTON AREA
+========================================= */
+
+.video-button {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 2px;
+}
+
+
+/* =========================================
+   ADD / UPDATE BUTTON
+========================================= */
+
+.submit-video-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  height: 45px;
+
+  min-width: 165px;
+
+  padding: 0 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.submit-video-btn:hover {
+  background: #e3a82f;
+
+  transform: translateY(-1px);
+}
+
+.submit-video-btn:active {
+  transform: translateY(0);
+}
+
+.submit-video-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+.submit-video-btn svg {
+  font-size: 15px;
+}
+
+
+/* =========================================
+   CANCEL BUTTON
+========================================= */
+
+.cancel-video-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  height: 45px;
+
+  min-width: 130px;
+
+  padding: 0 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #ffe4e4;
+
+  color: #c0392b;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.cancel-video-btn:hover {
+  background: #ffd2d2;
+
+  color: #a93226;
+
+  transform: translateY(-1px);
+}
+
+.cancel-video-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.video-table-container {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.video-table-container table {
+  width: 100%;
+
+  min-width: 1000px;
+
+  border-collapse: collapse;
+}
+
+.video-table-container thead {
+  background: #063b3d;
+}
+
+.video-table-container th {
+  padding: 14px 15px;
+
+  color: #ffffff;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.video-table-container td {
+  padding: 14px 15px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  color: #444;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+.video-table-container tbody tr:hover {
+  background: #fafafa;
+}
+
+
+/* =========================================
+   VIDEO LINK
+========================================= */
+
+.video-link {
+  display: inline-block;
+
+  padding: 7px 12px;
+
+  background: #063b3d;
+
+  color: #ffffff;
+
+  border-radius: 5px;
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.video-link:hover {
+  background: #104e50;
+}
+
+
+/* =========================================
+   ACTION COLUMN
+========================================= */
+
+.video-actions {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  white-space: nowrap;
+
+  min-width: 190px;
+}
+
+
+/* =========================================
+   EDIT BUTTON
+========================================= */
+
+.edit-video-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  min-width: 88px;
+
+  height: 42px;
+
+  padding: 0 16px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.edit-video-btn:hover {
+  background: #e3a82f;
+
+  transform: translateY(-1px);
+}
+
+.edit-video-btn:active {
+  transform: translateY(0);
+}
+
+.edit-video-btn svg {
+  font-size: 14px;
+}
+
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.delete-video-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  min-width: 92px;
+
+  height: 42px;
+
+  padding: 0 16px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #ffe4e4;
+
+  color: #c0392b;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.delete-video-btn:hover {
+  background: #ffd0d0;
+
+  color: #a93226;
+
+  transform: translateY(-1px);
+}
+
+.delete-video-btn:active {
+  transform: translateY(0);
+}
+
+.delete-video-btn svg {
+  font-size: 14px;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.video-empty {
+  padding: 40px !important;
+
+  text-align: center;
+
+  color: #888 !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .admin-videos-body {
+    margin-left: 240px;
+
+    padding: 28px;
+  }
+
+}
+
+
+@media (max-width: 800px) {
+
+  .admin-videos-body {
+    margin-left: 220px;
+
+    padding: 22px;
+  }
+
+  .videos-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .video-form {
+    grid-template-columns: 1fr;
+  }
+
+  .video-full {
+    grid-column: auto;
+  }
+
+  .video-actions {
+    justify-content: flex-start;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .admin-videos-body {
+    margin-left: 200px;
+
+    padding: 18px;
+  }
+
+  .video-card {
+    padding: 20px;
+  }
+
+  .videos-header h1 {
+    font-size: 24px;
+  }
+
+  .video-button {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .submit-video-btn,
+  .cancel-video-btn {
+    width: 100%;
+  }
+
+}

@@ -1,0 +1,639 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.offline-batch-page {
+  min-height: 100vh;
+
+  width: 100%;
+
+  background: #f4f6f6;
+
+  font-family: Arial, sans-serif;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.offline-batch-content {
+  margin-left: 280px;
+
+  width: calc(100% - 280px);
+
+  min-height: 100vh;
+
+  padding: 35px 45px;
+
+  background: #f4f6f6;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.offline-batch-header {
+  width: 100%;
+
+  background: white;
+
+  padding: 25px 30px;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+.offline-batch-header h1 {
+  color: #063b3d;
+
+  font-size: 32px;
+
+  margin-bottom: 8px;
+}
+
+
+.offline-batch-header p {
+  color: #777;
+
+  font-size: 15px;
+}
+
+
+/* =========================================
+   DASHBOARD BUTTON
+========================================= */
+
+.offline-dashboard-btn {
+  text-decoration: none;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  padding: 12px 22px;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  white-space: nowrap;
+
+  transition: 0.3s;
+}
+
+
+.offline-dashboard-btn:hover {
+  background: #063b3d;
+
+  color: white;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.offline-batch-stats {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 22px;
+
+  margin-bottom: 35px;
+}
+
+
+.offline-stat-card {
+  background: white;
+
+  min-height: 125px;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  border-left: 5px solid #f5b942;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.07);
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+
+.offline-stat-card h2 {
+  color: #063b3d;
+
+  font-size: 30px;
+
+  margin-bottom: 8px;
+}
+
+
+.offline-stat-card p {
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.offline-batch-section {
+  width: 100%;
+}
+
+
+.offline-section-heading {
+  margin-bottom: 22px;
+}
+
+
+.offline-section-heading h2 {
+  color: #063b3d;
+
+  font-size: 25px;
+
+  margin-bottom: 6px;
+}
+
+
+.offline-section-heading p {
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   BATCH GRID
+========================================= */
+
+.offline-batch-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 28px;
+}
+
+
+/* =========================================
+   BATCH CARD
+========================================= */
+
+.offline-batch-card {
+  width: 100%;
+
+  background: white;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+
+  flex-direction: column;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.offline-batch-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 9px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.offline-batch-image {
+  width: 100%;
+
+  height: 210px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: #ddd;
+}
+
+
+.offline-batch-image img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+
+  transition: transform 0.3s ease;
+}
+
+
+.offline-batch-card:hover
+.offline-batch-image img {
+  transform: scale(1.04);
+}
+
+
+/* =========================================
+   ACTIVE BADGE
+========================================= */
+
+.offline-active-badge {
+  position: absolute;
+
+  top: 14px;
+
+  right: 14px;
+
+  background: #063b3d;
+
+  color: white;
+
+  padding: 7px 13px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: bold;
+}
+
+
+/* =========================================
+   DETAILS
+========================================= */
+
+.offline-batch-details {
+  padding: 25px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.offline-batch-details h3 {
+  color: #063b3d;
+
+  font-size: 21px;
+
+  line-height: 1.35;
+
+  margin-bottom: 10px;
+}
+
+
+.offline-course {
+  color: #777;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================================
+   DETAIL LIST
+========================================= */
+
+.offline-detail-list {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+
+  margin-bottom: 22px;
+}
+
+
+.offline-detail-item {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  background: #f7f8f8;
+
+  border-radius: 7px;
+}
+
+
+.offline-detail-item > span {
+  font-size: 18px;
+
+  line-height: 1;
+}
+
+
+.offline-detail-item strong {
+  display: block;
+
+  color: #063b3d;
+
+  font-size: 12px;
+
+  margin-bottom: 4px;
+}
+
+
+.offline-detail-item p {
+  color: #666;
+
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================
+   ATTENDANCE BUTTON
+========================================= */
+
+.attendance-btn {
+  width: 100%;
+
+  min-height: 43px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+
+.attendance-btn:hover {
+  background: #063b3d;
+
+  color: white;
+}
+
+
+/* =========================================
+   NOTICE
+========================================= */
+
+.offline-batch-notice {
+  width: 100%;
+
+  margin-top: 35px;
+
+  padding: 22px 25px;
+
+  background: white;
+
+  border-left: 5px solid #f5b942;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 18px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+
+.offline-notice-icon {
+  font-size: 27px;
+}
+
+
+.offline-batch-notice h3 {
+  color: #063b3d;
+
+  font-size: 19px;
+
+  margin-bottom: 8px;
+}
+
+
+.offline-batch-notice p {
+  color: #666;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   LARGE TABLET
+========================================= */
+
+@media screen and (max-width: 1200px) {
+
+  .offline-batch-content {
+    padding: 30px;
+  }
+
+  .offline-batch-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media screen and (max-width: 900px) {
+
+  .offline-batch-content {
+    margin-left: 260px;
+
+    width: calc(100% - 260px);
+
+    padding: 25px;
+  }
+
+  .offline-batch-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media screen and (max-width: 750px) {
+
+  .offline-batch-content {
+    margin-left: 230px;
+
+    width: calc(100% - 230px);
+
+    padding: 20px;
+  }
+
+  .offline-batch-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .offline-dashboard-btn {
+    width: 100%;
+
+    text-align: center;
+  }
+
+  .offline-detail-list {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media screen and (max-width: 600px) {
+
+  .offline-batch-content {
+    margin-left: 200px;
+
+    width: calc(100% - 200px);
+
+    padding: 18px 15px;
+  }
+
+  .offline-batch-header {
+    padding: 20px;
+  }
+
+  .offline-batch-header h1 {
+    font-size: 27px;
+  }
+
+  .offline-batch-header p {
+    font-size: 14px;
+  }
+
+  .offline-stat-card {
+    min-height: 110px;
+
+    padding: 20px;
+  }
+
+  .offline-batch-image {
+    height: 200px;
+  }
+
+  .offline-batch-details {
+    padding: 20px;
+  }
+
+  .offline-batch-notice {
+    padding: 20px;
+  }
+
+}
+
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media screen and (max-width: 400px) {
+
+  .offline-batch-content {
+    margin-left: 190px;
+
+    width: calc(100% - 190px);
+
+    padding: 15px 10px;
+  }
+
+  .offline-batch-header {
+    padding: 18px;
+  }
+
+  .offline-stat-card {
+    padding: 18px;
+  }
+
+  .offline-batch-details {
+    padding: 18px;
+  }
+
+}

@@ -1,0 +1,421 @@
+
+/* =====================================================
+   STUDENT CATEGORY PAGE
+===================================================== */
+
+.student-category-page {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #063B3D;
+  display: flex;
+}
+
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.student-category-main {
+  flex: 1;
+  padding: 50px 6%;
+  margin-left: 250px;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.category-page-header h1 {
+  color: #063B3D;
+}
+
+.category-page-header p {
+  color: #555555;
+}
+
+.section-heading h2 {
+  color: #000101;
+}
+
+.section-heading p {
+  color: #666666;
+}
+
+/* =====================================================
+   SECTION HEADING
+===================================================== */
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section-heading h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  color: #F5B942;
+}
+
+.section-heading p {
+  margin: 0;
+  color: #d0e5e5;
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   COURSE CLASS SECTION
+===================================================== */
+
+.course-class-section {
+  margin-bottom: 60px;
+}
+
+
+/* =====================================================
+   COURSE CARD GRID
+===================================================== */
+
+.student-course-class-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+
+/* =====================================================
+   COURSE CARD
+===================================================== */
+
+.student-course-class-card {
+  background: #104E50;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(245, 185, 66, 0.25);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.student-course-class-card:hover {
+  transform: translateY(-8px);
+  border-color: #F5B942;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =====================================================
+   CARD TOP
+===================================================== */
+
+.course-class-top {
+  height: 115px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: #063B3D;
+  border-bottom: 1px solid rgba(245, 185, 66, 0.2);
+}
+
+.course-class-number {
+  font-size: 15px;
+  font-weight: 700;
+  color: #F5B942;
+  letter-spacing: 1px;
+}
+
+.course-class-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #F5B942;
+  color: #063B3D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27px;
+}
+
+
+/* =====================================================
+   CARD CONTENT
+===================================================== */
+
+.course-class-content {
+  padding: 25px;
+}
+
+.course-class-content h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  color: white;
+}
+
+.course-class-content p {
+  margin: 0 0 22px;
+  min-height: 72px;
+  line-height: 1.6;
+  font-size: 14px;
+  color: #d5e6e6;
+}
+
+
+/* =====================================================
+   COURSE DETAILS
+===================================================== */
+
+.course-class-details {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.course-class-details div {
+  flex: 1;
+  padding: 12px;
+  background: #063B3D;
+  border-radius: 10px;
+  border: 1px solid rgba(245, 185, 66, 0.15);
+}
+
+.course-class-details span {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: #a9caca;
+}
+
+.course-class-details strong {
+  font-size: 14px;
+  color: #F5B942;
+}
+
+
+/* =====================================================
+   VIEW CATEGORIES BUTTON
+===================================================== */
+
+.course-class-content button {
+  width: 100%;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #F5B942;
+  color: #063B3D;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.course-class-content button:hover {
+  background: #ffffff;
+  color: #063B3D;
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   CATEGORIES SECTION
+===================================================== */
+
+.categories-section {
+  margin-top: 50px;
+}
+
+.student-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+
+/* =====================================================
+   CATEGORY CARD
+===================================================== */
+
+.student-category-card {
+  background: #104E50;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(245, 185, 66, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.student-category-card:hover {
+  transform: translateY(-7px);
+  border-color: #F5B942;
+}
+
+
+/* =====================================================
+   CATEGORY CARD TOP
+===================================================== */
+
+.category-card-top {
+  height: 90px;
+  padding: 20px;
+  background: #063B3D;
+}
+
+.category-number {
+  font-size: 17px;
+  font-weight: 700;
+  color: #F5B942;
+}
+
+
+/* =====================================================
+   CATEGORY CARD CONTENT
+===================================================== */
+
+.student-category-card-content {
+  padding: 25px;
+}
+
+.student-category-card-content h2 {
+  margin: 0 0 12px;
+  font-size: 23px;
+  color: white;
+}
+
+.student-category-card-content p {
+  min-height: 60px;
+  margin: 0 0 22px;
+  line-height: 1.6;
+  color: #d5e6e6;
+  font-size: 14px;
+}
+
+.student-category-card-content button {
+  width: 100%;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #F5B942;
+  color: #063B3D;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.student-category-card-content button:hover {
+  background: white;
+}
+
+
+/* =====================================================
+   LOADING / ERROR MESSAGE
+===================================================== */
+
+.category-message {
+  text-align: center;
+  padding: 40px;
+  background: #104E50;
+  border-radius: 15px;
+  color: white;
+}
+
+.category-message.error {
+  border: 1px solid #F5B942;
+}
+
+.category-message button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #F5B942;
+  color: #063B3D;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.category-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #104E50;
+  border-radius: 18px;
+}
+
+.category-empty h2 {
+  color: #F5B942;
+  margin-bottom: 10px;
+}
+
+.category-empty p {
+  color: #d5e6e6;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .student-course-class-grid,
+  .student-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .student-category-main {
+    padding: 40px 4%;
+  }
+}
+
+
+@media (max-width: 768px) {
+
+  .student-category-main {
+    margin-left: 0;
+    padding: 30px 20px;
+  }
+
+  .category-page-header h1 {
+    font-size: 32px;
+  }
+
+  .student-course-class-grid,
+  .student-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .course-class-content p {
+    min-height: auto;
+  }
+
+  .course-class-details {
+    flex-direction: column;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .student-category-main {
+    padding: 25px 15px;
+  }
+
+  .category-page-header h1 {
+    font-size: 28px;
+  }
+
+  .section-heading h2 {
+    font-size: 25px;
+  }
+
+  .course-class-content,
+  .student-category-card-content {
+    padding: 20px;
+  }
+}
+

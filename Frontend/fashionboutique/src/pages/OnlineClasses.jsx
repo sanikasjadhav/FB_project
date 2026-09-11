@@ -1,6 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
+import StudentSidebar from "../components/StudentSidebar";
+
 import "./OnlineClasses.css";
+
 
 function OnlineClasses() {
 
@@ -13,6 +17,7 @@ function OnlineClasses() {
       image: "/images/course1.jpg",
       status: "Completed"
     },
+
     {
       title: "Basic Sewing Techniques",
       instructor: "Fashion Boutique Academy",
@@ -21,6 +26,7 @@ function OnlineClasses() {
       image: "/images/bg1.png",
       status: "Continue"
     },
+
     {
       title: "Fabric Selection & Knowledge",
       instructor: "Fashion Boutique Academy",
@@ -29,6 +35,7 @@ function OnlineClasses() {
       image: "/images/course2.jpg",
       status: "Continue"
     },
+
     {
       title: "Pattern Making",
       instructor: "Fashion Boutique Academy",
@@ -37,6 +44,7 @@ function OnlineClasses() {
       image: "/images/course3.jpg",
       status: "Continue"
     },
+
     {
       title: "Dress Designing",
       instructor: "Fashion Boutique Academy",
@@ -45,6 +53,7 @@ function OnlineClasses() {
       image: "/images/bg1.png",
       status: "Start Class"
     },
+
     {
       title: "Embroidery Basics",
       instructor: "Fashion Boutique Academy",
@@ -55,171 +64,242 @@ function OnlineClasses() {
     }
   ];
 
+
   return (
+
     <div className="online-page">
 
-      {/* HEADER */}
+      {/* =====================================
+          COMMON STUDENT SIDEBAR
+      ===================================== */}
 
-      <div className="online-header">
-
-        <div>
-          <h1>Online Classes</h1>
-
-          <p>
-            Learn fashion designing from anywhere, anytime.
-          </p>
-        </div>
-
-        <Link
-          to="/dashboard"
-          className="back-dashboard"
-        >
-          ← Dashboard
-        </Link>
-
-      </div>
+      <StudentSidebar />
 
 
-      {/* STATISTICS */}
+      {/* =====================================
+          MAIN CONTENT
+      ===================================== */}
 
-      <div className="online-stats">
-
-        <div className="online-stat">
-          <h2>06</h2>
-          <p>Total Classes</p>
-        </div>
-
-        <div className="online-stat">
-          <h2>02</h2>
-          <p>Completed</p>
-        </div>
-
-        <div className="online-stat">
-          <h2>04</h2>
-          <p>Remaining</p>
-        </div>
-
-        <div className="online-stat">
-          <h2>58%</h2>
-          <p>Overall Progress</p>
-        </div>
-
-      </div>
+      <main className="online-main-content">
 
 
-      {/* CLASSES */}
+        {/* =====================================
+            HEADER
+        ===================================== */}
 
-      <div className="classes-section">
-
-        <div className="section-title">
+        <div className="online-header">
 
           <div>
-            <h2>My Online Classes</h2>
+
+            <h1>
+              Online Classes
+            </h1>
 
             <p>
-              Continue your learning journey
+              Learn fashion designing from anywhere, anytime.
             </p>
+
+          </div>
+
+
+          
+        </div>
+
+
+        {/* =====================================
+            STATISTICS
+        ===================================== */}
+
+        <div className="online-stats">
+
+
+          <div className="online-stat">
+
+            <h2>
+              06
+            </h2>
+
+            <p>
+              Total Classes
+            </p>
+
+          </div>
+
+
+          <div className="online-stat">
+
+            <h2>
+              02
+            </h2>
+
+            <p>
+              Completed
+            </p>
+
+          </div>
+
+
+          <div className="online-stat">
+
+            <h2>
+              04
+            </h2>
+
+            <p>
+              Remaining
+            </p>
+
+          </div>
+
+
+          <div className="online-stat">
+
+            <h2>
+              58%
+            </h2>
+
+            <p>
+              Overall Progress
+            </p>
+
+          </div>
+
+
+        </div>
+
+
+        {/* =====================================
+            CLASSES
+        ===================================== */}
+
+        <div className="classes-section">
+
+
+          <div className="section-title">
+
+            <div>
+
+              <h2>
+                My Online Classes
+              </h2>
+
+              <p>
+                Continue your learning journey
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* =====================================
+              CLASS GRID
+          ===================================== */}
+
+          <div className="classes-grid">
+
+            {classes.map((item, index) => (
+
+              <div
+                className="class-card"
+                key={index}
+              >
+
+
+                {/* IMAGE */}
+
+                <div className="class-image">
+
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                  />
+
+
+                  <span
+                    className={
+                      item.progress === 100
+                        ? "class-status completed-status"
+                        : "class-status"
+                    }
+                  >
+                    {item.status}
+                  </span>
+
+                </div>
+
+
+                {/* CONTENT */}
+
+                <div className="class-content">
+
+                  <h3>
+                    {item.title}
+                  </h3>
+
+
+                  <p className="instructor">
+                    👩‍🏫 {item.instructor}
+                  </p>
+
+
+                  <p className="duration">
+                    ⏱ {item.duration}
+                  </p>
+
+
+                  {/* PROGRESS */}
+
+                  <div className="class-progress-title">
+
+                    <span>
+                      Progress
+                    </span>
+
+                    <strong>
+                      {item.progress}%
+                    </strong>
+
+                  </div>
+
+
+                  <progress
+                    value={item.progress}
+                    max="100"
+                  ></progress>
+
+
+                  {/* BUTTON */}
+
+                  {item.progress === 100 ? (
+
+                    <button className="watch-btn completed-btn">
+                      ✓ Completed
+                    </button>
+
+                  ) : (
+
+                    <button className="watch-btn">
+                      ▶ Watch Class
+                    </button>
+
+                  )}
+
+                </div>
+
+              </div>
+
+            ))}
+
           </div>
 
         </div>
 
-
-        <div className="classes-grid">
-
-          {classes.map((item, index) => (
-
-            <div
-              className="class-card"
-              key={index}
-            >
-
-              {/* IMAGE */}
-
-              <div className="class-image">
-
-                <img
-                  src={item.image}
-                  alt={item.title}
-                />
-
-                <span
-                  className={
-                    item.progress === 100
-                      ? "class-status completed-status"
-                      : "class-status"
-                  }
-                >
-                  {item.status}
-                </span>
-
-              </div>
-
-
-              {/* CONTENT */}
-
-              <div className="class-content">
-
-                <h3>
-                  {item.title}
-                </h3>
-
-                <p className="instructor">
-                  👩‍🏫 {item.instructor}
-                </p>
-
-                <p className="duration">
-                  ⏱ {item.duration}
-                </p>
-
-
-                {/* PROGRESS */}
-
-                <div className="class-progress-title">
-
-                  <span>
-                    Progress
-                  </span>
-
-                  <strong>
-                    {item.progress}%
-                  </strong>
-
-                </div>
-
-                <progress
-                  value={item.progress}
-                  max="100"
-                ></progress>
-
-
-                {/* BUTTON */}
-
-                {item.progress === 100 ? (
-
-                  <button className="watch-btn">
-                    ✓ Completed
-                  </button>
-
-                ) : (
-
-                  <button className="watch-btn">
-                    ▶ Watch Class
-                  </button>
-
-                )}
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
-
-      </div>
+      </main>
 
     </div>
   );
 }
+
 
 export default OnlineClasses;

@@ -1,0 +1,544 @@
+/* =========================================================
+   ADMIN ENROLLMENT PAGE
+========================================================= */
+
+.admin-enrollment-page {
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #f5f6f6;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+
+   Sidebar is 260px wide.
+   Therefore main content starts after sidebar.
+========================================================= */
+
+.enrollment-main {
+  width: calc(100% - 260px);
+
+  margin-left: 260px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.enrollment-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.enrollment-header h1 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 28px;
+}
+
+.enrollment-header p {
+  margin: 7px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ADD ENROLLMENT BUTTON
+========================================================= */
+
+.add-enrollment-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #135255;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.add-enrollment-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.enrollment-form-card {
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   FORM TITLE
+========================================================= */
+
+.form-title {
+  margin-bottom: 20px;
+}
+
+.form-title h2 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 21px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #135255;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUT / SELECT
+========================================================= */
+
+.form-group input,
+.form-group select {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  background: #ffffff;
+
+  color: #333333;
+
+  transition: 0.2s;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #f5b942;
+
+  box-shadow:
+    0 0 0 2px rgba(245, 185, 66, 0.15);
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.form-buttons {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 11px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.save-btn {
+  background: #f5b942;
+
+  color: #135255;
+}
+
+.cancel-btn {
+  background: #eeeeee;
+
+  color: #555555;
+}
+
+.save-btn:hover,
+.cancel-btn:hover {
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.enrollment-table-card {
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   TABLE HEADING
+========================================================= */
+
+.table-heading {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.table-heading h2 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 21px;
+}
+
+.table-heading p {
+  margin: 5px 0 0;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   ENROLLMENT COUNT
+========================================================= */
+
+.enrollment-count {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 8px 14px;
+
+  border-radius: 20px;
+
+  background: #fff4d8;
+
+  color: #135255;
+
+  font-weight: 600;
+}
+
+.enrollment-count svg {
+  color: #135255;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.enrollment-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.enrollment-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 750px;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.enrollment-table th {
+  padding: 14px;
+
+  background: #063b3d;
+
+  color: #ffffff;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLE DATA
+========================================================= */
+
+.enrollment-table td {
+  padding: 14px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+.enrollment-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.enrollment-table td strong {
+  color: #135255;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.enrollment-actions {
+  display: flex;
+
+  gap: 8px;
+}
+
+.edit-btn,
+.delete-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 7px 11px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.edit-btn {
+  background: #f5b942;
+
+  color: #135255;
+}
+
+.delete-btn {
+  background: #ffe5e5;
+
+  color: #c62828;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  opacity: 0.85;
+}
+
+
+/* =========================================================
+   NO ENROLLMENTS
+========================================================= */
+
+.no-enrollment {
+  padding: 60px 20px !important;
+
+  text-align: center;
+
+  color: #777777 !important;
+}
+
+.no-enrollment div {
+  font-size: 45px;
+
+  margin-bottom: 10px;
+}
+
+.no-enrollment h3 {
+  margin: 0 0 7px;
+
+  color: #135255;
+}
+
+.no-enrollment p {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-page-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #135255;
+
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .enrollment-main {
+    width: calc(100% - 220px);
+
+    margin-left: 220px;
+
+    padding: 20px;
+  }
+
+  .enrollment-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .enrollment-main {
+    width: calc(100% - 200px);
+
+    margin-left: 200px;
+
+    padding: 15px;
+  }
+
+  .enrollment-header {
+    padding: 18px;
+  }
+
+  .enrollment-table-card {
+    padding: 15px;
+  }
+
+  .enrollment-form-card {
+    padding: 18px;
+  }
+
+}

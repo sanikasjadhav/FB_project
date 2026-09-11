@@ -1,0 +1,633 @@
+/* =====================================================
+   STUDENT LAYOUT
+===================================================== */
+
+.student-layout {
+  min-height: 100vh;
+  width: 100%;
+  background: #063B3D;
+}
+
+
+/* =====================================================
+   PAYMENT PAGE
+===================================================== */
+
+.payment-page {
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  min-height: 100vh;
+
+  background: #063B3D;
+
+  padding: 50px 25px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* =====================================================
+   PAYMENT CONTAINER
+===================================================== */
+
+.payment-container {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto;
+}
+
+
+/* =====================================================
+   PAYMENT CARD
+===================================================== */
+
+.payment-card {
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  padding: 40px;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.payment-card h1 {
+  margin: 0;
+
+  text-align: center;
+
+  color: #063B3D;
+
+  font-size: 34px;
+
+  font-weight: 700;
+}
+
+
+.payment-subtitle {
+  margin: 10px 0 30px;
+
+  text-align: center;
+
+  color: #777;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   COURSE DETAILS
+===================================================== */
+
+.course-details {
+  background: #f8f9f9;
+
+  border: 1px solid #e2e7e7;
+
+  border-radius: 14px;
+
+  padding: 25px;
+
+  margin-bottom: 22px;
+
+  transition: box-shadow 0.3s ease;
+}
+
+
+.course-details:hover {
+  box-shadow:
+    0 5px 18px rgba(6, 59, 61, 0.06);
+}
+
+
+.course-details h2 {
+  margin: 0 0 15px;
+
+  color: #063B3D;
+
+  font-size: 25px;
+
+  font-weight: 700;
+}
+
+
+.course-description {
+  margin: 0 0 20px;
+
+  color: #666;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* =====================================================
+   DETAIL ROW
+===================================================== */
+
+.detail-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 13px 0;
+
+  border-top: 1px solid #e5e8e8;
+}
+
+
+.detail-row span {
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+.detail-row strong {
+  color: #063B3D;
+
+  font-size: 15px;
+
+  text-align: right;
+}
+
+
+.course-fee {
+  color: #d49300 !important;
+
+  font-size: 20px !important;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   STUDENT DETAILS
+===================================================== */
+
+.student-details {
+  background: #ffffff;
+
+  border: 1px solid #e2e7e7;
+
+  border-radius: 14px;
+
+  padding: 23px 25px;
+
+  margin-bottom: 22px;
+
+  transition: box-shadow 0.3s ease;
+}
+
+
+.student-details:hover {
+  box-shadow:
+    0 5px 18px rgba(6, 59, 61, 0.06);
+}
+
+
+.student-details h3 {
+  margin: 0 0 15px;
+
+  color: #063B3D;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+
+.student-details p {
+  margin: 9px 0;
+
+  color: #666;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+.student-details strong {
+  color: #063B3D;
+}
+
+
+/* =====================================================
+   SUCCESS MESSAGE
+===================================================== */
+
+.success-message {
+  background: #e8f8ed;
+
+  color: #16733b;
+
+  border: 1px solid #b9e6c8;
+
+  border-radius: 8px;
+
+  padding: 13px 16px;
+
+  margin-bottom: 20px;
+
+  text-align: center;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   ERROR MESSAGE
+===================================================== */
+
+.error-message {
+  background: #fff0f0;
+
+  color: #c0392b;
+
+  border: 1px solid #f2c0c0;
+
+  border-radius: 8px;
+
+  padding: 13px 16px;
+
+  margin-bottom: 20px;
+
+  text-align: center;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   TOTAL AMOUNT
+===================================================== */
+
+.payment-total {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background: #063B3D;
+
+  color: #ffffff;
+
+  padding: 20px 24px;
+
+  border-radius: 12px;
+
+  margin: 25px 0;
+}
+
+
+.payment-total span {
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+
+.payment-total strong {
+  color: #F5B942;
+
+  font-size: 25px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.payment-buttons {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-top: 10px;
+}
+
+
+.back-btn,
+.pay-btn {
+  border: none;
+
+  border-radius: 8px;
+
+  padding: 14px 28px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+
+/* BACK BUTTON */
+
+.back-btn {
+  background: #eeeeee;
+
+  color: #063B3D;
+}
+
+
+.back-btn:hover {
+  background: #dddddd;
+
+  transform: translateY(-2px);
+}
+
+
+.back-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.6;
+}
+
+
+/* PAY BUTTON */
+
+.pay-btn {
+  min-width: 190px;
+
+  background: #F5B942;
+
+  color: #063B3D;
+
+  box-shadow:
+    0 5px 15px rgba(245, 185, 66, 0.25);
+}
+
+
+.pay-btn:hover {
+  background: #e5a92f;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(245, 185, 66, 0.35);
+}
+
+
+.pay-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.65;
+
+  transform: none;
+}
+
+
+/* =====================================================
+   COURSE NOT FOUND
+===================================================== */
+
+.not-found-card {
+  text-align: center;
+}
+
+
+.not-found-card h2 {
+  margin-top: 0;
+
+  color: #063B3D;
+
+  font-size: 28px;
+}
+
+
+.not-found-card p {
+  color: #666;
+
+  line-height: 1.6;
+
+  margin-bottom: 25px;
+}
+
+
+/* =====================================================
+   GENERAL
+===================================================== */
+
+.payment-card h2 {
+  color: #063B3D;
+}
+
+
+.payment-card > p {
+  color: #666;
+
+  line-height: 1.6;
+}
+
+
+.payment-card .back-btn {
+  margin-top: 10px;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .payment-page {
+    margin-left: 230px;
+
+    width: calc(100% - 230px);
+
+    padding: 40px 20px;
+  }
+
+  .payment-card {
+    padding: 35px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .payment-page {
+    margin-left: 0;
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding: 30px 15px;
+
+    align-items: flex-start;
+  }
+
+
+  .payment-card {
+    padding: 30px 25px;
+  }
+
+
+  .payment-card h1 {
+    font-size: 29px;
+  }
+
+
+  .course-details h2 {
+    font-size: 22px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 550px) {
+
+  .payment-page {
+    padding: 20px 10px;
+  }
+
+
+  .payment-card {
+    padding: 22px 17px;
+
+    border-radius: 14px;
+  }
+
+
+  .payment-card h1 {
+    font-size: 25px;
+  }
+
+
+  .payment-subtitle {
+    font-size: 13px;
+
+    margin-bottom: 22px;
+  }
+
+
+  .course-details,
+  .student-details {
+    padding: 18px;
+  }
+
+
+  .course-details h2 {
+    font-size: 20px;
+  }
+
+
+  .detail-row {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+
+  .detail-row strong {
+    text-align: left;
+  }
+
+
+  .payment-total {
+    padding: 17px;
+  }
+
+
+  .payment-total span {
+    font-size: 14px;
+  }
+
+
+  .payment-total strong {
+    font-size: 21px;
+  }
+
+
+  .payment-buttons {
+    flex-direction: column-reverse;
+  }
+
+
+  .back-btn,
+  .pay-btn {
+    width: 100%;
+  }
+
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 360px) {
+
+  .payment-card {
+    padding: 18px 13px;
+  }
+
+
+  .payment-card h1 {
+    font-size: 22px;
+  }
+
+
+  .course-details,
+  .student-details {
+    padding: 15px;
+  }
+
+
+  .payment-total {
+    flex-direction: column;
+
+    gap: 8px;
+
+    text-align: center;
+  }
+
+}

@@ -72,7 +72,7 @@ function Login() {
           "student",
           JSON.stringify(data.student)
         );
-
+        localStorage.setItem("studentEmail", data.email);
         alert("Login Successful!");
 
         // Go to dashboard

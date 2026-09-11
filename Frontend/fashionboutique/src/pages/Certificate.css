@@ -1,0 +1,134 @@
+.certificate-page {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f6f6;
+}
+
+.certificate-main {
+  margin-left: 285px;
+  width: calc(100% - 285px);
+  padding: 40px 48px;
+}
+
+.certificate-header h1 {
+  color: #063b3d;
+  font-size: 34px;
+  margin: 0;
+}
+
+.certificate-header p {
+  color: #777;
+}
+
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 35px;
+}
+
+.certificate-card {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  border: 5px solid #f5b942;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.certificate-icon {
+  font-size: 55px;
+}
+
+.certificate-card h2 {
+  color: #063b3d;
+}
+
+.certificate-card p {
+  color: #777;
+}
+
+.certificate-card h3 {
+  color: #063b3d;
+  font-size: 24px;
+}
+
+.certificate-number,
+.certificate-date {
+  margin-top: 15px;
+  color: #666;
+}
+
+.certificate-card button {
+  margin-top: 25px;
+  padding: 13px 25px;
+  border: none;
+  background: #063b3d;
+  color: white;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.certificate-card button:hover {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.certificate-empty,
+.certificate-message {
+  background: white;
+  padding: 50px;
+  margin-top: 35px;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.certificate-empty div {
+  font-size: 55px;
+}
+
+.certificate-empty h2 {
+  color: #063b3d;
+}
+
+.certificate-empty p {
+  color: #777;
+}
+
+@media (max-width: 800px) {
+
+  .certificate-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 25px;
+  }
+
+  .certificate-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media print {
+
+  .certificate-page {
+    display: block;
+  }
+
+  .certificate-main {
+    margin: 0;
+    width: 100%;
+  }
+
+  .certificate-header,
+  .certificate-card button {
+    display: none;
+  }
+
+  .certificate-card {
+    box-shadow: none;
+    margin: 0;
+  }
+
+}

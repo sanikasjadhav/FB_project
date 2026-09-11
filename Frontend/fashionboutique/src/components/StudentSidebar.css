@@ -1,0 +1,234 @@
+/* =========================================================
+   STUDENT SIDEBAR
+========================================================= */
+
+.student-sidebar {
+  width: 260px;
+
+  min-height: 100vh;
+
+  position: fixed;
+
+  left: 0;
+  top: 0;
+
+  background: #063b3d;
+
+  color: #ffffff;
+
+  display: flex;
+
+  flex-direction: column;
+
+  z-index: 1000;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.student-logo {
+  width: 100%;
+
+  height: 100px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+
+.student-logo img {
+  width: 52px;
+
+  height: 52px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  margin-right: 12px;
+}
+
+
+.student-logo h2 {
+  color: #ffffff !important;
+
+  font-size: 19px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.student-sidebar-nav {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+  padding: 25px 15px;
+}
+
+
+.student-sidebar-nav a {
+  width: 100%;
+
+  display: block;
+
+  padding: 14px 18px;
+
+  color: #ffffff !important;
+
+  text-decoration: none;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  border-radius: 7px;
+
+  transition: all 0.3s ease;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.student-sidebar-nav a:hover {
+  background: #f5b942;
+
+  color: #ffffff !important;
+
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.student-sidebar-nav a.active {
+  background: #f5b942;
+
+  color: #ffffff !important;
+
+  font-weight: 700;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+
+.student-sidebar-nav a.active:hover {
+  background: #f5b942;
+
+  color: #ffffff !important;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   LOGOUT BUTTON
+========================================================= */
+
+.student-logout-btn {
+  width: 100%;
+
+  display: block;
+
+  padding: 14px 18px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  text-align: left;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+
+.student-logout-btn:hover {
+  background: #f5b942;
+
+  color: #ffffff;
+
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .student-sidebar {
+    position: relative;
+
+    width: 100%;
+
+    min-height: auto;
+  }
+
+
+  .student-logo {
+    justify-content: center;
+  }
+
+
+  .student-sidebar-nav {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 6px;
+
+    padding: 15px;
+  }
+
+
+  .student-sidebar-nav a,
+  .student-logout-btn {
+    padding: 12px 14px;
+
+    font-size: 14px;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .student-sidebar-nav {
+    grid-template-columns: 1fr;
+  }
+
+}

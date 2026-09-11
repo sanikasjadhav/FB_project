@@ -1,137 +1,367 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
+import {
+  FaBookOpen,
+  FaGraduationCap,
+  FaVideo,
+  FaCertificate,
+  FaArrowRight,
+} from "react-icons/fa";
+
+import StudentSidebar from "../components/StudentSidebar";
+
 import "./StudentDashboard.css";
-import { useState } from "react";
 
 function StudentDashboard() {
-  const [student, setStudent] = useState(() => {
-            const savedStudent = localStorage.getItem("student");
+  const [student] = useState(() => {
+    const savedStudent = localStorage.getItem("student");
 
-            return savedStudent
-              ? JSON.parse(savedStudent)
-              : null;
-            });
+    return savedStudent ? JSON.parse(savedStudent) : null;
+  });
+
+  const studentName = student?.first_name || "Student";
+
   return (
+    <div className="student-dashboard">
 
-    <div className="dashboard">
+      {/* ================= COMMON SIDEBAR ================= */}
 
-      {/* SIDEBAR */}
-      <aside className="sidebar">
- 
-        <div className="logo">
-          <img src="/images/logofbn.jpg" alt="Logo" />
-          <h2>Fashion Boutique</h2>
-        </div>
-
-        <nav className="sidebar-nav">
-
-          <Link to="/dashboard"> Dashboard</Link>
-
-          <Link to="/mycourses">My Courses</Link>
-
-          <Link to="/online">Online Classes</Link>
-
-          <Link to="/offline">Offline Batch</Link>
-
-          <Link to="/payment">Payment</Link>
-
-          <Link to="/quiz">Quiz</Link>
-
-          <Link to="/certificate">Certificate</Link>
-
-          <Link to="/profile"> My Profile</Link>
-
-          <Link to="/login"> Logout</Link>
-
-        </nav>
-
-      </aside>
+      <StudentSidebar />
 
 
-      {/* MAIN CONTENT */}
-      <main className="main-content">
+      {/* ================= MAIN CONTENT ================= */}
 
-        {/* WELCOME */}
-        <div className="welcome">
+      <main className="student-main-content">
 
-          <div>
-            
-            <h1>Hello,{" "}
-          {student?.first_name || "Student"} 👋</h1>
+        {/* ================= WELCOME ================= */}
+
+        <section className="student-welcome">
+
+          <div className="welcome-text">
+
+            <h1>
+              Hello, {studentName} 👋
+            </h1>
 
             <p>
-              Welcome to your Fashion Boutique Learning Dashboard.
+              Welcome back to your Fashion Boutique
+              Learning Dashboard.
             </p>
+
+            <Link
+              to="/categories"
+              className="explore-btn"
+            >
+              Explore Courses
+              <FaArrowRight />
+            </Link>
+
           </div>
 
-          <img
-            src="/images/dashboard.png"
-            alt="Dashboard"
-          />
 
-        </div>
+          
+
+        </section>
 
 
-        {/* STATISTICS */}
-        <div className="cards">
+        {/* ================= STATISTICS ================= */}
 
-          <div className="card">
-            <h2>03</h2>
-            <p>Enrolled Courses</p>
+        <section className="student-statistics">
+
+          {/* MY COURSES */}
+
+          <div className="student-stat-card">
+
+            <div className="stat-icon">
+              <FaBookOpen />
+            </div>
+
+            <div>
+              <h2>0</h2>
+              <p>My Courses</p>
+            </div>
+
           </div>
 
-          <div className="card">
-            <h2>15</h2>
-            <p>Videos Completed</p>
+
+          {/* VIDEOS COMPLETED */}
+
+          <div className="student-stat-card">
+
+            <div className="stat-icon">
+              <FaVideo />
+            </div>
+
+            <div>
+              <h2>0</h2>
+              <p>Videos Completed</p>
+            </div>
+
           </div>
 
-          <div className="card">
-            <h2>02</h2>
-            <p>Certificates</p>
+
+          {/* ACTIVE COURSES */}
+
+          <div className="student-stat-card">
+
+            <div className="stat-icon">
+              <FaGraduationCap />
+            </div>
+
+            <div>
+              <h2>0</h2>
+              <p>Active Courses</p>
+            </div>
+
           </div>
 
-          <div className="card">
-            <h2>85%</h2>
-            <p>Course Progress</p>
+
+          {/* CERTIFICATES */}
+
+          <div className="student-stat-card">
+
+            <div className="stat-icon">
+              <FaCertificate />
+            </div>
+
+            <div>
+              <h2>0</h2>
+              <p>Certificates</p>
+            </div>
+
           </div>
 
-        </div>
+        </section>
 
 
-        {/* CONTINUE LEARNING */}
-        <div className="course-box">
+        {/* ================= EXPLORE COURSES ================= */}
 
-          <h2>Continue Learning</h2>
+        <section className="explore-section">
 
-          <div className="course">
+          <div className="section-heading">
 
-            <img
-              src="/images/bg1.png"
-              alt="Fashion Designing"
-            />
+            <div>
 
-            <div className="course-info">
+              <h2>
+                Explore Courses
+              </h2>
 
-              <h3>Fashion Designing</h3>
+              <p>
+                Choose a course and start your learning journey.
+              </p>
 
-              <p>Progress : 65%</p>
+            </div>
 
-              <progress
-                value="65"
-                max="100"
-              ></progress>
 
-              <br />
+            <Link
+              to="/categories"
+              className="view-all-btn"
+            >
+              View All
+              <FaArrowRight />
+            </Link>
 
-              <button>
-                Continue Course
-              </button>
+          </div>
+
+
+          <div className="category-cards">
+
+
+            {/* ================= FASHION DESIGNING ================= */}
+
+            <div className="category-card">
+
+              <img
+                src="/images/course1.jpg"
+                alt="Fashion Designing"
+              />
+
+              <div className="category-card-content">
+
+                <h3>
+                  Fashion Designing
+                </h3>
+
+                <p>
+                  Learn fashion illustration,
+                  pattern making, cutting and stitching.
+                </p>
+
+                <Link
+                  to="/course-details"
+                  className="category-btn"
+                >
+                  Explore
+                  <FaArrowRight />
+                </Link>
+
+              </div>
+
+            </div>
+
+
+            {/* ================= BOUTIQUE MANAGEMENT ================= */}
+
+            <div className="category-card">
+
+              <img
+                src="/images/course1.jpg"
+                alt="Boutique Management"
+              />
+
+              <div className="category-card-content">
+
+                <h3>
+                  Boutique Management
+                </h3>
+
+                <p>
+                  Learn how to manage and
+                  successfully run a fashion boutique.
+                </p>
+
+                <Link
+                  to="/course-details"
+                  className="category-btn"
+                >
+                  Explore
+                  <FaArrowRight />
+                </Link>
+
+              </div>
+
+            </div>
+
+
+            {/* ================= EMBROIDERY ================= */}
+
+            <div className="category-card">
+
+              <img
+                src="/images/course1.jpg"
+                alt="Embroidery"
+              />
+
+              <div className="category-card-content">
+
+                <h3>
+                  Embroidery
+                </h3>
+
+                <p>
+                  Learn beautiful embroidery
+                  techniques and creative designs.
+                </p>
+
+                <Link
+                  to="/course-details"
+                  className="category-btn"
+                >
+                  Explore
+                  <FaArrowRight />
+                </Link>
+
+              </div>
+
+            </div>
+
+
+            {/* ================= TAILORING ================= */}
+
+            <div className="category-card">
+
+              <img
+                src="/images/course1.jpg"
+                alt="Tailoring"
+              />
+
+              <div className="category-card-content">
+
+                <h3>
+                  Tailoring
+                </h3>
+
+                <p>
+                  Learn professional tailoring,
+                  measurements and garment construction.
+                </p>
+
+                <Link
+                  to="/course-details"
+                  className="category-btn"
+                >
+                  Explore
+                  <FaArrowRight />
+                </Link>
+
+              </div>
 
             </div>
 
           </div>
 
-        </div>
+        </section>
+
+
+        {/* ================= CONTINUE LEARNING ================= */}
+
+        <section className="continue-learning-section">
+
+          <div className="section-heading">
+
+            <div>
+
+              <h2>
+                Continue Learning
+              </h2>
+
+              <p>
+                Your enrolled courses will appear here.
+              </p>
+
+            </div>
+
+
+            <Link
+              to="/my-courses"
+              className="view-all-btn"
+            >
+              My Courses
+              <FaArrowRight />
+            </Link>
+
+          </div>
+
+
+          {/* ================= EMPTY STATE ================= */}
+
+          <div className="empty-course-box">
+
+            <FaGraduationCap
+              className="empty-course-icon"
+            />
+
+            <h3>
+              No Courses Yet
+            </h3>
+
+            <p>
+              You have not enrolled in any course yet.
+              Explore our courses and start learning.
+            </p>
+
+            <Link
+              to="/categories"
+              className="explore-btn"
+            >
+              Explore Courses
+              <FaArrowRight />
+            </Link>
+
+          </div>
+
+        </section>
 
       </main>
 

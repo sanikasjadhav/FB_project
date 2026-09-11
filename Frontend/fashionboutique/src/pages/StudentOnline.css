@@ -1,0 +1,478 @@
+/* =========================================
+   ONLINE CLASSES PAGE
+========================================= */
+
+.online-classes-page {
+  min-height: 100vh;
+
+  width: 100%;
+
+  background: #f5f6f6;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.online-classes-content {
+  margin-left: 280px;
+
+  min-height: 100vh;
+
+  padding: 45px 50px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.online-classes-header {
+  margin-bottom: 30px;
+}
+
+.online-classes-header h1 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 38px;
+
+  font-weight: 700;
+
+  font-family: Arial, sans-serif;
+}
+
+.online-classes-header p {
+  margin-top: 10px;
+
+  color: #666;
+
+  font-size: 17px;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.online-class-stats {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 25px;
+
+  margin-bottom: 40px;
+}
+
+
+.online-stat-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  background: white;
+
+  padding: 24px;
+
+  border-radius: 12px;
+
+  border-top: 4px solid #f5b942;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+.online-stat-icon {
+  width: 55px;
+
+  height: 55px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fff4d7;
+
+  font-size: 25px;
+}
+
+
+.online-stat-card h2 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 30px;
+}
+
+
+.online-stat-card p {
+  margin: 5px 0 0;
+
+  color: #666;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.online-classes-section {
+  width: 100%;
+}
+
+
+.online-section-heading {
+  margin-bottom: 25px;
+}
+
+
+.online-section-heading h2 {
+  margin: 0;
+
+  color: #063b3d;
+
+  font-size: 28px;
+}
+
+
+.online-section-heading p {
+  margin-top: 8px;
+
+  color: #777;
+
+  font-size: 15px;
+}
+
+
+/* =========================================
+   CLASS GRID
+========================================= */
+
+.online-classes-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(300px, 1fr));
+
+  gap: 30px;
+}
+
+
+/* =========================================
+   CLASS CARD
+========================================= */
+
+.online-class-card {
+  background: white;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.10);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.online-class-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.14);
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.online-class-image {
+  position: relative;
+
+  width: 100%;
+
+  height: 210px;
+
+  overflow: hidden;
+
+  background: #e8eeee;
+}
+
+
+.online-class-image img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* =========================================
+   LIVE BADGE
+========================================= */
+
+.live-badge {
+  position: absolute;
+
+  top: 15px;
+
+  right: 15px;
+
+  padding: 7px 14px;
+
+  border-radius: 20px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   DETAILS
+========================================= */
+
+.online-class-details {
+  padding: 25px;
+}
+
+
+.online-class-details h3 {
+  margin: 0 0 10px;
+
+  color: #063b3d;
+
+  font-size: 22px;
+
+  line-height: 1.3;
+}
+
+
+.online-course-name {
+  margin: 0 0 20px;
+
+  color: #666;
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   CLASS INFORMATION
+========================================= */
+
+.online-class-info {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+
+.online-class-info p {
+  margin: 0;
+
+  padding: 12px;
+
+  background: #f7f8f8;
+
+  border-radius: 7px;
+
+  color: #555;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+.online-class-info strong {
+  color: #063b3d;
+}
+
+
+/* =========================================
+   JOIN BUTTON
+========================================= */
+
+.join-class-btn {
+  width: 100%;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+.join-class-btn:hover {
+  background: #e5a92f;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   INFORMATION NOTICE
+========================================= */
+
+.online-class-notice {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 18px;
+
+  margin-top: 35px;
+
+  padding: 22px 25px;
+
+  background: white;
+
+  border-left: 5px solid #f5b942;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+
+.notice-icon {
+  font-size: 28px;
+}
+
+
+.online-class-notice h3 {
+  margin: 0 0 8px;
+
+  color: #063b3d;
+
+  font-size: 19px;
+}
+
+
+.online-class-notice p {
+  margin: 0;
+
+  color: #666;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .online-classes-content {
+    padding: 35px 30px;
+  }
+
+  .online-classes-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+  .online-classes-content {
+    margin-left: 230px;
+
+    padding: 30px 25px;
+  }
+
+  .online-class-stats {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .online-classes-content {
+    margin-left: 200px;
+
+    padding: 25px 15px;
+  }
+
+  .online-classes-header h1 {
+    font-size: 30px;
+  }
+
+  .online-classes-header p {
+    font-size: 14px;
+  }
+
+  .online-class-image {
+    height: 190px;
+  }
+
+  .online-class-details {
+    padding: 20px;
+  }
+
+  .online-class-info {
+    grid-template-columns: 1fr;
+  }
+
+}

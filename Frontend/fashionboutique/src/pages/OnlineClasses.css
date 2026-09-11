@@ -1,51 +1,97 @@
+/* =========================================
+   RESET
+========================================= */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+
+/* =========================================
+   ONLINE PAGE
+========================================= */
+
 .online-page {
   min-height: 100vh;
   width: 100%;
+
   background: #f4f6f6;
-  padding: 35px 45px;
+
   font-family: Arial, sans-serif;
 }
 
 
-/* =========================
+/* =========================================
+   MAIN CONTENT
+   SIDEBAR = 280px
+========================================= */
+
+.online-main-content {
+  margin-left: 280px;
+
+  width: calc(100% - 280px);
+
+  min-height: 100vh;
+
+  padding: 35px 45px;
+
+  background: #f4f6f6;
+}
+
+
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
 .online-header {
   width: 100%;
+
   background: white;
+
   padding: 25px 30px;
+
   border-radius: 12px;
 
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
 
   margin-bottom: 30px;
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.08);
 }
+
 
 .online-header h1 {
   color: #063b3d;
+
   font-size: 32px;
+
   margin-bottom: 8px;
 }
 
+
 .online-header p {
   color: #777;
+
   font-size: 15px;
 }
 
+
+/* =========================================
+   DASHBOARD BUTTON
+========================================= */
+
 .back-dashboard {
   text-decoration: none;
+
   background: #f5b942;
+
   color: #063b3d;
 
   padding: 12px 22px;
@@ -53,31 +99,39 @@
   border-radius: 7px;
 
   font-size: 14px;
+
   font-weight: bold;
 
   transition: 0.3s;
+
+  white-space: nowrap;
 }
+
 
 .back-dashboard:hover {
   background: #063b3d;
+
   color: white;
 }
 
 
-/* =========================
+/* =========================================
    STATISTICS
-========================= */
+========================================= */
 
 .online-stats {
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
 
   gap: 22px;
 
   margin-bottom: 35px;
 }
+
 
 .online-stat {
   background: white;
@@ -90,67 +144,82 @@
 
   border-left: 5px solid #f5b942;
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.07);
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
 }
 
+
 .online-stat h2 {
   color: #063b3d;
+
   font-size: 30px;
+
   margin-bottom: 8px;
 }
 
+
 .online-stat p {
   color: #777;
+
   font-size: 14px;
 }
 
 
-/* =========================
-   SECTION
-========================= */
+/* =========================================
+   CLASSES SECTION
+========================================= */
 
 .classes-section {
   width: 100%;
 }
 
+
 .section-title {
   margin-bottom: 22px;
 }
 
+
 .section-title h2 {
   color: #063b3d;
+
   font-size: 25px;
+
   margin-bottom: 6px;
 }
 
+
 .section-title p {
   color: #777;
+
   font-size: 14px;
 }
 
 
-/* =========================
+/* =========================================
    CLASSES GRID
-========================= */
+========================================= */
 
 .classes-grid {
   width: 100%;
 
   display: grid;
 
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
   gap: 25px;
 }
 
 
-/* =========================
+/* =========================================
    CLASS CARD
-========================= */
+========================================= */
 
 .class-card {
   width: 100%;
@@ -161,19 +230,34 @@
 
   overflow: hidden;
 
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.08);
 
   display: flex;
+
   flex-direction: column;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 
-/* =========================
+.class-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================
    IMAGE
-========================= */
+========================================= */
 
 .class-image {
   width: 100%;
+
   height: 190px;
 
   position: relative;
@@ -183,27 +267,38 @@
   background: #ddd;
 }
 
+
 .class-image img {
   width: 100%;
+
   height: 100%;
 
   object-fit: cover;
 
   display: block;
+
+  transition: transform 0.3s ease;
 }
 
 
-/* =========================
+.class-card:hover .class-image img {
+  transform: scale(1.04);
+}
+
+
+/* =========================================
    STATUS
-========================= */
+========================================= */
 
 .class-status {
   position: absolute;
 
   top: 14px;
+
   right: 14px;
 
   background: #f5b942;
+
   color: #063b3d;
 
   padding: 7px 12px;
@@ -215,22 +310,28 @@
   font-weight: bold;
 }
 
+
 .completed-status {
   background: #063b3d;
+
   color: white;
 }
 
 
-/* =========================
+/* =========================================
    CONTENT
-========================= */
+========================================= */
 
 .class-content {
   padding: 22px;
 
   display: flex;
+
   flex-direction: column;
+
+  flex: 1;
 }
+
 
 .class-content h3 {
   color: #063b3d;
@@ -244,6 +345,7 @@
   min-height: 54px;
 }
 
+
 .instructor,
 .duration {
   color: #777;
@@ -254,9 +356,9 @@
 }
 
 
-/* =========================
+/* =========================================
    PROGRESS
-========================= */
+========================================= */
 
 .class-progress-title {
   display: flex;
@@ -270,17 +372,20 @@
   margin-bottom: 7px;
 }
 
+
 .class-progress-title span {
   color: #555;
 
   font-size: 13px;
 }
 
+
 .class-progress-title strong {
   color: #063b3d;
 
   font-size: 13px;
 }
+
 
 .class-content progress {
   width: 100%;
@@ -296,17 +401,20 @@
   margin-bottom: 18px;
 }
 
+
 .class-content progress::-webkit-progress-bar {
   background: #e5e5e5;
 
   border-radius: 10px;
 }
 
+
 .class-content progress::-webkit-progress-value {
   background: #f5b942;
 
   border-radius: 10px;
 }
+
 
 .class-content progress::-moz-progress-bar {
   background: #f5b942;
@@ -315,14 +423,16 @@
 }
 
 
-/* =========================
+/* =========================================
    BUTTON
-========================= */
+========================================= */
 
 .watch-btn {
   width: 100%;
 
   min-height: 42px;
+
+  margin-top: auto;
 
   border: none;
 
@@ -341,6 +451,7 @@
   transition: 0.3s;
 }
 
+
 .watch-btn:hover {
   background: #063b3d;
 
@@ -348,40 +459,102 @@
 }
 
 
-/* =========================
-   TABLET
-========================= */
+/* =========================================
+   COMPLETED BUTTON
+========================================= */
 
-@media screen and (max-width: 1100px) {
+.completed-btn {
+  background: #063b3d;
 
-  .online-page {
+  color: white;
+}
+
+
+.completed-btn:hover {
+  background: #104e50;
+
+  color: white;
+}
+
+
+/* =========================================
+   LARGE TABLET
+========================================= */
+
+@media screen and (max-width: 1200px) {
+
+  .online-main-content {
     padding: 30px;
   }
 
-  .online-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
 
   .classes-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .online-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+/* =========================================
+   TABLET
+========================================= */
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 900px) {
 
-  .online-page {
-    padding: 20px 15px;
+  .online-main-content {
+    margin-left: 260px;
+
+    width: calc(100% - 260px);
+
+    padding: 25px;
   }
 
-  .online-header {
-    padding: 20px;
 
+  .online-header {
+    padding: 22px;
+  }
+
+
+  .online-header h1 {
+    font-size: 29px;
+  }
+
+}
+
+
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media screen and (max-width: 750px) {
+
+  .online-main-content {
+    margin-left: 230px;
+
+    width: calc(100% - 230px);
+
+    padding: 20px;
+  }
+
+
+  .classes-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .online-stats {
+    grid-template-columns: 1fr;
+  }
+
+
+  .online-header {
     flex-direction: column;
 
     align-items: flex-start;
@@ -389,9 +562,6 @@
     gap: 18px;
   }
 
-  .online-header h1 {
-    font-size: 27px;
-  }
 
   .back-dashboard {
     width: 100%;
@@ -399,41 +569,95 @@
     text-align: center;
   }
 
-  .online-stats {
-    grid-template-columns: 1fr;
+}
 
-    gap: 15px;
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media screen and (max-width: 600px) {
+
+  .online-main-content {
+    margin-left: 200px;
+
+    width: calc(100% - 200px);
+
+    padding: 18px 15px;
   }
 
-  .classes-grid {
-    grid-template-columns: 1fr;
 
-    gap: 20px;
+  .online-header {
+    padding: 20px;
+  }
+
+
+  .online-header h1 {
+    font-size: 26px;
+  }
+
+
+  .online-header p {
+    font-size: 14px;
+  }
+
+
+  .online-stat {
+    min-height: 110px;
+
+    padding: 20px;
+  }
+
+
+  .class-image {
+    height: 200px;
+  }
+
+
+  .class-content {
+    padding: 20px;
+  }
+
+
+  .class-content h3 {
+    font-size: 19px;
   }
 
 }
 
 
-/* =========================
-   SMALL MOBILE
-========================= */
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
 
 @media screen and (max-width: 400px) {
 
-  .online-page {
+  .online-main-content {
+    margin-left: 190px;
+
+    width: calc(100% - 190px);
+
     padding: 15px 10px;
   }
+
 
   .online-header {
     padding: 18px;
   }
 
+
   .online-stat {
-    padding: 20px;
+    padding: 18px;
   }
+
 
   .class-content {
     padding: 18px;
+  }
+
+
+  .class-image {
+    height: 180px;
   }
 
 }

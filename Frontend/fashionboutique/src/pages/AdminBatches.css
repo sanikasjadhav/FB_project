@@ -1,0 +1,562 @@
+/* =========================================================
+   ADMIN BATCH PAGE
+========================================================= */
+
+.admin-batch-page {
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #f5f6f6;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.batch-main {
+  width: calc(100% - 260px);
+
+  margin-left: 260px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.batch-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.batch-header h1 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 28px;
+}
+
+.batch-header p {
+  margin: 7px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ADD BATCH BUTTON
+========================================================= */
+
+.add-batch-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #135255;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.add-batch-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.batch-form-card {
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   FORM TITLE
+========================================================= */
+
+.batch-form-title {
+  margin-bottom: 20px;
+}
+
+.batch-form-title h2 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 21px;
+}
+
+
+/* =========================================================
+   FORM ROW
+========================================================= */
+
+.batch-form-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.batch-form-group {
+  margin-bottom: 18px;
+}
+
+.batch-form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #135255;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUT / SELECT
+========================================================= */
+
+.batch-form-group input,
+.batch-form-group select {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  background: #ffffff;
+
+  color: #333333;
+
+  transition: 0.2s;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+.batch-form-group input:focus,
+.batch-form-group select:focus {
+  border-color: #f5b942;
+
+  box-shadow:
+    0 0 0 2px rgba(245, 185, 66, 0.15);
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.batch-form-buttons {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.batch-save-btn,
+.batch-cancel-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 11px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.batch-save-btn {
+  background: #f5b942;
+
+  color: #135255;
+}
+
+.batch-cancel-btn {
+  background: #eeeeee;
+
+  color: #555555;
+}
+
+.batch-save-btn:hover,
+.batch-cancel-btn:hover {
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.batch-table-card {
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   TABLE HEADING
+========================================================= */
+
+.batch-table-heading {
+  margin-bottom: 20px;
+}
+
+.batch-table-heading h2 {
+  margin: 0;
+
+  color: #135255;
+
+  font-size: 21px;
+}
+
+.batch-table-heading p {
+  margin: 5px 0 0;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.batch-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.batch-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 1100px;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.batch-table th {
+  padding: 14px;
+
+  background: #063b3d;
+
+  color: #ffffff;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLE DATA
+========================================================= */
+
+.batch-table td {
+  padding: 14px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+.batch-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.batch-table td strong {
+  color: #135255;
+}
+
+
+/* =========================================================
+   BATCH TYPE
+========================================================= */
+
+.batch-type {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.batch-type.online {
+  background: #e3f2fd;
+
+  color: #1565c0;
+}
+
+.batch-type.offline {
+  background: #fff3cd;
+
+  color: #856404;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.batch-actions {
+  display: flex;
+
+  gap: 8px;
+}
+
+.batch-edit-btn,
+.batch-delete-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 7px 11px;
+
+  border: none;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.batch-edit-btn {
+  background: #f5b942;
+
+  color: #135255;
+}
+
+.batch-delete-btn {
+  background: #ffe5e5;
+
+  color: #c62828;
+}
+
+.batch-edit-btn:hover,
+.batch-delete-btn:hover {
+  opacity: 0.85;
+}
+
+
+/* =========================================================
+   NO BATCHES
+========================================================= */
+
+.no-batches {
+  padding: 60px 20px !important;
+
+  text-align: center;
+
+  color: #777777 !important;
+}
+
+.no-batches div {
+  font-size: 45px;
+
+  margin-bottom: 10px;
+}
+
+.no-batches h3 {
+  margin: 0 0 7px;
+
+  color: #135255;
+}
+
+.no-batches p {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-page-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #135255;
+
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .batch-main {
+    width: calc(100% - 240px);
+
+    margin-left: 240px;
+
+    padding: 20px;
+  }
+
+  .batch-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .batch-main {
+    width: calc(100% - 220px);
+
+    margin-left: 220px;
+
+    padding: 15px;
+  }
+
+  .batch-header {
+    padding: 18px;
+  }
+
+  .batch-form-card {
+    padding: 18px;
+  }
+
+  .batch-table-card {
+    padding: 15px;
+  }
+
+  .batch-form-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+}

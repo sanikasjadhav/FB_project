@@ -1,0 +1,610 @@
+/* =====================================
+   PAYMENT RECEIPT PAGE
+===================================== */
+
+.receipt-page {
+  min-height: 100vh;
+  padding: 35px 40px;
+  background: #f5f7f7;
+  box-sizing: border-box;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.receipt-header h1 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.receipt-header p {
+  margin: 8px 0 0;
+  color: #6d797a;
+  font-size: 15px;
+}
+
+
+/* =====================================
+   BACK BUTTON
+===================================== */
+
+.back-payment-btn {
+  border: none;
+  background: #ffffff;
+  color: #063b3d;
+  border: 1px solid #dce5e5;
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.back-payment-btn:hover {
+  background: #063b3d;
+  color: #ffffff;
+}
+
+
+/* =====================================
+   RECEIPT CONTAINER
+===================================== */
+
+.receipt-container {
+  max-width: 950px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: 0 8px 30px rgba(6, 59, 61, 0.10);
+  border: 1px solid #e5eeee;
+}
+
+
+/* =====================================
+   RECEIPT TOP
+===================================== */
+
+.receipt-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+
+/* =====================================
+   LOGO
+===================================== */
+
+.receipt-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #f5b942;
+  color: #063b3d;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.receipt-logo h2 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 23px;
+}
+
+.receipt-logo p {
+  margin: 5px 0 0;
+  color: #788384;
+  font-size: 13px;
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.receipt-status-box {
+  text-align: right;
+}
+
+.receipt-status {
+  display: inline-flex;
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.receipt-status.paid {
+  background: #e4f7ec;
+  color: #168344;
+}
+
+.receipt-status.pending {
+  background: #fff3d6;
+  color: #b77900;
+}
+
+.receipt-status-box p {
+  margin: 7px 0 0;
+  color: #168344;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =====================================
+   DIVIDER
+===================================== */
+
+.receipt-divider {
+  height: 1px;
+  background: #e5eeee;
+  margin: 28px 0;
+}
+
+
+/* =====================================
+   INFORMATION SECTIONS
+===================================== */
+
+.receipt-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 45px;
+  margin-bottom: 35px;
+}
+
+.receipt-section h3,
+.course-payment-section h3,
+.razorpay-section h3 {
+  margin: 0 0 18px;
+  color: #063b3d;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+
+/* =====================================
+   INFO ROW
+===================================== */
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 11px 0;
+  border-bottom: 1px solid #edf1f1;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row span {
+  color: #7a8586;
+  font-size: 14px;
+}
+
+.info-row strong {
+  color: #263f40;
+  font-size: 14px;
+  text-align: right;
+  word-break: break-word;
+}
+
+
+/* =====================================
+   PAID / PENDING TEXT
+===================================== */
+
+.text-paid {
+  color: #168344 !important;
+}
+
+.text-pending {
+  color: #b77900 !important;
+}
+
+
+/* =====================================
+   COURSE PAYMENT SECTION
+===================================== */
+
+.course-payment-section {
+  margin-bottom: 30px;
+}
+
+.course-payment-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #fffaf0;
+  border: 1px solid #f3dfad;
+  border-radius: 12px;
+
+  padding: 22px 25px;
+}
+
+.course-label {
+  display: block;
+  color: #7d8586;
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.course-payment-card h2 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 20px;
+}
+
+.course-amount {
+  text-align: right;
+}
+
+.course-amount span {
+  display: block;
+  color: #7d8586;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.course-amount strong {
+  color: #063b3d;
+  font-size: 24px;
+}
+
+
+/* =====================================
+   TRANSACTION SECTION
+===================================== */
+
+.razorpay-section {
+  margin-bottom: 30px;
+}
+
+.transaction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.transaction-item {
+  background: #f7f9f9;
+  border: 1px solid #e5eeee;
+  border-radius: 9px;
+  padding: 15px;
+}
+
+.transaction-item span {
+  display: block;
+  color: #7a8586;
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.transaction-item strong {
+  display: block;
+  color: #063b3d;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+
+/* =====================================
+   TOTAL
+===================================== */
+
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #063b3d;
+  color: #ffffff;
+
+  padding: 20px 25px;
+  border-radius: 10px;
+
+  margin-top: 25px;
+}
+
+.receipt-total span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.receipt-total strong {
+  color: #f5b942;
+  font-size: 25px;
+}
+
+
+/* =====================================
+   RECEIPT FOOTER
+===================================== */
+
+.receipt-footer {
+  text-align: center;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px dashed #dce5e5;
+}
+
+.receipt-footer p {
+  margin: 0 0 7px;
+  color: #063b3d;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.receipt-footer span {
+  color: #899293;
+  font-size: 12px;
+}
+
+
+/* =====================================
+   ACTION BUTTONS
+===================================== */
+
+.receipt-actions {
+  max-width: 950px;
+  margin: 25px auto 0;
+
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.print-receipt-btn,
+.my-courses-btn {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.print-receipt-btn {
+  background: #063b3d;
+  color: #ffffff;
+}
+
+.print-receipt-btn:hover {
+  background: #104e50;
+  transform: translateY(-2px);
+}
+
+.my-courses-btn {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.my-courses-btn:hover {
+  background: #e5a82f;
+  transform: translateY(-2px);
+}
+
+
+/* =====================================
+   NOT FOUND
+===================================== */
+
+.receipt-not-found {
+  max-width: 550px;
+  margin: 80px auto;
+  background: #ffffff;
+  padding: 45px 30px;
+  text-align: center;
+
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(6, 59, 61, 0.08);
+}
+
+.receipt-not-found h2 {
+  margin: 0 0 10px;
+  color: #063b3d;
+}
+
+.receipt-not-found p {
+  color: #737f80;
+  margin-bottom: 25px;
+}
+
+.receipt-not-found button {
+  border: none;
+  background: #f5b942;
+  color: #063b3d;
+
+  padding: 12px 22px;
+  border-radius: 8px;
+
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 800px) {
+
+  .receipt-page {
+    padding: 25px 20px;
+  }
+
+  .receipt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .receipt-header h1 {
+    font-size: 27px;
+  }
+
+  .receipt-container {
+    padding: 25px 20px;
+  }
+
+  .receipt-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .receipt-status-box {
+    text-align: left;
+  }
+
+  .receipt-info {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .transaction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .course-payment-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .course-amount {
+    text-align: left;
+  }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 500px) {
+
+  .receipt-page {
+    padding: 20px 12px;
+  }
+
+  .receipt-container {
+    padding: 20px 15px;
+    border-radius: 10px;
+  }
+
+  .receipt-logo h2 {
+    font-size: 19px;
+  }
+
+  .logo-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 17px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .info-row strong {
+    text-align: left;
+  }
+
+  .receipt-total {
+    padding: 17px;
+  }
+
+  .receipt-total strong {
+    font-size: 21px;
+  }
+
+  .receipt-actions {
+    flex-direction: column;
+  }
+
+  .print-receipt-btn,
+  .my-courses-btn {
+    width: 100%;
+  }
+
+}
+
+
+/* =====================================
+   PRINT
+===================================== */
+
+@media print {
+
+  body {
+    background: #ffffff;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .receipt-page {
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .receipt-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 25px;
+    box-shadow: none;
+    border: none;
+  }
+
+  .receipt-divider {
+    margin: 20px 0;
+  }
+
+  .receipt-total {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .receipt-status {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

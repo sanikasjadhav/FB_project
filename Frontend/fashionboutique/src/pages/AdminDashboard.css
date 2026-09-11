@@ -1,150 +1,20 @@
+/* =========================================================
+   ADMIN DASHBOARD PAGE
+========================================================= */
+
 .admin-dashboard {
   min-height: 100vh;
+
   display: flex;
+
   background: #f5f6f6;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
 
-.admin-sidebar {
-  width: 260px;
-  min-height: 100vh;
-  background: #063b3d;
-  color: white;
-
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  z-index: 100;
-}
-
-.admin-logo {
-  padding: 25px 15px;
-  text-align: center;
-
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.15);
-}
-
-.admin-logo h2 {
-  margin: 0;
-
-  color: #f5b942;
-
-  font-size: 21px;
-}
-
-.admin-logo span {
-  display: block;
-
-  margin-top: 6px;
-
-  color: #dddddd;
-
-  font-size: 13px;
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-.admin-navigation {
-  flex: 1;
-
-  padding: 15px 10px;
-
-  overflow-y: auto;
-}
-
-.sidebar-link {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 11px 14px;
-
-  margin-bottom: 4px;
-
-  border: none;
-  border-radius: 7px;
-
-  background: transparent;
-
-  color: white;
-
-  text-align: left;
-
-  font-size: 14px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.sidebar-link:hover {
-  background: #104e50;
-}
-
-.sidebar-link.active {
-  background: #f5b942;
-
-  color: #135255;
-
-  font-weight: 600;
-}
-
-/* =========================
-   LOGOUT
-========================= */
-
-.admin-sidebar-bottom {
-  padding: 15px;
-}
-
-.admin-logout {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 10px;
-
-  padding: 12px;
-
-  border: none;
-
-  border-radius: 7px;
-
-  background: #f5b942;
-
-  color: #135255;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-.admin-logout:hover {
-  opacity: 0.9;
-}
-
-/* =========================
-   MAIN
-========================= */
+/* =========================================================
+   MAIN CONTENT
+   Sidebar width = 260px
+========================================================= */
 
 .admin-main {
   width: calc(100% - 260px);
@@ -152,11 +22,14 @@
   margin-left: 260px;
 
   padding: 30px;
+
+  box-sizing: border-box;
 }
 
-/* =========================
+
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 .admin-header {
   display: flex;
@@ -165,7 +38,7 @@
 
   align-items: center;
 
-  background: white;
+  background: #ffffff;
 
   padding: 20px 25px;
 
@@ -177,19 +50,39 @@
     0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+
+/* =========================================================
+   HEADER LEFT
+========================================================= */
+
 .admin-header-left h1 {
   margin: 0;
 
   color: #135255;
 
   font-size: 28px;
+
+  font-weight: 700;
 }
+
 
 .admin-header-left p {
   margin: 7px 0 0;
 
-  color: #777;
+  color: #777777;
+
+  font-size: 14px;
 }
+
+
+.admin-header-left strong {
+  color: #135255;
+}
+
+
+/* =========================================================
+   ADMIN PROFILE
+========================================================= */
 
 .admin-profile {
   display: flex;
@@ -199,8 +92,14 @@
   gap: 12px;
 }
 
+
+/* =========================================================
+   ADMIN AVATAR
+========================================================= */
+
 .admin-avatar {
   width: 48px;
+
   height: 48px;
 
   border-radius: 50%;
@@ -220,25 +119,34 @@
   font-weight: bold;
 }
 
+
+/* =========================================================
+   ADMIN PROFILE INFORMATION
+========================================================= */
+
 .admin-profile-info strong {
   display: block;
 
   color: #135255;
+
+  font-size: 14px;
 }
+
 
 .admin-profile-info span {
   display: block;
 
   margin-top: 3px;
 
-  color: #777;
+  color: #777777;
 
   font-size: 12px;
 }
 
-/* =========================
-   WELCOME
-========================= */
+
+/* =========================================================
+   WELCOME SECTION
+========================================================= */
 
 .admin-welcome {
   display: flex;
@@ -249,7 +157,7 @@
 
   background: #135255;
 
-  color: white;
+  color: #ffffff;
 
   padding: 30px;
 
@@ -258,11 +166,23 @@
   margin-bottom: 25px;
 }
 
+
+/* =========================================================
+   WELCOME TITLE
+========================================================= */
+
 .admin-welcome h2 {
   margin: 0 0 10px;
 
   color: #f5b942;
+
+  font-size: 24px;
 }
+
+
+/* =========================================================
+   WELCOME TEXT
+========================================================= */
 
 .admin-welcome p {
   margin: 0;
@@ -272,15 +192,25 @@
   line-height: 1.6;
 
   color: #eeeeee;
+
+  font-size: 14px;
 }
+
+
+/* =========================================================
+   WELCOME ICON
+========================================================= */
 
 .welcome-icon {
   font-size: 65px;
+
+  line-height: 1;
 }
 
-/* =========================
-   STATS
-========================= */
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
 
 .admin-stats {
   display: grid;
@@ -293,8 +223,13 @@
   margin-bottom: 25px;
 }
 
+
+/* =========================================================
+   STAT CARD
+========================================================= */
+
 .stat-card {
-  background: white;
+  background: #ffffff;
 
   padding: 20px;
 
@@ -311,8 +246,15 @@
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.06);
 
-  transition: 0.2s;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+
+/* =========================================================
+   STAT CARD HOVER
+========================================================= */
 
 .stat-card:hover {
   transform: translateY(-3px);
@@ -321,9 +263,17 @@
     0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+
+/* =========================================================
+   STAT ICON
+========================================================= */
+
 .stat-icon {
   width: 52px;
+
   height: 52px;
+
+  flex-shrink: 0;
 
   border-radius: 9px;
 
@@ -338,6 +288,11 @@
   font-size: 25px;
 }
 
+
+/* =========================================================
+   STAT CONTENT
+========================================================= */
+
 .stat-content h3 {
   margin: 0;
 
@@ -346,20 +301,22 @@
   font-size: 17px;
 }
 
+
 .stat-content p {
   margin: 5px 0 0;
 
-  color: #777;
+  color: #777777;
 
   font-size: 12px;
 }
 
-/* =========================
+
+/* =========================================================
    QUICK ACTIONS
-========================= */
+========================================================= */
 
 .quick-actions {
-  background: white;
+  background: #ffffff;
 
   padding: 25px;
 
@@ -371,23 +328,37 @@
     0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
 .section-title {
   margin-bottom: 20px;
 }
+
 
 .section-title h2 {
   margin: 0;
 
   color: #135255;
+
+  font-size: 22px;
 }
+
 
 .section-title p {
   margin: 5px 0 0;
 
-  color: #777;
+  color: #777777;
 
   font-size: 14px;
 }
+
+
+/* =========================================================
+   QUICK GRID
+========================================================= */
 
 .quick-grid {
   display: grid;
@@ -398,12 +369,17 @@
   gap: 15px;
 }
 
+
+/* =========================================================
+   QUICK ACTION BUTTON
+========================================================= */
+
 .quick-grid button {
   min-height: 150px;
 
   padding: 20px;
 
-  background: white;
+  background: #ffffff;
 
   border: 1px solid #eeeeee;
 
@@ -413,8 +389,18 @@
 
   cursor: pointer;
 
-  transition: 0.2s;
+  font-family: inherit;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
+
+
+/* =========================================================
+   QUICK ACTION HOVER
+========================================================= */
 
 .quick-grid button:hover {
   border-color: #f5b942;
@@ -425,6 +411,11 @@
   transform: translateY(-2px);
 }
 
+
+/* =========================================================
+   QUICK ICON
+========================================================= */
+
 .quick-icon {
   display: block;
 
@@ -433,28 +424,43 @@
   margin-bottom: 12px;
 }
 
+
+/* =========================================================
+   QUICK ACTION TITLE
+========================================================= */
+
 .quick-grid strong {
   display: block;
 
   color: #135255;
 
   margin-bottom: 6px;
+
+  font-size: 15px;
 }
+
+
+/* =========================================================
+   QUICK ACTION DESCRIPTION
+========================================================= */
 
 .quick-grid small {
   display: block;
 
-  color: #777;
+  color: #777777;
 
   line-height: 1.4;
+
+  font-size: 12px;
 }
 
-/* =========================
+
+/* =========================================================
    ADMIN INFORMATION
-========================= */
+========================================================= */
 
 .admin-information {
-  background: white;
+  background: #ffffff;
 
   padding: 25px;
 
@@ -464,11 +470,23 @@
     0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+
+/* =========================================================
+   ADMIN INFORMATION TITLE
+========================================================= */
+
 .admin-information h2 {
   margin: 0 0 20px;
 
   color: #135255;
+
+  font-size: 21px;
 }
+
+
+/* =========================================================
+   INFORMATION GRID
+========================================================= */
 
 .info-grid {
   display: grid;
@@ -479,6 +497,11 @@
   gap: 15px;
 }
 
+
+/* =========================================================
+   INFORMATION ITEM
+========================================================= */
+
 .info-item {
   padding: 16px;
 
@@ -487,15 +510,25 @@
   background: #f7f7f7;
 }
 
+
+/* =========================================================
+   INFORMATION LABEL
+========================================================= */
+
 .info-item label {
   display: block;
 
-  color: #777;
+  color: #777777;
 
   font-size: 12px;
 
   margin-bottom: 6px;
 }
+
+
+/* =========================================================
+   INFORMATION VALUE
+========================================================= */
 
 .info-item p {
   margin: 0;
@@ -503,11 +536,14 @@
   color: #135255;
 
   font-weight: 600;
+
+  word-break: break-word;
 }
 
-/* =========================
+
+/* =========================================================
    LOADING
-========================= */
+========================================================= */
 
 .admin-loading {
   min-height: 100vh;
@@ -521,28 +557,36 @@
   color: #135255;
 
   font-size: 20px;
+
+  background: #f5f6f6;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
 
 @media (max-width: 1100px) {
+
   .admin-stats {
     grid-template-columns:
       repeat(2, 1fr);
   }
 
+
   .quick-grid {
     grid-template-columns:
       repeat(2, 1fr);
   }
+
 }
 
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
 @media (max-width: 750px) {
-  .admin-sidebar {
-    width: 210px;
-  }
 
   .admin-main {
     width: calc(100% - 210px);
@@ -552,6 +596,7 @@
     padding: 15px;
   }
 
+
   .admin-header {
     flex-direction: column;
 
@@ -559,6 +604,7 @@
 
     gap: 15px;
   }
+
 
   .admin-welcome {
     flex-direction: column;
@@ -568,15 +614,80 @@
     gap: 15px;
   }
 
+
   .admin-stats {
     grid-template-columns: 1fr;
   }
+
 
   .quick-grid {
     grid-template-columns: 1fr;
   }
 
+
   .info-grid {
     grid-template-columns: 1fr;
   }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+
+  .admin-main {
+    width: calc(100% - 190px);
+
+    margin-left: 190px;
+
+    padding: 10px;
+  }
+
+
+  .admin-header {
+    padding: 15px;
+  }
+
+
+  .admin-header-left h1 {
+    font-size: 22px;
+  }
+
+
+  .admin-welcome {
+    padding: 20px;
+  }
+
+
+  .admin-welcome h2 {
+    font-size: 20px;
+  }
+
+
+  .quick-actions {
+    padding: 18px;
+  }
+
+
+  .admin-information {
+    padding: 18px;
+  }
+
+
+  .admin-profile {
+    width: 100%;
+  }
+
+
+  .admin-avatar {
+    width: 42px;
+
+    height: 42px;
+
+    font-size: 17px;
+  }
+
 }
