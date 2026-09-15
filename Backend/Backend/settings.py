@@ -146,21 +146,35 @@ STATIC_URL = 'static/'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-# Email configuration for development
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# =========================
+# EMAIL CONFIGURATION
+# =========================
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
+
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-EMAIL_HOST_USER = 'sanikasjadhav0505@gmail.com'
-EMAIL_HOST_PASSWORD = 'spiivjdmtdympuib'
+EMAIL_HOST_USER = "sanikasjadhav0505@gmail.com"
+
+# Use a NEW Google App Password here
+EMAIL_HOST_PASSWORD = "spiivjdmtdympuib"
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 # =========================
 # RAZORPAY
 # =========================
 
 RAZORPAY_KEY_ID = "rzp_test_TVaW6DxN7dH5FX"
 RAZORPAY_KEY_SECRET = "PVwkl7S0E8f6Zccpsf7efFUF"
+# =========================================================
+# MEDIA FILES
+# =========================================================
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

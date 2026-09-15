@@ -1,91 +1,89 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
 .certificate-page {
   min-height: 100vh;
-  display: flex;
-  background: #f5f6f6;
+  background: #f2f6f5;
 }
 
 .certificate-main {
-  margin-left: 285px;
-  width: calc(100% - 285px);
-  padding: 40px 48px;
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  min-height: 100vh;
+
+  padding: 35px 40px 60px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.certificate-header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .certificate-header h1 {
-  color: #063b3d;
-  font-size: 34px;
   margin: 0;
+
+  color: #063b3d;
+
+  font-size: 32px;
+  font-weight: 700;
 }
 
 .certificate-header p {
-  color: #777;
-}
+  margin-top: 8px;
 
-.certificate-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  margin-top: 35px;
-}
-
-.certificate-card {
-  background: white;
-  padding: 40px;
-  border-radius: 15px;
-  text-align: center;
-  border: 5px solid #f5b942;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-.certificate-icon {
-  font-size: 55px;
-}
-
-.certificate-card h2 {
-  color: #063b3d;
-}
-
-.certificate-card p {
-  color: #777;
-}
-
-.certificate-card h3 {
-  color: #063b3d;
-  font-size: 24px;
-}
-
-.certificate-number,
-.certificate-date {
-  margin-top: 15px;
   color: #666;
+
+  font-size: 15px;
 }
 
-.certificate-card button {
-  margin-top: 25px;
-  padding: 13px 25px;
-  border: none;
-  background: #063b3d;
-  color: white;
-  border-radius: 7px;
-  cursor: pointer;
-  font-weight: bold;
-}
 
-.certificate-card button:hover {
-  background: #f5b942;
-  color: #063b3d;
-}
+/* =========================================================
+   LOADING
+========================================================= */
 
-.certificate-empty,
 .certificate-message {
-  background: white;
-  padding: 50px;
-  margin-top: 35px;
   text-align: center;
-  border-radius: 15px;
+
+  padding: 50px;
+
+  color: #063b3d;
+
+  font-size: 18px;
 }
 
-.certificate-empty div {
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.certificate-empty {
+  max-width: 500px;
+
+  margin: 70px auto;
+
+  background: white;
+
+  padding: 50px 30px;
+
+  border-radius: 15px;
+
+  text-align: center;
+
+  box-shadow:
+    0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.empty-trophy {
   font-size: 55px;
+  margin-bottom: 15px;
 }
 
 .certificate-empty h2 {
@@ -96,39 +94,842 @@
   color: #777;
 }
 
-@media (max-width: 800px) {
+
+/* =========================================================
+   CERTIFICATE CONTAINER
+========================================================= */
+
+.certificates-container {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 35px;
+}
+
+.certificate-wrapper {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+/* =========================================================
+   MAIN CERTIFICATE
+========================================================= */
+
+.certificate {
+  width: 1120px;
+  height: 790px;
+
+  max-width: 100%;
+
+  position: relative;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #ffffff 0%,
+      #fffefa 65%,
+      #f8f4e8 100%
+    );
+
+  border: 4px solid #b18a35;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.18);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+}
+
+
+/* =========================================================
+   INNER BORDER
+========================================================= */
+
+.certificate::before {
+  content: "";
+
+  position: absolute;
+
+  top: 13px;
+  left: 13px;
+  right: 13px;
+  bottom: 13px;
+
+  border: 2px solid #b18a35;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+
+/* =========================================================
+   TOP DECORATION
+   LOGO RELATED COLORS
+========================================================= */
+
+.top-decoration {
+  position: absolute;
+
+  top: -125px;
+  left: -125px;
+
+  width: 500px;
+  height: 250px;
+
+  background: #063b3d;
+
+  border-bottom-right-radius: 100%;
+
+  transform: rotate(-8deg);
+
+  box-shadow:
+    0 0 0 9px #d3aa4d,
+    0 0 0 15px white;
+}
+
+.top-decoration::after {
+  content: "";
+
+  position: absolute;
+
+  left: 35px;
+  top: 30px;
+
+  width: 440px;
+  height: 205px;
+
+  border-right: 5px solid #d7ae4c;
+  border-bottom: 5px solid #d7ae4c;
+
+  border-bottom-right-radius: 100%;
+}
+
+
+/* =========================================================
+   DECORATIVE CORNERS
+========================================================= */
+
+.corner {
+  position: absolute;
+
+  width: 100px;
+  height: 100px;
+
+  z-index: 3;
+}
+
+.corner-top-left {
+  top: 18px;
+  left: 18px;
+
+  border-top: 4px solid #b18a35;
+  border-left: 4px solid #b18a35;
+}
+
+.corner-top-right {
+  top: 18px;
+  right: 18px;
+
+  border-top: 4px solid #b18a35;
+  border-right: 4px solid #b18a35;
+}
+
+.corner-bottom-left {
+  bottom: 18px;
+  left: 18px;
+
+  border-left: 4px solid #b18a35;
+  border-bottom: 4px solid #b18a35;
+}
+
+.corner-bottom-right {
+  bottom: 18px;
+  right: 18px;
+
+  border-right: 4px solid #b18a35;
+  border-bottom: 4px solid #b18a35;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.certificate-logo {
+  position: absolute;
+
+  top: 27px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 105px;
+  height: 105px;
+
+  z-index: 20;
+}
+
+.certificate-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+}
+
+
+/* =========================================================
+   BRAND NAME
+========================================================= */
+
+.brand-name {
+  position: absolute;
+
+  top: 132px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  font-size: 25px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+
+  color: #063b3d;
+}
+
+.brand-line {
+  position: absolute;
+
+  top: 164px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  font-size: 11px;
+
+  letter-spacing: 4px;
+
+  color: #b18a35;
+}
+
+
+/* =========================================================
+   CERTIFICATE TITLE
+========================================================= */
+
+.certificate-title {
+  position: absolute;
+
+  top: 198px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  font-size: 56px;
+
+  font-weight: 600;
+
+  letter-spacing: 6px;
+
+  color: #063b3d;
+}
+
+.certificate-subtitle {
+  position: absolute;
+
+  top: 268px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  font-size: 25px;
+
+  font-weight: 600;
+
+  letter-spacing: 2px;
+
+  color: #b18a35;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.gold-divider {
+  position: absolute;
+
+  top: 308px;
+
+  left: 280px;
+  right: 280px;
+
+  text-align: center;
+
+  color: #b18a35;
+
+  font-size: 17px;
+
+  border-top: 1px dotted #b18a35;
+}
+
+
+/* =========================================================
+   CERTIFICATE TEXT
+========================================================= */
+
+.certificate-text {
+  position: absolute;
+
+  top: 352px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  font-size: 19px;
+
+  color: #222;
+}
+
+
+/* =========================================================
+   STUDENT NAME
+   CALIBRI
+========================================================= */
+
+.student-name {
+  position: absolute;
+
+  top: 383px;
+
+  left: 260px;
+  right: 260px;
+
+  text-align: center;
+
+  font-family: Calibri, Arial, sans-serif;
+
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #063b3d;
+
+  white-space: nowrap;
+}
+
+.student-line {
+  position: absolute;
+
+  top: 440px;
+
+  left: 270px;
+  right: 270px;
+
+  border-bottom: 2px solid #b18a35;
+}
+
+
+/* =========================================================
+   COMPLETION
+========================================================= */
+
+.completion-text {
+  position: absolute;
+
+  top: 455px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  font-size: 17px;
+
+  color: #333;
+}
+
+
+/* =========================================================
+   COURSE NAME
+========================================================= */
+
+.course-name {
+  position: absolute;
+
+  top: 482px;
+
+  left: 230px;
+  right: 230px;
+
+  text-align: center;
+
+  color: #063b3d;
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   CONDUCTED TEXT
+========================================================= */
+
+.conducted-text {
+  position: absolute;
+
+  top: 520px;
+
+  left: 250px;
+  right: 250px;
+
+  text-align: center;
+
+  font-size: 16px;
+
+  line-height: 1.5;
+
+  color: #333;
+}
+
+
+/* =========================================================
+   EXCELLENCE BADGE
+========================================================= */
+
+.excellence-badge {
+  position: absolute;
+
+  right: 65px;
+
+  top: 365px;
+
+  width: 145px;
+  height: 145px;
+
+  border-radius: 50%;
+
+  background: #d2a541;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.excellence-circle {
+  width: 112px;
+  height: 112px;
+
+  border-radius: 50%;
+
+  background: #063b3d;
+
+  border: 3px solid #e5bd5d;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  color: #e8c361;
+
+  font-size: 12px;
+
+  font-weight: bold;
+}
+
+.excellence-circle span {
+  display: block;
+
+  line-height: 1.35;
+}
+
+.stars {
+  margin-top: 7px;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   DIRECTOR SIGNATURE
+========================================================= */
+
+.director-signature {
+  position: absolute;
+
+  right: 150px;
+
+  bottom: 75px;
+
+  width: 200px;
+
+  text-align: center;
+}
+
+.signature-name {
+  font-family:
+    "Brush Script MT",
+    "Segoe Script",
+    cursive;
+
+  font-size: 27px;
+
+  color: #063b3d;
+
+  margin-bottom: 4px;
+}
+
+.signature-line {
+  width: 185px;
+
+  margin: auto;
+
+  border-top: 1px solid #222;
+}
+
+.director-signature span {
+  display: block;
+
+  margin-top: 7px;
+
+  font-size: 13px;
+
+  color: #333;
+}
+
+
+/* =========================================================
+   BOTTOM INFORMATION
+========================================================= */
+
+.certificate-info {
+  position: absolute;
+
+  bottom: 25px;
+
+  left: 145px;
+  right: 145px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  font-size: 12px;
+
+  color: #333;
+}
+
+.certificate-info div {
+  display: flex;
+
+  gap: 7px;
+}
+
+.certificate-info strong {
+  color: #063b3d;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   PRINT BUTTON
+========================================================= */
+
+.certificate-actions {
+  margin-top: 25px;
+
+  text-align: center;
+}
+
+.print-button {
+  border: none;
+
+  padding: 13px 28px;
+
+  border-radius: 7px;
+
+  background: #063b3d;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.print-button:hover {
+  background: #d2a541;
+
+  color: #063b3d;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
 
   .certificate-main {
-    margin-left: 0;
-    width: 100%;
+    margin-left: 260px;
+
+    width: calc(100% - 260px);
+
     padding: 25px;
   }
 
-  .certificate-grid {
-    grid-template-columns: 1fr;
+  .certificate {
+    transform-origin: top center;
+
+    transform: scale(0.85);
+
+    margin-bottom: -100px;
+  }
+}
+
+@media (max-width: 900px) {
+
+  .certificate-main {
+    margin-left: 0;
+
+    width: 100%;
+
+    padding: 20px;
   }
 
+  .certificate {
+    transform: scale(0.65);
+
+    margin-bottom: -250px;
+  }
 }
+
+
+/* =========================================================
+   PRINT
+========================================================= */
 
 @media print {
 
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+
+    background: white;
+  }
+
   .certificate-page {
-    display: block;
+    background: white;
+  }
+
+  .certificate-sidebar,
+  .certificate-header,
+  .certificate-actions {
+    display: none !important;
   }
 
   .certificate-main {
     margin: 0;
+    padding: 0;
+
     width: 100%;
   }
 
-  .certificate-header,
-  .certificate-card button {
-    display: none;
+  .certificates-container {
+    display: block;
   }
 
-  .certificate-card {
+  .certificate-wrapper {
+    display: block;
+
+    width: 100%;
+  }
+
+  .certificate {
+    width: 100vw;
+    height: 100vh;
+
+    max-width: none;
+
     box-shadow: none;
+
+    transform: none !important;
+
+    page-break-after: always;
+  }
+}
+/* =========================================================
+   CERTIFICATE BUTTONS
+========================================================= */
+
+.certificate-actions {
+  margin-top: 25px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.download-button,
+.print-button {
+  border: none;
+
+  padding: 13px 25px;
+
+  border-radius: 7px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+
+/* DOWNLOAD */
+
+.download-button {
+  background: #063b3d;
+
+  color: white;
+}
+
+.download-button:hover {
+  background: #d2a541;
+
+  color: #063b3d;
+
+  transform: translateY(-2px);
+}
+
+.download-button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* PRINT */
+
+.print-button {
+  background: #d2a541;
+
+  color: #063b3d;
+}
+
+.print-button:hover {
+  background: #063b3d;
+
+  color: white;
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print {
+
+  @page {
+    size: A4 landscape;
     margin: 0;
   }
 
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  .certificate-sidebar,
+  .certificate-header,
+  .certificate-actions {
+    display: none !important;
+  }
+
+  .certificate-main {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+  }
+
+  .certificate {
+    width: 100vw;
+    height: 100vh;
+
+    max-width: none;
+
+    box-shadow: none;
+
+    transform: none !important;
+  }
 }

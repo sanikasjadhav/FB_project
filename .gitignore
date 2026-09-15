@@ -1,11 +1,12 @@
+# Environment variables
+.env
+*.env
+
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
 
 # Django
-*.log
 db.sqlite3
 media/
 staticfiles/
@@ -13,15 +14,6 @@ staticfiles/
 # Virtual environment
 .venv/
 venv/
-env/
 
-# Environment variables
-.env
-
-# React
+# Node
 node_modules/
-dist/
-
-# IDE
-.vscode/
-.idea/
