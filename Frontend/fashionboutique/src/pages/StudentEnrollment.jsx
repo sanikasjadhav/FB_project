@@ -21,7 +21,6 @@ function StudentEnrollment() {
   const [batches, setBatches] = useState([]);
 
   const [batch, setBatch] = useState("");
-  const [joiningDate, setJoiningDate] = useState("");
 
   const [loadingStudent, setLoadingStudent] = useState(true);
   const [loadingBatches, setLoadingBatches] = useState(false);
@@ -33,127 +32,46 @@ function StudentEnrollment() {
   ===================================================== */
 
   useEffect(() => {
+  fetchStudent();
+}, []);
 
-    if (!selectedCourse || !selectedMode) {
+const fetchStudent = async () => {
+  try {
+    setLoadingStudent(true);
+    setError("");
 
-      alert("Please select a course and class mode.");
+    // Get currently logged-in student
+    const savedStudent = localStorage.getItem("student");
 
-      navigate("/student-courses");
-
-    }
-
-  }, [selectedCourse, selectedMode, navigate]);
-
-
-  /* =====================================================
-     GET LOGGED-IN STUDENT
-  ===================================================== */
-
-  useEffect(() => {
-
-    fetchStudent();
-
-  }, []);
-
-
-  const fetchStudent = async () => {
-
-    try {
-
-      setLoadingStudent(true);
-
-      /*
-        This example assumes the logged-in student's email
-        is saved in localStorage during login.
-
-        Example:
-        localStorage.setItem("studentEmail", data.email);
-      */
-
-      const studentEmail =
-        localStorage.getItem("studentEmail");
-
-      if (!studentEmail) {
-
-        setError(
-          "Student information not found. Please login again."
-        );
-
-        return;
-      }
-
-
-      const response = await fetch(
-        `${API_URL}/students/?email=${encodeURIComponent(
-          studentEmail
-        )}`
-      );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Unable to load student information."
-        );
-
-      }
-
-
-      const data = await response.json();
-
-      /*
-        Django pagination may return:
-        {
-          count: ...,
-          results: [...]
-        }
-
-        Non-paginated API may return:
-        [...]
-      */
-
-      const studentData =
-        Array.isArray(data)
-          ? data[0]
-          : data.results?.[0];
-
-
-      if (!studentData) {
-
-        throw new Error(
-          "Student profile not found."
-        );
-
-      }
-
-
-      setStudent(studentData);
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Student loading error:",
-        error
-      );
-
+    if (!savedStudent) {
       setError(
-        error.message ||
-        "Unable to load student information."
+        "Student information not found. Please login again."
       );
-
+      return;
     }
 
-    finally {
+    const loggedInStudent = JSON.parse(savedStudent);
 
-      setLoadingStudent(false);
+    console.log("Logged-in student:", loggedInStudent);
 
-    }
+    // Display the logged-in student's details
+    setStudent(loggedInStudent);
 
-  };
+  } catch (error) {
+    console.error(
+      "Student loading error:",
+      error
+    );
 
+    setError(
+      error.message ||
+      "Unable to load student information."
+    );
 
+  } finally {
+    setLoadingStudent(false);
+  }
+};
   /* =====================================================
      GET OFFLINE BATCHES
   ===================================================== */
@@ -258,19 +176,6 @@ function StudentEnrollment() {
     setError("");
 
 
-    /* ---------------------------------------------
-       Validate joining date
-    --------------------------------------------- */
-
-    if (!joiningDate) {
-
-      setError(
-        "Please select your joining date."
-      );
-
-      return;
-
-    }
 
 
     /* ---------------------------------------------
@@ -320,7 +225,7 @@ function StudentEnrollment() {
 
         batch: selectedBatch,
 
-        joining_date: joiningDate,
+       
 
         student: student
 
@@ -471,7 +376,7 @@ function StudentEnrollment() {
             <div className="enrollment-grid">
 
 
-              {/* First Name */}
+              {/* First Namej */}
 
               <div className="enrollment-field">
 
@@ -834,43 +739,11 @@ function StudentEnrollment() {
 
           <section className="enrollment-section">
 
-            <div className="section-title">
-
-              <h2>
-                Joining Date
-              </h2>
-
-              <p>
-                Select the date you want to start
-                your course.
-              </p>
-
-            </div>
+           
 
 
-            <div className="joining-date-field">
-
-              <label>
-                Joining Date
-              </label>
-
-              <input
-                type="date"
-                value={joiningDate}
-                min={
-                  new Date()
-                    .toISOString()
-                    .split("T")[0]
-                }
-                onChange={(e) =>
-                  setJoiningDate(
-                    e.target.value
-                  )
-                }
-                required
-              />
-
-            </div>
+            
+       
 
           </section>
 

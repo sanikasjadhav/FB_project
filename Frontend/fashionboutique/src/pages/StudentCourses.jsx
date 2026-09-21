@@ -1,221 +1,473 @@
+
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import StudentSidebar from "../components/StudentSidebar";
-
 import "./StudentCourses.css";
 
 const API_URL = "http://127.0.0.1:8000/api";
 
 function StudentCourses() {
-
   const { categoryId } = useParams();
-
   const location = useLocation();
-
   const navigate = useNavigate();
 
   const [courses, setCourses] = useState([]);
-
   const [category, setCategory] = useState(
     location.state?.category || null
   );
 
-  const [loading, setLoading] = useState(true);
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState([]);
 
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
+  // =====================================================
+  // GET LOGGED-IN STUDENT
+  // =====================================================
 
-  /* =====================================================
-     FETCH COURSES
-  ===================================================== */
+  const getLoggedInStudent = () => {
+    try {
+      const savedStudent = localStorage.getItem("student");
 
-  useEffect(() => {
+      if (!savedStudent) {
+        return null;
+      }
 
-    fetchCourses();
+      const student = JSON.parse(savedStudent);
 
-  }, [categoryId]);
+      console.log("LOGGED IN STUDENT:", student);
 
+      return student;
+    } catch (error) {
+      console.error(
+        "Unable to read student:",
+        error
+      );
+
+      return null;
+    }
+  };
+
+  // =====================================================
+  // LOAD COURSES
+  // =====================================================
 
   const fetchCourses = async () => {
+    const response = await fetch(
+      `${API_URL}/courses/`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to fetch courses"
+      );
+    }
+
+    const data = await response.json();
+
+    console.log(
+      "COURSES API:",
+      data
+    );
+
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (Array.isArray(data.results)) {
+      return data.results;
+    }
+
+    return [];
+  };
+
+  // =====================================================
+  // LOAD STUDENT ENROLLMENTS
+  // =====================================================
+
+  const fetchStudentEnrollments = async (studentId) => {
+
+    const response = await fetch(
+      `${API_URL}/enrollments/?student_id=${studentId}`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to fetch enrollments"
+      );
+    }
+
+    const data = await response.json();
+
+    console.log(
+      "ENROLLMENT API RESPONSE:",
+      data
+    );
+
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (Array.isArray(data.results)) {
+      return data.results;
+    }
+
+    return [];
+  };
+
+  // =====================================================
+  // GET COURSE ID FROM ENROLLMENT
+  // =====================================================
+
+  const getCourseIdFromEnrollment = (enrollment) => {
+
+    // Example:
+    // course: 6
+
+    if (
+      typeof enrollment.course === "number"
+    ) {
+      return Number(
+        enrollment.course
+      );
+    }
+
+    // Example:
+    // course: { id: 6, course_name: "Advance Tailoring" }
+
+    if (
+      enrollment.course &&
+      typeof enrollment.course === "object"
+    ) {
+      if (enrollment.course.id) {
+        return Number(
+          enrollment.course.id
+        );
+      }
+    }
+
+    // Example:
+    // course_id: 6
+
+    if (enrollment.course_id) {
+      return Number(
+        enrollment.course_id
+      );
+    }
+
+    return null;
+  };
+
+  // =====================================================
+  // FETCH EVERYTHING
+  // =====================================================
+
+  const fetchCoursesAndEnrollments = async () => {
 
     try {
 
       setLoading(true);
-
       setMessage("");
 
-      /*
-        We fetch all courses and filter by category.
-        This works with your current Course API.
-      */
+      // -----------------------------------------------
+      // CURRENT STUDENT
+      // -----------------------------------------------
 
-      const response = await fetch(
-        `${API_URL}/courses/`
+      const student =
+        getLoggedInStudent();
+
+      if (!student) {
+
+        setMessage(
+          "Student information not found. Please login again."
+        );
+
+        return;
+      }
+
+      if (!student.id) {
+
+        console.error(
+          "Student ID is missing:",
+          student
+        );
+
+        setMessage(
+          "Student ID not found. Please login again."
+        );
+
+        return;
+      }
+
+      console.log(
+        "CURRENT STUDENT ID:",
+        student.id
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch courses");
-      }
+      // -----------------------------------------------
+      // FETCH COURSES
+      // -----------------------------------------------
 
-      const data = await response.json();
+      const allCourses =
+        await fetchCourses();
 
+      console.log(
+        "ALL COURSES:",
+        allCourses
+      );
 
-      let courseData = [];
+      // -----------------------------------------------
+      // FILTER CATEGORY
+      // -----------------------------------------------
 
-      /*
-        Support DRF pagination
-      */
-
-      if (Array.isArray(data)) {
-
-        courseData = data;
-
-      } else if (Array.isArray(data.results)) {
-
-        courseData = data.results;
-
-      }
-
-
-      /*
-        Filter courses according to category
-      */
-
-      const filteredCourses = courseData.filter(
-        (course) => {
-
-          /*
-            If category is returned as ID
-          */
+      const filteredCourses =
+        allCourses.filter((course) => {
 
           if (
-            typeof course.category === "number"
+            typeof course.category ===
+            "number"
           ) {
             return (
-              course.category ===
+              Number(course.category) ===
               Number(categoryId)
             );
           }
-
-
-          /*
-            If category is returned as object
-          */
 
           if (
             course.category &&
-            typeof course.category === "object"
+            typeof course.category ===
+              "object"
           ) {
             return (
-              Number(course.category.id) ===
-              Number(categoryId)
+              Number(
+                course.category.id
+              ) === Number(categoryId)
             );
           }
 
+          if (course.category_id) {
+            return (
+              Number(
+                course.category_id
+              ) === Number(categoryId)
+            );
+          }
 
           return false;
+        });
 
-        }
+      console.log(
+        "COURSES FOR CATEGORY:",
+        filteredCourses
       );
 
+      setCourses(
+        filteredCourses
+      );
 
-      setCourses(filteredCourses);
+      // -----------------------------------------------
+      // SET CATEGORY
+      // -----------------------------------------------
 
+      if (
+        !category &&
+        filteredCourses.length > 0
+      ) {
 
-      /*
-        If category was not passed through
-        location.state, create basic information
-      */
-
-      if (!category && filteredCourses.length > 0) {
-
-        const firstCourse = filteredCourses[0];
+        const firstCourse =
+          filteredCourses[0];
 
         if (
           firstCourse.category &&
-          typeof firstCourse.category === "object"
+          typeof firstCourse.category ===
+            "object"
         ) {
-
           setCategory(
             firstCourse.category
           );
-
         }
-
       }
+
+      // -----------------------------------------------
+      // FETCH ONLY CURRENT STUDENT ENROLLMENTS
+      // -----------------------------------------------
+
+      const enrollments =
+        await fetchStudentEnrollments(
+          student.id
+        );
+
+      console.log(
+        "CURRENT STUDENT ENROLLMENTS:",
+        enrollments
+      );
+
+      // -----------------------------------------------
+      // GET ENROLLED COURSE IDS
+      // -----------------------------------------------
+
+      const enrolledIds = [];
+
+      enrollments.forEach(
+        (enrollment) => {
+
+          // Ignore cancelled enrollment
+          if (
+            String(
+              enrollment.status
+            ).toLowerCase() ===
+            "cancelled"
+          ) {
+            return;
+          }
+
+          const courseId =
+            getCourseIdFromEnrollment(
+              enrollment
+            );
+
+          if (courseId !== null) {
+
+            enrolledIds.push(
+              Number(courseId)
+            );
+
+            console.log(
+              "ENROLLED COURSE:",
+              enrollment.course_name ||
+                enrollment.course,
+              "COURSE ID:",
+              courseId
+            );
+          }
+        }
+      );
+
+      // Remove duplicates
+      const uniqueEnrolledIds =
+        [...new Set(enrolledIds)];
+
+      console.log(
+        "FINAL ENROLLED COURSE IDS:",
+        uniqueEnrolledIds
+      );
+
+      setEnrolledCourseIds(
+        uniqueEnrolledIds
+      );
 
     } catch (error) {
 
       console.error(
-        "Course error:",
+        "ERROR:",
         error
       );
 
       setMessage(
-        "Unable to load courses. Please try again."
+        error.message ||
+          "Unable to load courses."
       );
 
     } finally {
 
       setLoading(false);
-
     }
-
   };
 
+  // =====================================================
+  // USE EFFECT
+  // =====================================================
 
-  /* =====================================================
-     VIEW COURSE
-  ===================================================== */
+  useEffect(() => {
 
-  const handleViewCourse = (course) => {
+    fetchCoursesAndEnrollments();
+
+  }, [categoryId]);
+
+  // =====================================================
+  // CHECK COURSE ENROLLMENT
+  // =====================================================
+
+  const isCourseEnrolled = (
+    courseId
+  ) => {
+
+    const result =
+      enrolledCourseIds.includes(
+        Number(courseId)
+      );
+
+    console.log(
+      "CHECK COURSE:",
+      courseId,
+      "ENROLLED:",
+      result
+    );
+
+    return result;
+  };
+
+  // =====================================================
+  // VIEW COURSE DETAILS
+  // =====================================================
+
+  const handleViewCourse = (
+    course
+  ) => {
+
+    // Safety check
+    if (
+      isCourseEnrolled(
+        course.id
+      )
+    ) {
+      return;
+    }
 
     navigate(
       `/course-details/${course.id}`,
       {
         state: {
           course: course,
-          category: category
-        }
+          category: category,
+        },
       }
     );
-
   };
 
-
-  /* =====================================================
-     BACK TO CATEGORIES
-  ===================================================== */
+  // =====================================================
+  // BACK
+  // =====================================================
 
   const handleBack = () => {
-
     navigate("/categories");
-
   };
 
+  // =====================================================
+  // FORMAT FEE
+  // =====================================================
+
+  const formatFee = (fee) => {
+
+    return Number(
+      fee || 0
+    ).toLocaleString("en-IN");
+  };
+
+  // =====================================================
+  // PAGE
+  // =====================================================
 
   return (
-
     <div className="student-courses-page">
-
-      {/* =================================================
-          COMMON SIDEBAR
-      ================================================= */}
 
       <StudentSidebar />
 
-
-      {/* =================================================
-          MAIN CONTENT
-      ================================================= */}
-
       <main className="student-courses-main">
 
-
-        {/* =================================================
+        {/* ==========================================
             HEADER
-        ================================================= */}
+        ========================================== */}
 
         <div className="student-courses-header">
 
@@ -223,70 +475,49 @@ function StudentCourses() {
 
             <h1>
               {category?.category_name ||
+                category?.name ||
                 "Available Courses"}
             </h1>
 
             <p>
-              Choose a course to start your learning journey.
+              Choose a course to start your
+              learning journey.
             </p>
 
           </div>
 
-
           <button
-            type="button"
-            className="back-category-btn"
+            className="back-courses-btn"
             onClick={handleBack}
           >
-            Back to Courses
+            ← Back to Courses
           </button>
 
         </div>
 
+        {/* ==========================================
+            MESSAGE
+        ========================================== */}
 
-        {/* =================================================
+        {message && (
+          <div className="student-course-error">
+            {message}
+          </div>
+        )}
+
+        {/* ==========================================
             LOADING
-        ================================================= */}
+        ========================================== */}
 
         {loading && (
-
-          <div className="student-course-message">
-
-            <p>
-              Loading courses...
-            </p>
-
+          <div className="student-course-loading">
+            Loading courses...
           </div>
-
         )}
 
-
-        {/* =================================================
-            ERROR
-        ================================================= */}
-
-        {!loading && message && (
-
-          <div className="student-course-message error">
-
-            <p>
-              {message}
-            </p>
-
-            <button
-              onClick={fetchCourses}
-            >
-              Try Again
-            </button>
-
-          </div>
-
-        )}
-
-
-        {/* =================================================
+        {/* ==========================================
             NO COURSES
-        ================================================= */}
+        ========================================== */}
 
         {!loading &&
           !message &&
@@ -294,163 +525,192 @@ function StudentCourses() {
 
             <div className="student-course-empty">
 
-              <div className="empty-icon">
-                📚
-              </div>
-
-              <h2>
+              <h3>
                 No Courses Available
-              </h2>
+              </h3>
 
               <p>
-                There are currently no active courses
-                available in this category.
+                There are currently no
+                courses available in
+                this category.
               </p>
 
-
-              <button
-                type="button"
-                onClick={handleBack}
-              >
-                Choose Another Category
-              </button>
-
             </div>
-
           )}
 
-
-        {/* =================================================
+        {/* ==========================================
             COURSE GRID
-        ================================================= */}
+        ========================================== */}
 
         {!loading &&
-          !message &&
           courses.length > 0 && (
 
-            <div className="student-course-grid">
+            <div className="student-courses-grid">
 
-              {courses.map((course) => (
+              {courses.map(
+                (course) => {
 
-                <div
-                  className="student-course-card"
-                  key={course.id}
-                >
+                  const alreadyEnrolled =
+                    isCourseEnrolled(
+                      course.id
+                    );
 
+                  return (
 
-                  {/* COURSE TOP */}
-
-                  <div className="student-course-card-top">
-
-                    <div className="course-circle">
-
-                      {course.course_name
-                        ?.charAt(0)
-                        .toUpperCase()}
-
-                    </div>
-
-                  </div>
-
-
-                  {/* COURSE CONTENT */}
-
-                  <div className="student-course-card-content">
-
-                    <h2>
-                      {course.course_name}
-                    </h2>
-
-
-                    <p className="course-description">
-
-                      {course.description ||
-                        "Learn professional skills with our Fashion Boutique course."}
-
-                    </p>
-
-
-                    {/* COURSE DETAILS */}
-
-                    <div className="course-details">
-
-
-                      <div className="course-detail-row">
-
-                        <span>
-                          Duration
-                        </span>
-
-                        <strong>
-                          {course.duration || "N/A"}
-                        </strong>
-
-                      </div>
-
-
-                      <div className="course-detail-row">
-
-                        <span>
-                          Course Fee
-                        </span>
-
-                        <strong className="course-fee">
-
-                          ₹
-                          {Number(course.fees || 0).toLocaleString(
-                            "en-IN"
-                          )}
-
-                        </strong>
-
-                      </div>
-
-
-                      <div className="course-detail-row">
-
-                        <span>
-                          Status
-                        </span>
-
-                        <strong className="course-status">
-
-                          {course.status || "Active"}
-
-                        </strong>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* VIEW COURSE BUTTON */}
-
-                    <button
-                      type="button"
-                      className="view-course-btn"
-                      onClick={() =>
-                        handleViewCourse(course)
+                    <div
+                      key={course.id}
+                      className={
+                        `student-course-card ${
+                          alreadyEnrolled
+                            ? "course-already-enrolled"
+                            : ""
+                        }`
                       }
                     >
-                      View Course Details
-                    </button>
 
-                  </div>
+                      {/* ================================
+                          ICON
+                      ================================= */}
 
-                </div>
+                      <div className="course-icon-circle">
 
-              ))}
+                        {course.course_name
+                          ?.charAt(0)
+                          ?.toUpperCase() ||
+                          "C"}
+
+                      </div>
+
+                      {/* ================================
+                          NAME
+                      ================================= */}
+
+                      <h2>
+                        {course.course_name}
+                      </h2>
+
+                      {/* ================================
+                          DESCRIPTION
+                      ================================= */}
+
+                      <p className="course-description">
+
+                        {course.description ||
+                          "Learn professional fashion boutique skills with practical training."}
+
+                      </p>
+
+                      {/* ================================
+                          DETAILS
+                      ================================= */}
+
+                      <div className="course-details">
+
+                        <div className="course-detail-row">
+
+                          <span>
+                            <strong>
+                              Duration
+                            </strong>
+                          </span>
+
+                          <span>
+                            {course.duration ||
+                              "Not specified"}
+                          </span>
+
+                        </div>
+
+                        <div className="course-detail-row">
+
+                          <span>
+                            <strong>
+                              Course Fee
+                            </strong>
+                          </span>
+
+                          <span className="course-fee">
+
+                            ₹
+                            {formatFee(
+                              course.fees
+                            )}
+
+                          </span>
+
+                        </div>
+
+                        <div className="course-detail-row">
+
+                          <span>
+                            <strong>
+                              Status
+                            </strong>
+                          </span>
+
+                          <span
+                            className={`course-status ${
+                              String(
+                                course.status ||
+                                  "Active"
+                              ).toLowerCase() ===
+                              "active"
+                                ? "status-active"
+                                : "status-inactive"
+                            }`}
+                          >
+                            {course.status ||
+                              "Active"}
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      {/* =================================
+                          ONLY SHOW ONE OF THESE
+                      ================================= */}
+
+                      {alreadyEnrolled ? (
+
+                        <div className="course-enrolled-message">
+
+                          <span className="enrolled-check">
+                            ✓
+                          </span>
+
+                          <span>
+                            Enrolled Successfully
+                          </span>
+
+                        </div>
+
+                      ) : (
+
+                        <button
+                          className="view-course-btn"
+                          onClick={() =>
+                            handleViewCourse(
+                              course
+                            )
+                          }
+                        >
+                          View Course Details
+                        </button>
+
+                      )}
+
+                    </div>
+                  );
+                }
+              )}
 
             </div>
-
           )}
 
       </main>
-
     </div>
-
   );
-
 }
 
 export default StudentCourses;

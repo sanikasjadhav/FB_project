@@ -128,11 +128,17 @@ class Course(models.Model):
 # ----------------------
 class Batch(models.Model):
 
-    STATUS_CHOICES = (
+    MODE_CHOICES = [
+        ("Online", "Online"),
+        ("Offline", "Offline"),
+        ("Both", "Both"),
+    ]
+
+    STATUS_CHOICES = [
         ("Upcoming", "Upcoming"),
         ("Ongoing", "Ongoing"),
         ("Completed", "Completed"),
-    )
+    ]
 
     course = models.ForeignKey(
         Course,
@@ -141,18 +147,27 @@ class Batch(models.Model):
     )
 
     batch_name = models.CharField(max_length=100)
+
+    mode = models.CharField(
+        max_length=20,
+        choices=MODE_CHOICES,
+        default="Online"
+    )
+
     start_date = models.DateField()
+
     end_date = models.DateField()
+
     timing = models.CharField(max_length=100)
+
     status = models.CharField(
         max_length=20,
-        choices=STATUS_CHOICES
+        choices=STATUS_CHOICES,
+        default="Upcoming"
     )
 
     def __str__(self):
-        return self.batch_name
-
-
+        return f"{self.batch_name} - {self.mode}"
 # ----------------------
 # Enrollment
 # ----------------------

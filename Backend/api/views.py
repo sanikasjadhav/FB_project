@@ -106,29 +106,69 @@ class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # ---------------- Batch ----------------
+# ---------------- Batch ----------------
+
 class BatchListCreateView(generics.ListCreateAPIView):
-    queryset = Batch.objects.all()
+
     serializer_class = BatchSerializer
 
+    def get_queryset(self):
+
+        queryset = Batch.objects.all().select_related(
+            "course"
+        )
+
+        course_id = self.request.query_params.get("course")
+        mode = self.request.query_params.get("mode")
+
+        if course_id:
+            queryset = queryset.filter(
+                course_id=course_id
+            )
+
+        if mode:
+            queryset = queryset.filter(
+                mode__in=[mode, "Both"]
+            )
+
+        return queryset.order_by("start_date")
 
 class BatchDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Batch.objects.all()
+    queryset = Batch.objects.all().select_related("course")
     serializer_class = BatchSerializer
-    lookup_field= "pk"
-
+    lookup_field = "pk"
 
 # ---------------- Enrollment ----------------
+
 class EnrollmentListCreateView(generics.ListCreateAPIView):
-    queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+
+    def get_queryset(self):
+        queryset = Enrollment.objects.all().select_related(
+            "student",
+            "course",
+            "batch"
+        )
+
+        student_id = self.request.query_params.get("student_id")
+
+        if student_id:
+            queryset = queryset.filter(
+                student_id=student_id
+            )
+
+        return queryset.order_by("-id")
 
 
 class EnrollmentDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Enrollment.objects.all()
+    queryset = Enrollment.objects.all().select_related(
+        "student",
+        "course",
+        "batch"
+    )
+
     serializer_class = EnrollmentSerializer
-    lookup_field= "pk"
-
-
+    lookup_field = "pk"
 # ---------------- Payment ----------------
 class PaymentListCreateView(generics.ListCreateAPIView):
     queryset = Payment.objects.all()
@@ -285,6 +325,9 @@ class StudentLoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Clean email
+        email = email.strip().lower()
+
         # Find student by email
         try:
             student = Student.objects.get(email=email)
@@ -332,19 +375,20 @@ class StudentLoginView(APIView):
                 "message": "Login Successful",
 
                 "access": str(refresh.access_token),
-
                 "refresh": str(refresh),
 
                 "student": {
                     "id": student.id,
                     "first_name": student.first_name,
                     "last_name": student.last_name,
-                    "email": student.email
+                    "email": student.email,
+                    "phone": student.phone,
+                    "gender": student.gender,
+                    "address": student.address,
                 }
             },
             status=status.HTTP_200_OK
         )
-
 # ---------------- Admin Login ----------------
 
 
@@ -461,6 +505,8 @@ class ForgotPasswordView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        email = email.strip().lower()
+
         try:
             student = Student.objects.get(email=email)
 
@@ -487,7 +533,42 @@ class ForgotPasswordView(APIView):
         # Generate 6 digit OTP
         otp = str(random.randint(100000, 999999))
 
-        # Store OTP for 5 minutes
+        try:
+            # Send OTP email
+            send_mail(
+                "Fashion Boutique - Password Reset OTP",
+
+                f"""Hello {user.first_name},
+
+Your Fashion Boutique password reset OTP is:
+
+{otp}
+
+This OTP is valid for 5 minutes.
+
+If you did not request a password reset, please ignore this email.
+
+Regards,
+Fashion Boutique
+""",
+
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+
+        except Exception as e:
+            print("EMAIL ERROR:", e)
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Unable to send OTP email. Please try again."
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        # Store OTP only after email is successfully sent
         cache.set(
             f"password_otp_{email}",
             otp,
@@ -499,29 +580,6 @@ class ForgotPasswordView(APIView):
             f"password_reset_email_{email}",
             email,
             timeout=300
-        )
-
-        # Send OTP
-        send_mail(
-            "Fashion Boutique - Password Reset OTP",
-
-            f"""Hello {user.first_name},
-
-                Your Fashion Boutique password reset OTP is:
-
-                {otp}
-
-                This OTP is valid for 5 minutes.
-
-                If you did not request a password reset, please ignore this email.
-
-                Regards,
-                Fashion Boutique
-                """,
-
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
-            fail_silently=False,
         )
 
         return Response(

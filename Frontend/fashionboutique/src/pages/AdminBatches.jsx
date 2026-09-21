@@ -15,9 +15,9 @@ const API_URL = "http://127.0.0.1:8000/api";
 
 const AdminBatches = () => {
 
-  // =========================
+  // =====================================================
   // STATES
-  // =========================
+  // =====================================================
 
   const [batches, setBatches] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -30,6 +30,7 @@ const AdminBatches = () => {
   const [formData, setFormData] = useState({
     course: "",
     batch_name: "",
+    mode: "Online",
     start_date: "",
     end_date: "",
     timing: "",
@@ -45,14 +46,14 @@ const AdminBatches = () => {
 
     try {
 
+      setError("");
+
       const response = await fetch(
         `${API_URL}/batches/`
       );
 
       if (!response.ok) {
-        throw new Error(
-          "Failed to fetch batches"
-        );
+        throw new Error("Failed to fetch batches");
       }
 
       const data = await response.json();
@@ -186,6 +187,25 @@ const AdminBatches = () => {
 
 
   // =====================================================
+  // RESET FORM
+  // =====================================================
+
+  const resetForm = () => {
+
+    setFormData({
+      course: "",
+      batch_name: "",
+      mode: "Online",
+      start_date: "",
+      end_date: "",
+      timing: "",
+      status: "Upcoming"
+    });
+
+  };
+
+
+  // =====================================================
   // ADD BATCH
   // =====================================================
 
@@ -193,14 +213,7 @@ const AdminBatches = () => {
 
     setEditingId(null);
 
-    setFormData({
-      course: "",
-      batch_name: "",
-      start_date: "",
-      end_date: "",
-      timing: "",
-      status: "Upcoming"
-    });
+    resetForm();
 
     setShowForm(true);
 
@@ -213,6 +226,11 @@ const AdminBatches = () => {
 
   const handleEdit = (batch) => {
 
+    console.log(
+      "Editing batch:",
+      batch
+    );
+
     setEditingId(batch.id);
 
     setFormData({
@@ -222,6 +240,9 @@ const AdminBatches = () => {
 
       batch_name:
         batch.batch_name || "",
+
+      mode:
+        batch.mode || "Online",
 
       start_date:
         batch.start_date || "",
@@ -243,12 +264,76 @@ const AdminBatches = () => {
 
 
   // =====================================================
-  // SAVE BATCH
+  // SAVE / UPDATE BATCH
   // =====================================================
 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    // Basic validation
+
+    if (!formData.course) {
+
+      alert("Please select a course.");
+
+      return;
+
+    }
+
+    if (!formData.batch_name.trim()) {
+
+      alert("Please enter batch name.");
+
+      return;
+
+    }
+
+    if (!formData.mode) {
+
+      alert("Please select class mode.");
+
+      return;
+
+    }
+
+    if (!formData.start_date) {
+
+      alert("Please select start date.");
+
+      return;
+
+    }
+
+    if (!formData.end_date) {
+
+      alert("Please select end date.");
+
+      return;
+
+    }
+
+    if (
+      formData.end_date <
+      formData.start_date
+    ) {
+
+      alert(
+        "End date cannot be before start date."
+      );
+
+      return;
+
+    }
+
+    if (!formData.timing.trim()) {
+
+      alert("Please enter batch timing.");
+
+      return;
+
+    }
+
 
     try {
 
@@ -261,37 +346,52 @@ const AdminBatches = () => {
         : "POST";
 
 
+      const requestBody = {
+
+        course:
+          Number(formData.course),
+
+        batch_name:
+          formData.batch_name.trim(),
+
+        mode:
+          formData.mode,
+
+        start_date:
+          formData.start_date,
+
+        end_date:
+          formData.end_date,
+
+        timing:
+          formData.timing.trim(),
+
+        status:
+          formData.status
+
+      };
+
+
+      console.log(
+        "Sending batch data:",
+        requestBody
+      );
+
+
       const response = await fetch(
         url,
         {
           method: method,
 
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type":
+              "application/json"
           },
 
-          body: JSON.stringify({
-
-            course:
-              Number(formData.course),
-
-            batch_name:
-              formData.batch_name,
-
-            start_date:
-              formData.start_date,
-
-            end_date:
-              formData.end_date,
-
-            timing:
-              formData.timing,
-
-            status:
-              formData.status
-
-          })
-
+          body:
+            JSON.stringify(
+              requestBody
+            )
         }
       );
 
@@ -314,7 +414,8 @@ const AdminBatches = () => {
         );
 
         alert(
-          "Failed to save batch."
+          data.detail ||
+          "Failed to save batch. Please check the entered data."
         );
 
         return;
@@ -324,8 +425,8 @@ const AdminBatches = () => {
 
       alert(
         editingId
-          ? "Batch updated successfully"
-          : "Batch added successfully"
+          ? "Batch updated successfully."
+          : "Batch added successfully."
       );
 
 
@@ -333,20 +434,10 @@ const AdminBatches = () => {
 
       setEditingId(null);
 
-
-      setFormData({
-
-        course: "",
-        batch_name: "",
-        start_date: "",
-        end_date: "",
-        timing: "",
-        status: "Upcoming"
-
-      });
-
+      resetForm();
 
       fetchBatches();
+
 
     } catch (error) {
 
@@ -402,11 +493,12 @@ const AdminBatches = () => {
 
 
       alert(
-        "Batch deleted successfully"
+        "Batch deleted successfully."
       );
 
 
       fetchBatches();
+
 
     } catch (error) {
 
@@ -434,16 +526,42 @@ const AdminBatches = () => {
 
     setEditingId(null);
 
-    setFormData({
+    resetForm();
 
-      course: "",
-      batch_name: "",
-      start_date: "",
-      end_date: "",
-      timing: "",
-      status: "Upcoming"
+  };
 
-    });
+
+  // =====================================================
+  // FORMAT DATE
+  // =====================================================
+
+  const formatDate = (date) => {
+
+    if (!date) {
+      return "N/A";
+    }
+
+    const dateObject =
+      new Date(date);
+
+    if (
+      Number.isNaN(
+        dateObject.getTime()
+      )
+    ) {
+
+      return date;
+
+    }
+
+    return dateObject.toLocaleDateString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }
+    );
 
   };
 
@@ -476,23 +594,23 @@ const AdminBatches = () => {
     <div className="admin-batch-page">
 
 
-      {/* =========================
-          COMMON ADMIN SIDEBAR
-      ========================= */}
+      {/* =================================================
+          ADMIN SIDEBAR
+      ================================================= */}
 
       <AdminSidebar />
 
 
-      {/* =========================
+      {/* =================================================
           MAIN CONTENT
-      ========================= */}
+      ================================================= */}
 
       <main className="batch-main">
 
 
-        {/* =========================
+        {/* =================================================
             HEADER
-        ========================= */}
+        ================================================= */}
 
         <div className="batch-header">
 
@@ -525,9 +643,9 @@ const AdminBatches = () => {
         </div>
 
 
-        {/* =========================
+        {/* =================================================
             ERROR
-        ========================= */}
+        ================================================= */}
 
         {error && (
 
@@ -540,9 +658,9 @@ const AdminBatches = () => {
         )}
 
 
-        {/* =========================
+        {/* =================================================
             FORM
-        ========================= */}
+        ================================================= */}
 
         {showForm && (
 
@@ -568,9 +686,9 @@ const AdminBatches = () => {
             >
 
 
-              {/* =========================
+              {/* =================================================
                   COURSE
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-group">
 
@@ -613,9 +731,9 @@ const AdminBatches = () => {
               </div>
 
 
-              {/* =========================
+              {/* =================================================
                   BATCH NAME
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-group">
 
@@ -636,9 +754,41 @@ const AdminBatches = () => {
               </div>
 
 
-              {/* =========================
+              {/* =================================================
+                  CLASS MODE
+              ================================================= */}
+
+              <div className="batch-form-group">
+
+                <label>
+                  Class Mode
+                </label>
+
+                <select
+                  name="mode"
+                  value={formData.mode}
+                  onChange={handleChange}
+                  required
+                >
+
+                  <option value="Online">
+                    Online
+                  </option>
+
+                  <option value="Offline">
+                    Offline
+                  </option>
+
+                  <option value="Both">
+                    Both
+                  </option>
+
+                </select>
+
+              </div>
+              {/* =================================================
                   START DATE
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-group">
 
@@ -658,9 +808,9 @@ const AdminBatches = () => {
               </div>
 
 
-              {/* =========================
+              {/* =================================================
                   END DATE
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-group">
 
@@ -680,9 +830,9 @@ const AdminBatches = () => {
               </div>
 
 
-              {/* =========================
+              {/* =================================================
                   TIMING
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-group">
 
@@ -703,9 +853,9 @@ const AdminBatches = () => {
               </div>
 
 
-              {/* =========================
+              {/* =================================================
                   STATUS
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-group">
 
@@ -738,9 +888,9 @@ const AdminBatches = () => {
               </div>
 
 
-              {/* =========================
+              {/* =================================================
                   BUTTONS
-              ========================= */}
+              ================================================= */}
 
               <div className="batch-form-buttons">
 
@@ -778,6 +928,7 @@ const AdminBatches = () => {
 
                 </button>
 
+
               </div>
 
             </form>
@@ -787,9 +938,9 @@ const AdminBatches = () => {
         )}
 
 
-        {/* =========================
-            TABLE
-        ========================= */}
+        {/* =================================================
+            BATCH TABLE
+        ================================================= */}
 
         <div className="batch-table-card">
 
@@ -865,6 +1016,10 @@ const AdminBatches = () => {
                     </th>
 
                     <th>
+                      Mode
+                    </th>
+
+                    <th>
                       Start Date
                     </th>
 
@@ -890,7 +1045,6 @@ const AdminBatches = () => {
 
 
                 <tbody>
-
 
                   {batches.map(
                     (batch) => (
@@ -935,12 +1089,36 @@ const AdminBatches = () => {
                         </td>
 
 
+                        {/* MODE */}
+
+                        <td>
+
+                          <span
+                            className={
+                              `batch-mode ${
+                                (
+                                  batch.mode ||
+                                  ""
+                                ).toLowerCase()
+                              }`
+                            }
+                          >
+
+                            {batch.mode ||
+                              "N/A"}
+
+                          </span>
+
+                        </td>
+
+
                         {/* START DATE */}
 
                         <td>
 
-                          {batch.start_date ||
-                            "N/A"}
+                          {formatDate(
+                            batch.start_date
+                          )}
 
                         </td>
 
@@ -949,8 +1127,9 @@ const AdminBatches = () => {
 
                         <td>
 
-                          {batch.end_date ||
-                            "N/A"}
+                          {formatDate(
+                            batch.end_date
+                          )}
 
                         </td>
 
@@ -971,9 +1150,12 @@ const AdminBatches = () => {
 
                           <span
                             className={
-                              `batch-status ${(
-                                batch.status || ""
-                              ).toLowerCase()}`
+                              `batch-status ${
+                                (
+                                  batch.status ||
+                                  ""
+                                ).toLowerCase()
+                              }`
                             }
                           >
 
@@ -1037,7 +1219,6 @@ const AdminBatches = () => {
 
                     )
                   )}
-
 
                 </tbody>
 

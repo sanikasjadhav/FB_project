@@ -15,6 +15,7 @@ function CourseDetails() {
 
   const navigate = useNavigate();
 
+
   const [course, setCourse] = useState(
     location.state?.course || null
   );
@@ -26,6 +27,10 @@ function CourseDetails() {
   const [message, setMessage] = useState("");
 
   const [selectedMode, setSelectedMode] = useState("");
+
+  const [batches, setBatches] = useState([]);
+
+  const [batchLoading, setBatchLoading] = useState(false);
 
 
   /* =====================================================
@@ -59,12 +64,6 @@ function CourseDetails() {
 
       setCourse(data);
 
-      /* If course already has a mode */
-
-      if (data.mode) {
-        setSelectedMode(data.mode);
-      }
-
     } catch (error) {
 
       console.error(error);
@@ -83,23 +82,119 @@ function CourseDetails() {
 
 
   /* =====================================================
+     FETCH BATCHES FOR SELECTED MODE
+  ===================================================== */
+
+  useEffect(() => {
+
+    if (
+      course?.id &&
+      selectedMode
+    ) {
+
+      fetchBatches();
+
+    } else {
+
+      setBatches([]);
+
+    }
+
+  }, [course, selectedMode]);
+
+
+  const fetchBatches = async () => {
+
+    try {
+
+      setBatchLoading(true);
+
+      const response = await fetch(
+        `${API_URL}/batches/?course=${course.id}&mode=${selectedMode}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to load batches");
+      }
+
+      const data = await response.json();
+
+      const batchData = Array.isArray(data)
+        ? data
+        : data.results || [];
+
+      setBatches(batchData);
+
+    } catch (error) {
+
+      console.error(
+        "Batch fetch error:",
+        error
+      );
+
+      setBatches([]);
+
+    } finally {
+
+      setBatchLoading(false);
+
+    }
+
+  };
+
+
+  /* =====================================================
+     SELECT FIRST UPCOMING BATCH
+  ===================================================== */
+
+  const upcomingBatch = batches.find(
+    (item) =>
+      !item.status ||
+      item.status.toLowerCase() === "upcoming"
+  ) || batches[0];
+
+
+  /* =====================================================
      ENROLL NOW
   ===================================================== */
 
- const handleEnroll = () => {
+  const handleEnroll = () => {
 
-  if (!selectedMode) {
-    alert("Please select class mode.");
-    return;
-  }
+    if (!selectedMode) {
 
-  navigate("/student-enrollment", {
-    state: {
-      course: course,
-      mode: selectedMode
+      alert("Please select class mode.");
+
+      return;
+
     }
-  });
-};
+
+
+    if (!upcomingBatch) {
+
+      alert(
+        `No ${selectedMode} batch is currently available for this course.`
+      );
+
+      return;
+
+    }
+
+
+    navigate("/student-enrollment", {
+
+      state: {
+
+        course: course,
+
+        mode: selectedMode,
+
+        batch: upcomingBatch
+
+      }
+
+    });
+
+  };
 
 
   /* =====================================================
@@ -124,6 +219,28 @@ function CourseDetails() {
       navigate("/categories");
 
     }
+
+  };
+
+
+  /* =====================================================
+     FORMAT DATE
+  ===================================================== */
+
+  const formatDate = (date) => {
+
+    if (!date) {
+      return "N/A";
+    }
+
+    return new Date(date).toLocaleDateString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }
+    );
 
   };
 
@@ -187,7 +304,7 @@ function CourseDetails() {
                 navigate("/categories")
               }
             >
-              Back to Course Catagories
+              Back to Course Categories
             </button>
 
           </div>
@@ -205,23 +322,17 @@ function CourseDetails() {
 
     <div className="course-details-page">
 
-      {/* =================================================
-          COMMON SIDEBAR
-      ================================================= */}
+      {/* SIDEBAR */}
 
       <StudentSidebar />
 
 
-      {/* =================================================
-          MAIN CONTENT
-      ================================================= */}
+      {/* MAIN CONTENT */}
 
       <main className="course-details-main">
 
 
-        {/* =================================================
-            TOP HEADER
-        ================================================= */}
+        {/* HEADER */}
 
         <div className="course-details-header">
 
@@ -242,15 +353,13 @@ function CourseDetails() {
             className="back-course-btn"
             onClick={handleBack}
           >
-            Back to Courses Catagories
+            Back to Course Categories
           </button>
 
         </div>
 
 
-        {/* =================================================
-            COURSE DETAILS CARD
-        ================================================= */}
+        {/* COURSE CARD */}
 
         <div className="course-details-card">
 
@@ -267,9 +376,11 @@ function CourseDetails() {
 
             </div>
 
+
             <h2>
               {course.course_name}
             </h2>
+
 
             <p className="course-full-description">
 
@@ -344,6 +455,7 @@ function CourseDetails() {
                 Choose Class Mode
               </h3>
 
+
               <div className="mode-options">
 
 
@@ -372,6 +484,7 @@ function CourseDetails() {
                       )
                     }
                   />
+
 
                   <div>
 
@@ -414,6 +527,7 @@ function CourseDetails() {
                     }
                   />
 
+
                   <div>
 
                     <h4>
@@ -428,10 +542,107 @@ function CourseDetails() {
 
                 </label>
 
-
               </div>
 
             </div>
+
+
+            {/* =================================================
+                START / END DATE
+            ================================================= */}
+
+            {selectedMode && (
+
+              <div className="course-dates-section">
+
+                <h3>
+                  {selectedMode} Class Schedule
+                </h3>
+
+
+                {batchLoading ? (
+
+                  <p>
+                    Loading class dates...
+                  </p>
+
+                ) : upcomingBatch ? (
+
+                  <>
+
+                    <div className="course-info-row">
+
+                      <span>
+                        Starting Date
+                      </span>
+
+                      <strong>
+                        {formatDate(
+                          upcomingBatch.start_date
+                        )}
+                      </strong>
+
+                    </div>
+
+
+                    <div className="course-info-row">
+
+                      <span>
+                        Ending Date
+                      </span>
+
+                      <strong>
+                        {formatDate(
+                          upcomingBatch.end_date
+                        )}
+                      </strong>
+
+                    </div>
+
+
+                    <div className="course-info-row">
+
+                      <span>
+                        Batch
+                      </span>
+
+                      <strong>
+                        {upcomingBatch.batch_name ||
+                          "N/A"}
+                      </strong>
+
+                    </div>
+
+
+                    <div className="course-info-row">
+
+                      <span>
+                        Class Timing
+                      </span>
+
+                      <strong>
+                        {upcomingBatch.timing ||
+                          "N/A"}
+                      </strong>
+
+                    </div>
+
+                  </>
+
+                ) : (
+
+                  <p className="no-batch-message">
+
+                    No upcoming {selectedMode.toLowerCase()} batch
+                    is currently available.
+
+                  </p>
+
+                )}
+
+              </div>
+
+            )}
 
 
             {/* =================================================
@@ -441,24 +652,28 @@ function CourseDetails() {
             <button
               className="enroll-course-btn"
               onClick={handleEnroll}
+              disabled={
+                !selectedMode ||
+                !upcomingBatch
+              }
             >
               Enroll Now
             </button>
+
 
           </div>
 
         </div>
 
 
-        {/* =================================================
-            SIMPLE FLOW
-        ================================================= */}
+        {/* LEARNING FLOW */}
 
         <div className="course-flow">
 
           <h2>
             Your Learning Journey
           </h2>
+
 
           <div className="flow-items">
 

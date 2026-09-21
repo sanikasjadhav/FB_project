@@ -118,11 +118,29 @@ class CourseSerializer(serializers.ModelSerializer):
 # ---------------- Batch ----------------
 
 class BatchSerializer(serializers.ModelSerializer):
+
+    course_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Batch
-        fields = "__all__"
+        fields = [
+            "id",
+            "course",
+            "course_name",
+            "batch_name",
+            "mode",
+            "start_date",
+            "end_date",
+            "timing",
+            "status",
+        ]
 
+    def get_course_name(self, obj):
+        if obj.course:
+            return obj.course.course_name
+        return ""
 
+    
 class EnrollmentSerializer(serializers.ModelSerializer):
 
     student_name = serializers.SerializerMethodField()
@@ -145,15 +163,25 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_student_name(self, obj):
-        return f"{obj.student.first_name} {obj.student.last_name}"
+        if obj.student:
+            return (
+                f"{obj.student.first_name} "
+                f"{obj.student.last_name}"
+            ).strip()
+
+        return ""
 
     def get_course_name(self, obj):
-        return obj.course.course_name
+        if obj.course:
+            return obj.course.course_name
+
+        return ""
 
     def get_batch_name(self, obj):
         if obj.batch:
             return obj.batch.batch_name
-        return "No Batch"
+
+        return ""
 
 class PaymentSerializer(serializers.ModelSerializer):
 
