@@ -642,3 +642,210 @@
     width: 100%;
   }
 }
+/* =====================================================
+   CONTACT HEADER BUTTONS
+===================================================== */
+
+.contacts-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* =====================================================
+   SEARCH CONTACT BUTTON
+===================================================== */
+
+.search-contact-btn {
+  border: none;
+  padding: 11px 18px;
+  border-radius: 7px;
+  background: #135255;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-contact-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.contact-search-card {
+  background: white;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 25px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.contact-search-title {
+  margin-bottom: 20px;
+}
+
+.contact-search-title h2 {
+  margin: 0 0 6px;
+  color: #063b3d;
+  font-size: 21px;
+}
+
+.contact-search-title p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+/* =====================================================
+   SEARCH FORM
+===================================================== */
+
+.contact-search-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+}
+
+.contact-search-field {
+  flex: 1;
+}
+
+.contact-search-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.contact-search-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #d6d6d6;
+  border-radius: 7px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.contact-search-field input:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.08);
+}
+
+/* =====================================================
+   SEARCH ACTIONS
+===================================================== */
+
+.contact-search-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.reset-contact-search-btn {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 7px;
+  background: #777;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reset-contact-search-btn:hover {
+  background: #555;
+}
+
+.download-contact-report-btn {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 7px;
+  background: #f5b942;
+  color: #063b3d;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.download-contact-report-btn:hover {
+  background: #e6a92f;
+}
+
+.download-contact-report-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   FILTER RESULT
+===================================================== */
+
+.contact-filter-result {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #eeeeee;
+  color: #666;
+  font-size: 14px;
+}
+
+.contact-filter-result strong {
+  color: #063b3d;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .contacts-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .contacts-header-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .contact-search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-search-actions {
+    width: 100%;
+  }
+
+  .reset-contact-search-btn,
+  .download-contact-report-btn {
+    flex: 1;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .contacts-header-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-contact-btn,
+  .contacts-count {
+    width: 100%;
+    text-align: center;
+  }
+
+  .contact-search-actions {
+    flex-direction: column;
+  }
+
+}

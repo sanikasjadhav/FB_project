@@ -542,3 +542,240 @@
   }
 
 }
+/* =====================================================
+   ENROLLMENT HEADER BUTTONS
+===================================================== */
+
+.enrollment-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* =====================================================
+   SEARCH ENROLLMENT BUTTON
+===================================================== */
+
+.search-enrollment-btn {
+  border: none;
+  background: #135255;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-enrollment-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.enrollment-search-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.enrollment-search-title {
+  margin-bottom: 20px;
+}
+
+.enrollment-search-title h2 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.enrollment-search-title p {
+  margin: 6px 0 0;
+  color: #777777;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   SEARCH FORM
+===================================================== */
+
+.enrollment-search-form {
+  display: grid;
+  grid-template-columns:
+    2fr
+    1fr
+    1fr
+    1fr
+    auto;
+
+  gap: 16px;
+  align-items: end;
+}
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.search-field label {
+  color: #063b3d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.search-field input,
+.search-field select {
+  width: 100%;
+  height: 43px;
+  padding: 0 12px;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-field input:focus,
+.search-field select:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.1);
+}
+
+
+/* =====================================================
+   SEARCH ACTION BUTTONS
+===================================================== */
+
+.enrollment-search-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reset-enrollment-btn,
+.download-enrollment-btn {
+  height: 43px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s ease;
+}
+
+
+/* RESET */
+
+.reset-enrollment-btn {
+  background: #eeeeee;
+  color: #333333;
+}
+
+.reset-enrollment-btn:hover {
+  background: #dddddd;
+}
+
+
+/* DOWNLOAD */
+
+.download-enrollment-btn {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.download-enrollment-btn:hover {
+  background: #e5a82f;
+}
+
+.download-enrollment-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   FILTER RESULT
+===================================================== */
+
+.enrollment-filter-result {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #eeeeee;
+  color: #666666;
+  font-size: 14px;
+}
+
+.enrollment-filter-result strong {
+  color: #063b3d;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1200px) {
+
+  .enrollment-search-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .enrollment-search-actions {
+    grid-column: 1 / -1;
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .enrollment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .enrollment-header-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-enrollment-btn,
+  .add-enrollment-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .enrollment-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .enrollment-search-actions {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reset-enrollment-btn,
+  .download-enrollment-btn {
+    width: 100%;
+  }
+
+}

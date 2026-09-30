@@ -22,6 +22,16 @@ const AdminCertificate = () => {
   const [loading, setLoading] = useState(false);
 
   // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const [showSearchForm, setShowSearchForm] = useState(false);
+
+  const [filters, setFilters] = useState({
+    search: "",
+  });
+
+  // =====================================================
   // LOAD DATA
   // =====================================================
 
@@ -38,10 +48,7 @@ const AdminCertificate = () => {
 
   const fetchCertificates = async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/certificates/`
-      );
-
+      const response = await fetch(`${API_URL}/certificates/`);
       const data = await response.json();
 
       console.log("Certificates API:", data);
@@ -59,14 +66,8 @@ const AdminCertificate = () => {
         setCertificates([]);
       }
     } catch (err) {
-      console.error(
-        "Certificate fetch error:",
-        err
-      );
-
-      setError(
-        "Unable to connect to backend."
-      );
+      console.error("Certificate fetch error:", err);
+      setError("Unable to connect to backend.");
     }
   };
 
@@ -76,21 +77,13 @@ const AdminCertificate = () => {
 
   const fetchEnrollments = async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/enrollments/`
-      );
-
+      const response = await fetch(`${API_URL}/enrollments/`);
       const data = await response.json();
 
-      console.log(
-        "Enrollments API:",
-        data
-      );
+      console.log("Enrollments API:", data);
 
       if (!response.ok) {
-        setError(
-          "Unable to load enrollments."
-        );
+        setError("Unable to load enrollments.");
         return;
       }
 
@@ -102,10 +95,7 @@ const AdminCertificate = () => {
         setEnrollments([]);
       }
     } catch (err) {
-      console.error(
-        "Enrollment fetch error:",
-        err
-      );
+      console.error("Enrollment fetch error:", err);
     }
   };
 
@@ -115,10 +105,7 @@ const AdminCertificate = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/students/`
-      );
-
+      const response = await fetch(`${API_URL}/students/`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -133,10 +120,7 @@ const AdminCertificate = () => {
         setStudents([]);
       }
     } catch (err) {
-      console.error(
-        "Student fetch error:",
-        err
-      );
+      console.error("Student fetch error:", err);
     }
   };
 
@@ -146,10 +130,7 @@ const AdminCertificate = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/courses/`
-      );
-
+      const response = await fetch(`${API_URL}/courses/`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -164,15 +145,12 @@ const AdminCertificate = () => {
         setCourses([]);
       }
     } catch (err) {
-      console.error(
-        "Course fetch error:",
-        err
-      );
+      console.error("Course fetch error:", err);
     }
   };
 
   // =====================================================
-  // HANDLE CHANGE
+  // HANDLE FORM CHANGE
   // =====================================================
 
   const handleChange = (e) => {
@@ -183,14 +161,23 @@ const AdminCertificate = () => {
   };
 
   // =====================================================
+  // HANDLE SEARCH FILTER CHANGE
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // =====================================================
   // GET STUDENT NAME
   // =====================================================
 
   const getStudentName = (studentId) => {
     const student = students.find(
-      (item) =>
-        Number(item.id) ===
-        Number(studentId)
+      (item) => Number(item.id) === Number(studentId)
     );
 
     if (!student) {
@@ -208,9 +195,7 @@ const AdminCertificate = () => {
 
   const getCourseName = (courseId) => {
     const course = courses.find(
-      (item) =>
-        Number(item.id) ===
-        Number(courseId)
+      (item) => Number(item.id) === Number(courseId)
     );
 
     return course?.course_name || "-";
@@ -220,22 +205,72 @@ const AdminCertificate = () => {
   // GET ENROLLMENT DETAILS
   // =====================================================
 
-  const getEnrollmentDetails = (
-    enrollment
-  ) => {
+  const getEnrollmentDetails = (enrollment) => {
     const studentName =
       enrollment.student_name ||
-      getStudentName(
-        enrollment.student
-      );
+      getStudentName(enrollment.student);
 
     const courseName =
       enrollment.course_name ||
-      getCourseName(
-        enrollment.course
-      );
+      getCourseName(enrollment.course);
 
     return `${studentName} - ${courseName}`;
+  };
+
+  // =====================================================
+  // FILTER CERTIFICATES
+  // =====================================================
+
+  const filteredCertificates = certificates.filter(
+    (certificate) => {
+      const searchText = filters.search
+        .trim()
+        .toLowerCase();
+
+      if (!searchText) {
+        return true;
+      }
+
+      const certificateNumber = (
+        certificate.certificate_number || ""
+      ).toLowerCase();
+
+      const studentName = (
+        certificate.student_name ||
+        getStudentName(certificate.student) ||
+        ""
+      ).toLowerCase();
+
+      const courseName = (
+        certificate.course_name ||
+        getCourseName(certificate.course) ||
+        ""
+      ).toLowerCase();
+
+      return (
+        certificateNumber.includes(searchText) ||
+        studentName.includes(searchText) ||
+        courseName.includes(searchText)
+      );
+    }
+  );
+
+  // =====================================================
+  // RESET SEARCH
+  // =====================================================
+
+  const resetFilters = () => {
+    setFilters({
+      search: "",
+    });
+  };
+
+  // =====================================================
+  // OPEN SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+    setShowSearchForm((previous) => !previous);
   };
 
   // =====================================================
@@ -246,17 +281,17 @@ const AdminCertificate = () => {
     setMessage("");
     setError("");
 
+    setShowSearchForm(false);
+
     setEditingId(certificate.id);
 
-    // Find enrollment using student and course
-    const matchingEnrollment =
-      enrollments.find(
-        (enrollment) =>
-          Number(enrollment.student) ===
-            Number(certificate.student) &&
-          Number(enrollment.course) ===
-            Number(certificate.course)
-      );
+    const matchingEnrollment = enrollments.find(
+      (enrollment) =>
+        Number(enrollment.student) ===
+          Number(certificate.student) &&
+        Number(enrollment.course) ===
+          Number(certificate.course)
+    );
 
     setFormData({
       enrollment: matchingEnrollment
@@ -311,19 +346,14 @@ const AdminCertificate = () => {
     setLoading(true);
 
     try {
-      // Find selected enrollment
-      const selectedEnrollment =
-        enrollments.find(
-          (item) =>
-            Number(item.id) ===
-            Number(formData.enrollment)
-        );
+      const selectedEnrollment = enrollments.find(
+        (item) =>
+          Number(item.id) ===
+          Number(formData.enrollment)
+      );
 
       if (!selectedEnrollment) {
-        setError(
-          "Selected enrollment not found."
-        );
-
+        setError("Selected enrollment not found.");
         setLoading(false);
         return;
       }
@@ -331,8 +361,8 @@ const AdminCertificate = () => {
       // Check completed enrollment
       if (
         selectedEnrollment.status &&
-        selectedEnrollment.status !==
-          "Completed"
+        selectedEnrollment.status.toLowerCase() !==
+          "completed"
       ) {
         setError(
           "Certificate can only be issued for a completed enrollment."
@@ -343,20 +373,14 @@ const AdminCertificate = () => {
       }
 
       const certificateData = {
-        student: Number(
-          selectedEnrollment.student
-        ),
-
-        course: Number(
-          selectedEnrollment.course
-        ),
-
+        student: Number(selectedEnrollment.student),
+        course: Number(selectedEnrollment.course),
         certificate_number:
           formData.certificate_number,
       };
 
       // =================================================
-      // UPDATE CERTIFICATE
+      // UPDATE
       // =================================================
 
       if (editingId) {
@@ -364,20 +388,14 @@ const AdminCertificate = () => {
           `${API_URL}/certificates/${editingId}/`,
           {
             method: "PUT",
-
             headers: {
-              "Content-Type":
-                "application/json",
+              "Content-Type": "application/json",
             },
-
-            body: JSON.stringify(
-              certificateData
-            ),
+            body: JSON.stringify(certificateData),
           }
         );
 
-        const data =
-          await response.json();
+        const data = await response.json();
 
         console.log(
           "Certificate update response:",
@@ -385,10 +403,7 @@ const AdminCertificate = () => {
         );
 
         if (!response.ok) {
-          setError(
-            JSON.stringify(data)
-          );
-
+          setError(JSON.stringify(data));
           setLoading(false);
           return;
         }
@@ -411,27 +426,21 @@ const AdminCertificate = () => {
       }
 
       // =================================================
-      // ADD CERTIFICATE
+      // ADD
       // =================================================
 
       const response = await fetch(
         `${API_URL}/certificates/`,
         {
           method: "POST",
-
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
-
-          body: JSON.stringify(
-            certificateData
-          ),
+          body: JSON.stringify(certificateData),
         }
       );
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       console.log(
         "Certificate save response:",
@@ -444,10 +453,7 @@ const AdminCertificate = () => {
           data
         );
 
-        setError(
-          JSON.stringify(data)
-        );
-
+        setError(JSON.stringify(data));
         setLoading(false);
         return;
       }
@@ -481,10 +487,9 @@ const AdminCertificate = () => {
   // =====================================================
 
   const deleteCertificate = async (id) => {
-    const confirmDelete =
-      window.confirm(
-        "Are you sure you want to delete this certificate?"
-      );
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this certificate?"
+    );
 
     if (!confirmDelete) {
       return;
@@ -527,6 +532,77 @@ const AdminCertificate = () => {
   };
 
   // =====================================================
+  // DOWNLOAD FILTERED REPORT
+  // =====================================================
+
+  const escapeCSV = (value) => {
+    return `"${String(value ?? "").replace(
+      /"/g,
+      '""'
+    )}"`;
+  };
+
+  const downloadCertificateReport = () => {
+    if (filteredCertificates.length === 0) {
+      alert("No certificates available to download.");
+      return;
+    }
+
+    const headers = [
+      "Certificate ID",
+      "Certificate Number",
+      "Student",
+      "Course",
+      "Issue Date",
+    ];
+
+    const rows = filteredCertificates.map(
+      (certificate) => [
+        certificate.id || "",
+        certificate.certificate_number || "",
+        certificate.student_name ||
+          getStudentName(certificate.student) ||
+          "",
+        certificate.course_name ||
+          getCourseName(certificate.course) ||
+          "",
+        certificate.issue_date
+          ? new Date(
+              certificate.issue_date
+            ).toLocaleDateString("en-IN")
+          : "",
+      ]
+    );
+
+    const csv = [
+      headers.map(escapeCSV).join(","),
+      ...rows.map((row) =>
+        row.map(escapeCSV).join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download =
+      "filtered_certificates_report.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
+
+  // =====================================================
   // PAGE
   // =====================================================
 
@@ -534,33 +610,122 @@ const AdminCertificate = () => {
     <div className="admin-certificate-layout">
 
       {/* SIDEBAR */}
-
       <AdminSidebar />
 
       {/* MAIN BODY */}
-
       <div className="admin-certificate-body">
 
         {/* HEADER */}
-
         <div className="certificate-header">
 
           <div>
-            <h1>
-              Certificates
-            </h1>
+            <h1>Certificates</h1>
 
             <p>
               Manage student certificates
             </p>
           </div>
 
-          <div className="certificate-count">
-            Total Certificates:{" "}
-            {certificates.length}
+          <div className="certificate-header-buttons">
+
+            {/* SEARCH BUTTON */}
+            <button
+              type="button"
+              className="search-certificate-btn"
+              onClick={openSearchForm}
+            >
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Certificates"}
+            </button>
+
+            {/* COUNT */}
+            <div className="certificate-count">
+              Total Certificates:{" "}
+              {certificates.length}
+            </div>
+
           </div>
 
         </div>
+
+        {/* SEARCH FORM */}
+
+        {showSearchForm && (
+          <section className="certificate-search-card">
+
+            <div className="certificate-search-title">
+
+              <h2>
+                Search Certificates
+              </h2>
+
+              <p>
+                Search by certificate number,
+                student name, or course name.
+              </p>
+
+            </div>
+
+            <div className="certificate-search-form">
+
+              <div className="certificate-search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={filters.search}
+                  onChange={handleFilterChange}
+                  placeholder="Certificate number, student name or course..."
+                />
+
+              </div>
+
+              <div className="certificate-search-actions">
+
+                <button
+                  type="button"
+                  className="reset-certificate-search-btn"
+                  onClick={resetFilters}
+                >
+                  Reset
+                </button>
+
+                <button
+                  type="button"
+                  className="download-certificate-report-btn"
+                  onClick={downloadCertificateReport}
+                  disabled={
+                    filteredCertificates.length === 0
+                  }
+                >
+                  ↓ Download Report
+                </button>
+
+              </div>
+
+            </div>
+
+            <div className="certificate-filter-result">
+
+              Showing{" "}
+              <strong>
+                {filteredCertificates.length}
+              </strong>{" "}
+              of{" "}
+              <strong>
+                {certificates.length}
+              </strong>{" "}
+              certificates
+
+            </div>
+
+          </section>
+        )}
 
         {/* ALERTS */}
 
@@ -753,7 +918,7 @@ const AdminCertificate = () => {
 
               <tbody>
 
-                {certificates.length === 0 ? (
+                {filteredCertificates.length === 0 ? (
 
                   <tr>
 
@@ -761,14 +926,16 @@ const AdminCertificate = () => {
                       colSpan="6"
                       className="certificate-empty"
                     >
-                      No certificates found.
+                      {certificates.length === 0
+                        ? "No certificates found."
+                        : "No certificates match your search."}
                     </td>
 
                   </tr>
 
                 ) : (
 
-                  certificates.map(
+                  filteredCertificates.map(
                     (certificate) => (
 
                       <tr
@@ -780,11 +947,13 @@ const AdminCertificate = () => {
                         </td>
 
                         <td>
+
                           <strong>
                             {
                               certificate.certificate_number
                             }
                           </strong>
+
                         </td>
 
                         <td>
@@ -802,6 +971,7 @@ const AdminCertificate = () => {
                         </td>
 
                         <td>
+
                           {certificate.issue_date
                             ? new Date(
                                 certificate.issue_date
@@ -809,6 +979,7 @@ const AdminCertificate = () => {
                                 "en-IN"
                               )
                             : "-"}
+
                         </td>
 
                         <td>
@@ -848,8 +1019,10 @@ const AdminCertificate = () => {
                         </td>
 
                       </tr>
+
                     )
                   )
+
                 )}
 
               </tbody>

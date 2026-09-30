@@ -378,11 +378,12 @@ class CourseVideo(models.Model):
 # ----------------------
 class Feedback(models.Model):
     RATING_CHOICES = (
-            ("Excellent", "Exellent"),
-            ("Good", "Good"),
-            ("Average", "Average"),
-            ("Poor", "Poor"),
-        )
+        ("Excellent", "Excellent"),
+        ("Good", "Good"),
+        ("Average", "Average"),
+        ("Poor", "Poor"),
+    )
+
     student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE,
@@ -395,15 +396,15 @@ class Feedback(models.Model):
         related_name="feedbacks"
     )
 
-    rating = models.CharField(max_length=10, choices = RATING_CHOICES )
-
+    rating = models.CharField(
+        max_length=10,
+        choices=RATING_CHOICES
+    )
 
     feedback = models.TextField()
 
     def __str__(self):
         return f"{self.student} - {self.course}"
-
-
 # ----------------------
 # Gallery
 # ----------------------

@@ -5,14 +5,27 @@ import "./AdminFeedback.css";
 const API_URL = "http://127.0.0.1:8000/api";
 
 const AdminFeedback = () => {
+
+  // =====================================================
+  // STATES
+  // =====================================================
+
   const [feedbacks, setFeedbacks] = useState([]);
 
   const [editingId, setEditingId] = useState(null);
+
+  const [showSearchForm, setShowSearchForm] =
+    useState(false);
 
   const [formData, setFormData] = useState({
     student: "",
     course: "",
     feedback: "",
+    rating: "",
+  });
+
+  const [filters, setFilters] = useState({
+    search: "",
     rating: "",
   });
 
@@ -27,7 +40,9 @@ const AdminFeedback = () => {
   // =====================================================
 
   const fetchFeedbacks = async () => {
+
     try {
+
       setLoading(true);
       setError("");
 
@@ -43,6 +58,7 @@ const AdminFeedback = () => {
       );
 
       if (!response.ok) {
+
         setError(
           "Unable to load feedback."
         );
@@ -53,13 +69,20 @@ const AdminFeedback = () => {
       }
 
       if (Array.isArray(data)) {
+
         setFeedbacks(data);
+
       } else if (data.results) {
+
         setFeedbacks(data.results);
+
       } else {
+
         setFeedbacks([]);
       }
+
     } catch (err) {
+
       console.error(
         "Feedback fetch error:",
         err
@@ -70,7 +93,9 @@ const AdminFeedback = () => {
       );
 
       setFeedbacks([]);
+
     } finally {
+
       setLoading(false);
     }
   };
@@ -80,7 +105,9 @@ const AdminFeedback = () => {
   // =====================================================
 
   useEffect(() => {
+
     fetchFeedbacks();
+
   }, []);
 
   // =====================================================
@@ -88,6 +115,7 @@ const AdminFeedback = () => {
   // =====================================================
 
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -95,10 +123,113 @@ const AdminFeedback = () => {
   };
 
   // =====================================================
+  // HANDLE SEARCH FILTER CHANGE
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // =====================================================
+  // OPEN / CLOSE SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+
+    // Close edit form
+    setEditingId(null);
+
+    setFormData({
+      student: "",
+      course: "",
+      feedback: "",
+      rating: "",
+    });
+
+    // Toggle search form
+    setShowSearchForm(
+      (previous) => !previous
+    );
+  };
+
+  // =====================================================
+  // RESET SEARCH
+  // =====================================================
+
+  const resetFilters = () => {
+
+    setFilters({
+      search: "",
+      rating: "",
+    });
+  };
+
+  // =====================================================
+  // FILTER FEEDBACK
+  // =====================================================
+
+  const filteredFeedbacks =
+    feedbacks.filter((feedback) => {
+
+      const searchText =
+        filters.search
+          .trim()
+          .toLowerCase();
+
+      const studentName = (
+        feedback.student_name ||
+        feedback.student ||
+        ""
+      )
+        .toString()
+        .toLowerCase();
+
+      const courseName = (
+        feedback.course_name ||
+        feedback.course ||
+        ""
+      )
+        .toString()
+        .toLowerCase();
+
+      const feedbackText = (
+        feedback.feedback ||
+        ""
+      )
+        .toString()
+        .toLowerCase();
+
+      const matchesSearch =
+        !searchText ||
+        studentName.includes(searchText) ||
+        courseName.includes(searchText) ||
+        feedbackText.includes(searchText);
+
+      const matchesRating =
+        !filters.rating ||
+        String(
+          feedback.rating || ""
+        ) === String(filters.rating);
+
+      return (
+        matchesSearch &&
+        matchesRating
+      );
+    });
+
+  // =====================================================
   // EDIT FEEDBACK
   // =====================================================
 
   const handleEdit = (feedback) => {
+
+    // Close search form
+    setShowSearchForm(false);
+
     setMessage("");
     setError("");
 
@@ -138,6 +269,7 @@ const AdminFeedback = () => {
   // =====================================================
 
   const handleCancelEdit = () => {
+
     setEditingId(null);
 
     setFormData({
@@ -156,6 +288,7 @@ const AdminFeedback = () => {
   // =====================================================
 
   const handleUpdate = async (e) => {
+
     e.preventDefault();
 
     setMessage("");
@@ -169,6 +302,7 @@ const AdminFeedback = () => {
       !formData.feedback ||
       !formData.rating
     ) {
+
       setError(
         "Please enter feedback and rating."
       );
@@ -179,9 +313,13 @@ const AdminFeedback = () => {
     setSaving(true);
 
     try {
+
       const updateData = {
-        feedback: formData.feedback,
-        rating: Number(formData.rating),
+        feedback:
+          formData.feedback,
+
+        rating:
+          Number(formData.rating),
       };
 
       /*
@@ -191,11 +329,13 @@ const AdminFeedback = () => {
        */
 
       if (formData.student) {
+
         updateData.student =
           Number(formData.student);
       }
 
       if (formData.course) {
+
         updateData.course =
           Number(formData.course);
       }
@@ -210,7 +350,10 @@ const AdminFeedback = () => {
               "application/json",
           },
 
-          body: JSON.stringify(updateData),
+          body:
+            JSON.stringify(
+              updateData
+            ),
         }
       );
 
@@ -223,6 +366,7 @@ const AdminFeedback = () => {
       );
 
       if (!response.ok) {
+
         console.error(
           "Feedback update error:",
           data
@@ -251,7 +395,9 @@ const AdminFeedback = () => {
       });
 
       await fetchFeedbacks();
+
     } catch (err) {
+
       console.error(
         "Update feedback error:",
         err
@@ -270,6 +416,7 @@ const AdminFeedback = () => {
   // =====================================================
 
   const deleteFeedback = async (id) => {
+
     const confirmDelete =
       window.confirm(
         "Are you sure you want to delete this feedback?"
@@ -280,6 +427,7 @@ const AdminFeedback = () => {
     }
 
     try {
+
       setError("");
 
       const response = await fetch(
@@ -290,10 +438,14 @@ const AdminFeedback = () => {
       );
 
       if (!response.ok) {
+
         let data = {};
 
         try {
-          data = await response.json();
+
+          data =
+            await response.json();
+
         } catch {
           // DELETE may return empty response
         }
@@ -315,15 +467,20 @@ const AdminFeedback = () => {
       );
 
       if (editingId === id) {
+
         handleCancelEdit();
       }
 
       await fetchFeedbacks();
 
       setTimeout(() => {
+
         setMessage("");
+
       }, 3000);
+
     } catch (err) {
+
       console.error(
         "Delete feedback error:",
         err
@@ -336,10 +493,111 @@ const AdminFeedback = () => {
   };
 
   // =====================================================
+  // CSV HELPER
+  // =====================================================
+
+  const escapeCSV = (value) => {
+
+    return `"${String(
+      value ?? ""
+    ).replace(/"/g, '""')}"`;
+  };
+
+  // =====================================================
+  // DOWNLOAD FILTERED REPORT
+  // =====================================================
+
+  const downloadFeedbackReport = () => {
+
+    if (
+      filteredFeedbacks.length === 0
+    ) {
+
+      alert(
+        "No feedback available to download."
+      );
+
+      return;
+    }
+
+    const headers = [
+      "Feedback ID",
+      "Student",
+      "Course",
+      "Feedback",
+      "Rating",
+    ];
+
+    const rows =
+      filteredFeedbacks.map(
+        (feedback) => [
+
+          feedback.id || "",
+
+          feedback.student_name ||
+            feedback.student ||
+            "",
+
+          feedback.course_name ||
+            feedback.course ||
+            "",
+
+          feedback.feedback ||
+            "",
+
+          feedback.rating ||
+            "",
+        ]
+      );
+
+    const csv = [
+
+      headers
+        .map(escapeCSV)
+        .join(","),
+
+      ...rows.map((row) =>
+        row
+          .map(escapeCSV)
+          .join(",")
+      ),
+
+    ].join("\n");
+
+    const blob = new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;",
+      }
+    );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+      "filtered_feedback_report.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
+
+  // =====================================================
   // PAGE
   // =====================================================
 
   return (
+
     <div className="admin-feedback-layout">
 
       {/* =================================================
@@ -347,6 +605,7 @@ const AdminFeedback = () => {
       ================================================= */}
 
       <AdminSidebar />
+
 
       {/* =================================================
           MAIN BODY
@@ -361,47 +620,240 @@ const AdminFeedback = () => {
         <div className="feedback-header">
 
           <div>
+
             <h1>
               Feedback
             </h1>
 
             <p>
-              Manage feedback submitted by students
+              Manage feedback submitted
+              by students
             </p>
+
           </div>
 
-          <div className="feedback-count">
-            Total Feedback:{" "}
-            {feedbacks.length}
+
+          <div className="feedback-header-buttons">
+
+            {/* SEARCH BUTTON */}
+
+            <button
+              type="button"
+              className="search-feedback-btn"
+              onClick={openSearchForm}
+            >
+
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Feedback"}
+
+            </button>
+
+
+            {/* COUNT */}
+
+            <div className="feedback-count">
+
+              Total Feedback:{" "}
+
+              {filteredFeedbacks.length}
+
+            </div>
+
           </div>
 
         </div>
+
 
         {/* =================================================
             SUCCESS MESSAGE
         ================================================= */}
 
         {message && (
+
           <div className="feedback-alert success">
+
             {message}
+
           </div>
+
         )}
+
 
         {/* =================================================
             ERROR MESSAGE
         ================================================= */}
 
         {error && (
+
           <div className="feedback-alert error">
+
             {error}
+
           </div>
+
         )}
+
+
+        {/* =================================================
+            SEARCH FORM
+        ================================================= */}
+
+        {showSearchForm && (
+
+          <div className="feedback-search-card">
+
+            <div className="feedback-search-title">
+
+              <h2>
+                Search Feedback
+              </h2>
+
+              <p>
+                Filter feedback by student,
+                course or rating
+              </p>
+
+            </div>
+
+
+            <div className="feedback-search-form">
+
+              {/* SEARCH */}
+
+              <div className="feedback-search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={
+                    filters.search
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                  placeholder="Search student, course or feedback..."
+                />
+
+              </div>
+
+
+              {/* RATING */}
+
+              <div className="feedback-search-field">
+
+                <label>
+                  Rating
+                </label>
+
+                <select
+                  name="rating"
+                  value={
+                    filters.rating
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                >
+
+                  <option value="">
+                    All Ratings
+                  </option>
+
+                  <option value="1">
+                    1 Star
+                  </option>
+
+                  <option value="2">
+                    2 Stars
+                  </option>
+
+                  <option value="3">
+                    3 Stars
+                  </option>
+
+                  <option value="4">
+                    4 Stars
+                  </option>
+
+                  <option value="5">
+                    5 Stars
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              {/* ACTIONS */}
+
+              <div className="feedback-search-actions">
+
+                <button
+                  type="button"
+                  className="reset-feedback-search-btn"
+                  onClick={
+                    resetFilters
+                  }
+                >
+                  Reset
+                </button>
+
+
+                <button
+                  type="button"
+                  className="download-feedback-btn"
+                  onClick={
+                    downloadFeedbackReport
+                  }
+                  disabled={
+                    filteredFeedbacks.length ===
+                    0
+                  }
+                >
+                  ↓ Download Report
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* FILTER RESULT */}
+
+            <div className="feedback-filter-result">
+
+              Showing{" "}
+
+              <strong>
+                {filteredFeedbacks.length}
+              </strong>
+
+              {" "}of{" "}
+
+              <strong>
+                {feedbacks.length}
+              </strong>
+
+              {" "}feedback records
+
+            </div>
+
+          </div>
+
+        )}
+
 
         {/* =================================================
             EDIT FEEDBACK FORM
         ================================================= */}
 
         {editingId && (
+
           <div className="feedback-card feedback-edit-card">
 
             <div className="feedback-card-title">
@@ -411,10 +863,12 @@ const AdminFeedback = () => {
               </h2>
 
               <p>
-                Update the selected student feedback
+                Update the selected
+                student feedback
               </p>
 
             </div>
+
 
             <form
               className="feedback-edit-form"
@@ -440,6 +894,7 @@ const AdminFeedback = () => {
 
               </div>
 
+
               {/* COURSE */}
 
               <div className="feedback-input">
@@ -458,6 +913,7 @@ const AdminFeedback = () => {
                 />
 
               </div>
+
 
               {/* RATING */}
 
@@ -506,6 +962,7 @@ const AdminFeedback = () => {
 
               </div>
 
+
               {/* FEEDBACK */}
 
               <div className="feedback-input feedback-textarea">
@@ -529,6 +986,7 @@ const AdminFeedback = () => {
 
               </div>
 
+
               {/* BUTTONS */}
 
               <div className="feedback-edit-buttons">
@@ -538,10 +996,13 @@ const AdminFeedback = () => {
                   className="update-feedback-btn"
                   disabled={saving}
                 >
+
                   {saving
                     ? "Updating..."
                     : "Update Feedback"}
+
                 </button>
+
 
                 <button
                   type="button"
@@ -550,7 +1011,9 @@ const AdminFeedback = () => {
                     handleCancelEdit
                   }
                 >
+
                   Cancel
+
                 </button>
 
               </div>
@@ -559,6 +1022,7 @@ const AdminFeedback = () => {
 
           </div>
         )}
+
 
         {/* =================================================
             FEEDBACK CARD
@@ -573,10 +1037,12 @@ const AdminFeedback = () => {
             </h2>
 
             <p>
-              View feedback received from students
+              View feedback received
+              from students
             </p>
 
           </div>
+
 
           {/* =================================================
               TABLE
@@ -618,11 +1084,13 @@ const AdminFeedback = () => {
 
               </thead>
 
+
               <tbody>
 
                 {/* LOADING */}
 
                 {loading && (
+
                   <tr>
 
                     <td
@@ -635,30 +1103,42 @@ const AdminFeedback = () => {
                   </tr>
                 )}
 
+
                 {/* EMPTY */}
 
                 {!loading &&
-                  feedbacks.length === 0 && (
+                  filteredFeedbacks.length ===
+                    0 && (
+
                     <tr>
 
                       <td
                         colSpan="6"
                         className="feedback-empty"
                       >
-                        No feedback found.
+
+                        {feedbacks.length === 0
+                          ? "No feedback found."
+                          : "No matching feedback found."}
+
                       </td>
 
                     </tr>
                   )}
 
+
                 {/* DATA */}
 
                 {!loading &&
-                  feedbacks.length > 0 &&
-                  feedbacks.map(
+                  filteredFeedbacks.length >
+                    0 &&
+                  filteredFeedbacks.map(
                     (feedback) => (
+
                       <tr
-                        key={feedback.id}
+                        key={
+                          feedback.id
+                        }
                       >
 
                         {/* ID */}
@@ -667,26 +1147,36 @@ const AdminFeedback = () => {
                           #{feedback.id}
                         </td>
 
+
                         {/* STUDENT */}
 
                         <td>
+
                           {feedback.student_name ||
                             "-"}
+
                         </td>
+
 
                         {/* COURSE */}
 
                         <td>
+
                           {feedback.course_name ||
                             "-"}
+
                         </td>
+
 
                         {/* FEEDBACK */}
 
                         <td className="feedback-message">
+
                           {feedback.feedback ||
                             "-"}
+
                         </td>
+
 
                         {/* RATING */}
 
@@ -703,6 +1193,7 @@ const AdminFeedback = () => {
                           </span>
 
                         </td>
+
 
                         {/* ACTION */}
 
@@ -721,8 +1212,11 @@ const AdminFeedback = () => {
                                 )
                               }
                             >
+
                               Edit
+
                             </button>
+
 
                             {/* DELETE */}
 
@@ -735,7 +1229,9 @@ const AdminFeedback = () => {
                                 )
                               }
                             >
+
                               Delete
+
                             </button>
 
                           </div>

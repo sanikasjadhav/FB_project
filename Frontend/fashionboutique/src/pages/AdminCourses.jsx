@@ -9,9 +9,7 @@ import {
 
 import "./AdminCourses.css";
 
-
 const API_URL = "http://127.0.0.1:8000/api";
-
 
 const AdminCourses = () => {
 
@@ -20,17 +18,26 @@ const AdminCourses = () => {
   // =========================
 
   const [courses, setCourses] = useState([]);
-
   const [categories, setCategories] = useState([]);
 
   const [showForm, setShowForm] = useState(false);
+  const [showSearchForm, setShowSearchForm] = useState(false);
 
   const [editingId, setEditingId] = useState(null);
 
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
 
+  // =========================
+  // SEARCH FILTERS
+  // =========================
+
+  const [filters, setFilters] = useState({
+    search: "",
+    category: "",
+    mode: "",
+    status: ""
+  });
 
   const [formData, setFormData] = useState({
     category: "",
@@ -41,7 +48,6 @@ const AdminCourses = () => {
     mode: "Online",
     status: "Active"
   });
-
 
   // =====================================================
   // FETCH COURSES
@@ -68,8 +74,6 @@ const AdminCourses = () => {
         data
       );
 
-
-      // Django REST Framework pagination
       if (Array.isArray(data)) {
 
         setCourses(data);
@@ -101,7 +105,6 @@ const AdminCourses = () => {
 
   };
 
-
   // =====================================================
   // FETCH CATEGORIES
   // =====================================================
@@ -126,7 +129,6 @@ const AdminCourses = () => {
         "Categories API response:",
         data
       );
-
 
       if (Array.isArray(data)) {
 
@@ -155,7 +157,6 @@ const AdminCourses = () => {
 
   };
 
-
   // =====================================================
   // LOAD DATA
   // =====================================================
@@ -179,7 +180,6 @@ const AdminCourses = () => {
 
   }, []);
 
-
   // =====================================================
   // FORM CHANGE
   // =====================================================
@@ -193,6 +193,164 @@ const AdminCourses = () => {
 
   };
 
+  // =====================================================
+  // SEARCH FILTER CHANGE
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value
+    });
+
+  };
+
+  // =====================================================
+  // GET CATEGORY NAME
+  // =====================================================
+
+  const getCategoryName = (course) => {
+
+    if (course.category_name) {
+      return course.category_name;
+    }
+
+    if (
+      course.category &&
+      typeof course.category === "object"
+    ) {
+      return (
+        course.category.category_name ||
+        course.category.name ||
+        "N/A"
+      );
+    }
+
+    const category = categories.find(
+      (item) =>
+        String(item.id) ===
+        String(course.category)
+    );
+
+    return (
+      category?.category_name ||
+      category?.name ||
+      "N/A"
+    );
+
+  };
+
+  // =====================================================
+  // FILTER COURSES
+  // =====================================================
+
+  const filteredCourses = courses.filter(
+    (course) => {
+
+      const searchText =
+        filters.search
+          .trim()
+          .toLowerCase();
+
+      const courseName = (
+        course.course_name || ""
+      ).toLowerCase();
+
+      const description = (
+        course.description || ""
+      ).toLowerCase();
+
+      const duration = (
+        course.duration || ""
+      ).toLowerCase();
+
+      const mode = (
+        course.mode || ""
+      ).toLowerCase();
+
+      const status = (
+        course.status || ""
+      ).toLowerCase();
+
+      const categoryName = (
+        getCategoryName(course) || ""
+      ).toLowerCase();
+
+      // General search
+
+      const matchesSearch =
+        !searchText ||
+        courseName.includes(searchText) ||
+        categoryName.includes(searchText) ||
+        description.includes(searchText) ||
+        duration.includes(searchText) ||
+        mode.includes(searchText) ||
+        status.includes(searchText);
+
+      // Category filter
+
+      const matchesCategory =
+        !filters.category ||
+        String(
+          course.category
+        ) === String(
+          filters.category
+        );
+
+      // Mode filter
+
+      const matchesMode =
+        !filters.mode ||
+        mode ===
+          filters.mode.toLowerCase();
+
+      // Status filter
+
+      const matchesStatus =
+        !filters.status ||
+        status ===
+          filters.status.toLowerCase();
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesMode &&
+        matchesStatus
+      );
+
+    }
+  );
+
+  // =====================================================
+  // RESET FILTERS
+  // =====================================================
+
+  const resetFilters = () => {
+
+    setFilters({
+      search: "",
+      category: "",
+      mode: "",
+      status: ""
+    });
+
+  };
+
+  // =====================================================
+  // OPEN SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+
+    setShowForm(false);
+    setEditingId(null);
+
+    setShowSearchForm(
+      (previous) => !previous
+    );
+
+  };
 
   // =====================================================
   // ADD COURSE
@@ -201,6 +359,8 @@ const AdminCourses = () => {
   const handleAdd = () => {
 
     setEditingId(null);
+
+    setShowSearchForm(false);
 
     setFormData({
       category: "",
@@ -214,8 +374,12 @@ const AdminCourses = () => {
 
     setShowForm(true);
 
-  };
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
+  };
 
   // =====================================================
   // EDIT COURSE
@@ -225,10 +389,14 @@ const AdminCourses = () => {
 
     setEditingId(course.id);
 
+    setShowSearchForm(false);
+
     setFormData({
 
       category:
-        course.category || "",
+        typeof course.category === "object"
+          ? course.category.id
+          : course.category || "",
 
       course_name:
         course.course_name || "",
@@ -252,8 +420,12 @@ const AdminCourses = () => {
 
     setShowForm(true);
 
-  };
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
+  };
 
   // =====================================================
   // SAVE COURSE
@@ -269,11 +441,9 @@ const AdminCourses = () => {
         ? `${API_URL}/courses/${editingId}/`
         : `${API_URL}/courses/`;
 
-
       const method = editingId
         ? "PUT"
         : "POST";
-
 
       const response = await fetch(
         url,
@@ -281,7 +451,8 @@ const AdminCourses = () => {
           method: method,
 
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type":
+              "application/json"
           },
 
           body: JSON.stringify({
@@ -312,15 +483,13 @@ const AdminCourses = () => {
         }
       );
 
-
-      const data = await response.json();
-
+      const data =
+        await response.json();
 
       console.log(
         "Save course response:",
         data
       );
-
 
       if (!response.ok) {
 
@@ -337,21 +506,15 @@ const AdminCourses = () => {
 
       }
 
-
       alert(
         editingId
           ? "Course updated successfully"
           : "Course added successfully"
       );
 
-
-      // Close form
       setShowForm(false);
-
       setEditingId(null);
 
-
-      // Reset form
       setFormData({
         category: "",
         course_name: "",
@@ -362,10 +525,7 @@ const AdminCourses = () => {
         status: "Active"
       });
 
-
-      // Reload courses
       fetchCourses();
-
 
     } catch (error) {
 
@@ -382,7 +542,6 @@ const AdminCourses = () => {
 
   };
 
-
   // =====================================================
   // DELETE COURSE
   // =====================================================
@@ -394,11 +553,9 @@ const AdminCourses = () => {
         "Are you sure you want to delete this course?"
       );
 
-
     if (!confirmDelete) {
       return;
     }
-
 
     try {
 
@@ -410,7 +567,6 @@ const AdminCourses = () => {
           }
         );
 
-
       if (!response.ok) {
 
         throw new Error(
@@ -419,15 +575,11 @@ const AdminCourses = () => {
 
       }
 
-
       alert(
         "Course deleted successfully"
       );
 
-
-      // Reload database records
       fetchCourses();
-
 
     } catch (error) {
 
@@ -443,7 +595,6 @@ const AdminCourses = () => {
     }
 
   };
-
 
   // =====================================================
   // CANCEL FORM
@@ -467,6 +618,122 @@ const AdminCourses = () => {
 
   };
 
+  // =====================================================
+  // DOWNLOAD FILTERED REPORT
+  // =====================================================
+
+  const escapeCSV = (value) => {
+
+    return `"${String(
+      value ?? ""
+    ).replace(
+      /"/g,
+      '""'
+    )}"`;
+
+  };
+
+  const downloadCourseReport = () => {
+
+    if (
+      filteredCourses.length === 0
+    ) {
+
+      alert(
+        "No courses available to download."
+      );
+
+      return;
+
+    }
+
+    const headers = [
+      "Course ID",
+      "Category",
+      "Course Name",
+      "Description",
+      "Duration",
+      "Fees",
+      "Mode",
+      "Status"
+    ];
+
+    const rows =
+      filteredCourses.map(
+        (course) => [
+
+          course.id || "",
+
+          getCategoryName(course),
+
+          course.course_name || "",
+
+          course.description || "",
+
+          course.duration || "",
+
+          course.fees || "",
+
+          course.mode || "",
+
+          course.status || ""
+
+        ]
+      );
+
+    const csv = [
+      headers
+        .map(escapeCSV)
+        .join(","),
+
+      ...rows.map(
+        (row) =>
+          row
+            .map(escapeCSV)
+            .join(",")
+      )
+
+    ].join("\n");
+
+    const blob =
+      new Blob(
+        [csv],
+        {
+          type:
+            "text/csv;charset=utf-8;"
+        }
+      );
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+    link.href = url;
+
+    link.download =
+      "filtered_courses_report.csv";
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    document.body.removeChild(
+      link
+    );
+
+    URL.revokeObjectURL(
+      url
+    );
+
+  };
 
   // =====================================================
   // LOADING
@@ -486,7 +753,6 @@ const AdminCourses = () => {
 
   }
 
-
   // =====================================================
   // PAGE
   // =====================================================
@@ -495,24 +761,15 @@ const AdminCourses = () => {
 
     <div className="admin-courses-page">
 
-
-      {/* =========================
-          COMMON SIDEBAR
-      ========================= */}
+      {/* SIDEBAR */}
 
       <AdminSidebar />
 
-
-      {/* =========================
-          MAIN CONTENT
-      ========================= */}
+      {/* MAIN CONTENT */}
 
       <main className="admin-courses-main">
 
-
-        {/* =========================
-            HEADER
-        ========================= */}
+        {/* HEADER */}
 
         <div className="courses-header">
 
@@ -528,26 +785,50 @@ const AdminCourses = () => {
 
           </div>
 
+          <div className="courses-header-buttons">
 
-          <button
-            className="add-course-btn"
-            onClick={handleAdd}
-          >
+            {/* SEARCH BUTTON */}
 
-            <FaPlus />
+            <button
+              type="button"
+              className="search-course-btn"
+              onClick={
+                openSearchForm
+              }
+            >
 
-            <span>
-              Add Course
-            </span>
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Courses"}
 
-          </button>
+            </button>
+
+            {/* ADD BUTTON */}
+
+            <button
+              className="add-course-btn"
+              onClick={showForm
+                ? handleCancel
+                : handleAdd}
+            >
+
+              <FaPlus />
+
+              <span>
+
+                {showForm
+                  ? "Close Form"
+                  : "Add Course"}
+
+              </span>
+
+            </button>
+
+          </div>
 
         </div>
 
-
-        {/* =========================
-            ERROR
-        ========================= */}
+        {/* ERROR */}
 
         {error && (
 
@@ -559,15 +840,224 @@ const AdminCourses = () => {
 
         )}
 
+        {/* =================================================
+            SEARCH FORM
+        ================================================= */}
 
-        {/* =========================
+        {showSearchForm && (
+
+          <section className="course-search-card">
+
+            <div className="course-search-title">
+
+              <h2>
+                Search Courses
+              </h2>
+
+              <p>
+                Search and filter courses
+                by name, category, mode
+                or status.
+              </p>
+
+            </div>
+
+            <div className="course-search-form">
+
+              {/* SEARCH */}
+
+              <div className="course-search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={
+                    filters.search
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                  placeholder="Course name, category, description..."
+                />
+
+              </div>
+
+              {/* CATEGORY */}
+
+              <div className="course-search-field">
+
+                <label>
+                  Category
+                </label>
+
+                <select
+                  name="category"
+                  value={
+                    filters.category
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                >
+
+                  <option value="">
+                    All Categories
+                  </option>
+
+                  {categories.map(
+                    (category) => (
+
+                      <option
+                        key={category.id}
+                        value={category.id}
+                      >
+
+                        {category.category_name ||
+                          category.name}
+
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+              {/* MODE */}
+
+              <div className="course-search-field">
+
+                <label>
+                  Mode
+                </label>
+
+                <select
+                  name="mode"
+                  value={
+                    filters.mode
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                >
+
+                  <option value="">
+                    All Modes
+                  </option>
+
+                  <option value="Online">
+                    Online
+                  </option>
+
+                  <option value="Offline">
+                    Offline
+                  </option>
+
+                </select>
+
+              </div>
+
+              {/* STATUS */}
+
+              <div className="course-search-field">
+
+                <label>
+                  Status
+                </label>
+
+                <select
+                  name="status"
+                  value={
+                    filters.status
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                >
+
+                  <option value="">
+                    All Status
+                  </option>
+
+                  <option value="Active">
+                    Active
+                  </option>
+
+                  <option value="Inactive">
+                    Inactive
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+            {/* SEARCH ACTIONS */}
+
+            <div className="course-search-actions">
+
+              <button
+                type="button"
+                className="reset-course-search-btn"
+                onClick={
+                  resetFilters
+                }
+              >
+                Reset
+              </button>
+
+              <button
+                type="button"
+                className="download-course-report-btn"
+                onClick={
+                  downloadCourseReport
+                }
+                disabled={
+                  filteredCourses.length === 0
+                }
+              >
+                ↓ Download Report
+              </button>
+
+            </div>
+
+            {/* RESULT */}
+
+            <div className="course-filter-result">
+
+              Showing{" "}
+
+              <strong>
+                {filteredCourses.length}
+              </strong>{" "}
+
+              of{" "}
+
+              <strong>
+                {courses.length}
+              </strong>{" "}
+
+              courses
+
+            </div>
+
+          </section>
+
+        )}
+
+        {/* =================================================
             ADD / EDIT FORM
-        ========================= */}
+        ================================================= */}
 
         {showForm && (
 
           <div className="course-form-card">
-
 
             <div className="course-form-title">
 
@@ -575,22 +1065,19 @@ const AdminCourses = () => {
 
                 {editingId
                   ? "Edit Course"
-                  : "Add New Course"
-                }
+                  : "Add New Course"}
 
               </h2>
 
             </div>
 
-
             <form
-              onSubmit={handleSubmit}
+              onSubmit={
+                handleSubmit
+              }
             >
 
-
-              {/* =========================
-                  CATEGORY
-              ========================= */}
+              {/* CATEGORY */}
 
               <div className="form-group">
 
@@ -598,18 +1085,20 @@ const AdminCourses = () => {
                   Category
                 </label>
 
-
                 <select
                   name="category"
-                  value={formData.category}
-                  onChange={handleChange}
+                  value={
+                    formData.category
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
                   <option value="">
                     Select Category
                   </option>
-
 
                   {categories.map(
                     (category) => (
@@ -630,10 +1119,7 @@ const AdminCourses = () => {
 
               </div>
 
-
-              {/* =========================
-                  COURSE NAME
-              ========================= */}
+              {/* COURSE NAME */}
 
               <div className="form-group">
 
@@ -641,22 +1127,22 @@ const AdminCourses = () => {
                   Course Name
                 </label>
 
-
                 <input
                   type="text"
                   name="course_name"
-                  value={formData.course_name}
-                  onChange={handleChange}
+                  value={
+                    formData.course_name
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter course name"
                   required
                 />
 
               </div>
 
-
-              {/* =========================
-                  DESCRIPTION
-              ========================= */}
+              {/* DESCRIPTION */}
 
               <div className="form-group">
 
@@ -664,11 +1150,14 @@ const AdminCourses = () => {
                   Description
                 </label>
 
-
                 <textarea
                   name="description"
-                  value={formData.description}
-                  onChange={handleChange}
+                  value={
+                    formData.description
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter course description"
                   rows="4"
                   required
@@ -676,10 +1165,7 @@ const AdminCourses = () => {
 
               </div>
 
-
-              {/* =========================
-                  DURATION
-              ========================= */}
+              {/* DURATION */}
 
               <div className="form-group">
 
@@ -687,22 +1173,22 @@ const AdminCourses = () => {
                   Duration
                 </label>
 
-
                 <input
                   type="text"
                   name="duration"
-                  value={formData.duration}
-                  onChange={handleChange}
+                  value={
+                    formData.duration
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Example: 3 Months"
                   required
                 />
 
               </div>
 
-
-              {/* =========================
-                  FEES
-              ========================= */}
+              {/* FEES */}
 
               <div className="form-group">
 
@@ -710,12 +1196,15 @@ const AdminCourses = () => {
                   Fees
                 </label>
 
-
                 <input
                   type="number"
                   name="fees"
-                  value={formData.fees}
-                  onChange={handleChange}
+                  value={
+                    formData.fees
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter course fees"
                   min="0"
                   required
@@ -723,10 +1212,7 @@ const AdminCourses = () => {
 
               </div>
 
-
-              {/* =========================
-                  MODE
-              ========================= */}
+              {/* MODE */}
 
               <div className="form-group">
 
@@ -734,11 +1220,14 @@ const AdminCourses = () => {
                   Mode
                 </label>
 
-
                 <select
                   name="mode"
-                  value={formData.mode}
-                  onChange={handleChange}
+                  value={
+                    formData.mode
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
@@ -754,10 +1243,7 @@ const AdminCourses = () => {
 
               </div>
 
-
-              {/* =========================
-                  STATUS
-              ========================= */}
+              {/* STATUS */}
 
               <div className="form-group">
 
@@ -765,11 +1251,14 @@ const AdminCourses = () => {
                   Status
                 </label>
 
-
                 <select
                   name="status"
-                  value={formData.status}
-                  onChange={handleChange}
+                  value={
+                    formData.status
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
@@ -785,13 +1274,9 @@ const AdminCourses = () => {
 
               </div>
 
-
-              {/* =========================
-                  FORM BUTTONS
-              ========================= */}
+              {/* FORM BUTTONS */}
 
               <div className="course-form-buttons">
-
 
                 <button
                   type="submit"
@@ -800,22 +1285,21 @@ const AdminCourses = () => {
 
                   {editingId
                     ? "Update Course"
-                    : "Save Course"
-                  }
+                    : "Save Course"}
 
                 </button>
-
 
                 <button
                   type="button"
                   className="cancel-course-btn"
-                  onClick={handleCancel}
+                  onClick={
+                    handleCancel
+                  }
                 >
 
                   Cancel
 
                 </button>
-
 
               </div>
 
@@ -825,15 +1309,11 @@ const AdminCourses = () => {
 
         )}
 
-
-        {/* =========================
+        {/* =================================================
             COURSE TABLE
-        ========================= */}
+        ================================================= */}
 
         <div className="course-table-card">
-
-
-          {/* TABLE HEADER */}
 
           <div className="course-table-heading">
 
@@ -849,10 +1329,15 @@ const AdminCourses = () => {
 
             </div>
 
-
             <div className="course-count">
 
-              Total Courses:{" "}
+              Showing{" "}
+
+              <strong>
+                {filteredCourses.length}
+              </strong>
+
+              {" "}of{" "}
 
               <strong>
                 {courses.length}
@@ -862,12 +1347,9 @@ const AdminCourses = () => {
 
           </div>
 
+          {/* TABLE */}
 
-          {/* =========================
-              TABLE
-          ========================= */}
-
-          {courses.length === 0 ? (
+          {filteredCourses.length === 0 ? (
 
             <div className="no-courses">
 
@@ -875,15 +1357,20 @@ const AdminCourses = () => {
                 📚
               </div>
 
-
               <h3>
-                No Courses Found
+
+                {courses.length === 0
+                  ? "No Courses Found"
+                  : "No Matching Courses"}
+
               </h3>
 
-
               <p>
-                Add your first course
-                using the button above.
+
+                {courses.length === 0
+                  ? "Add your first course using the button above."
+                  : "Try changing your search or filters."}
+
               </p>
 
             </div>
@@ -893,7 +1380,6 @@ const AdminCourses = () => {
             <div className="course-table-wrapper">
 
               <table className="course-table">
-
 
                 <thead>
 
@@ -939,39 +1425,26 @@ const AdminCourses = () => {
 
                 </thead>
 
-
                 <tbody>
 
-
-                  {courses.map(
+                  {filteredCourses.map(
                     (course) => (
 
                       <tr
                         key={course.id}
                       >
 
-
-                        {/* ID */}
-
                         <td>
-
                           #{course.id}
-
                         </td>
-
-
-                        {/* CATEGORY */}
 
                         <td>
 
-                          {course.category_name ||
-                            course.category?.category_name ||
-                            "N/A"}
+                          {getCategoryName(
+                            course
+                          )}
 
                         </td>
-
-
-                        {/* COURSE NAME */}
 
                         <td>
 
@@ -984,9 +1457,6 @@ const AdminCourses = () => {
 
                         </td>
 
-
-                        {/* DESCRIPTION */}
-
                         <td>
 
                           {course.description ||
@@ -994,18 +1464,12 @@ const AdminCourses = () => {
 
                         </td>
 
-
-                        {/* DURATION */}
-
                         <td>
 
                           {course.duration ||
                             "N/A"}
 
                         </td>
-
-
-                        {/* FEES */}
 
                         <td>
 
@@ -1015,9 +1479,6 @@ const AdminCourses = () => {
 
                         </td>
 
-
-                        {/* MODE */}
-
                         <td>
 
                           {course.mode ||
@@ -1025,14 +1486,12 @@ const AdminCourses = () => {
 
                         </td>
 
-
-                        {/* STATUS */}
-
                         <td>
 
                           <span
                             className={
-                              course.status === "Active"
+                              course.status ===
+                              "Active"
                                 ? "course-status active"
                                 : "course-status inactive"
                             }
@@ -1045,13 +1504,9 @@ const AdminCourses = () => {
 
                         </td>
 
-
-                        {/* ACTIONS */}
-
                         <td>
 
                           <div className="course-actions">
-
 
                             {/* EDIT */}
 
@@ -1072,7 +1527,6 @@ const AdminCourses = () => {
 
                             </button>
 
-
                             {/* DELETE */}
 
                             <button
@@ -1092,17 +1546,14 @@ const AdminCourses = () => {
 
                             </button>
 
-
                           </div>
 
                         </td>
-
 
                       </tr>
 
                     )
                   )}
-
 
                 </tbody>
 
@@ -1114,7 +1565,6 @@ const AdminCourses = () => {
 
         </div>
 
-
       </main>
 
     </div>
@@ -1122,6 +1572,5 @@ const AdminCourses = () => {
   );
 
 };
-
 
 export default AdminCourses;

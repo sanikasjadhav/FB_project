@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -45,6 +46,9 @@ function StudentSidebar() {
         >
           Dashboard
         </Link>
+
+
+        {/* COURSES */}
         <Link
           to="/categories"
           className={
@@ -57,13 +61,6 @@ function StudentSidebar() {
         </Link>
 
 
-        {/* COURSE CATEGORIES */}
-       
-
-
-        {/* COURSE DETAILS */}
-        
-        
         {/* PAYMENT */}
         <Link
           to="/payment-details"
@@ -87,6 +84,19 @@ function StudentSidebar() {
           }
         >
           My Courses
+        </Link>
+
+
+        {/* FEEDBACK */}
+        <Link
+          to="/student-feedback"
+          className={
+            location.pathname.startsWith("/student-feedback")
+              ? "active"
+              : ""
+          }
+        >
+          Feedback
         </Link>
 
 

@@ -150,9 +150,7 @@ function AdminDashboard() {
           </div>
 
 
-          <div className="welcome-icon">
-            👗
-          </div>
+          
 
         </section>
 

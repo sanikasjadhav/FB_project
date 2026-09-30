@@ -11,10 +11,17 @@ const API_URL = "http://127.0.0.1:8000/api";
 
 const AdminVideos = () => {
 
+  // =====================================================
+  // STATES
+  // =====================================================
+
   const [videos, setVideos] = useState([]);
   const [courses, setCourses] = useState([]);
 
   const [editingId, setEditingId] = useState(null);
+
+  const [showForm, setShowForm] = useState(false);
+  const [showSearchForm, setShowSearchForm] = useState(false);
 
   const [formData, setFormData] = useState({
     course: "",
@@ -22,6 +29,12 @@ const AdminVideos = () => {
     youtube_url: "",
     description: "",
     video_order: 1,
+  });
+
+  const [filters, setFilters] = useState({
+    search: "",
+    course: "",
+    video_order: "",
   });
 
   const [message, setMessage] = useState("");
@@ -53,11 +66,17 @@ const AdminVideos = () => {
 
       const data = await response.json();
 
-      console.log("Course Videos API:", data);
+      console.log(
+        "Course Videos API:",
+        data
+      );
 
       if (!response.ok) {
 
-        setError("Unable to load videos.");
+        setError(
+          "Unable to load videos."
+        );
+
         return;
 
       }
@@ -88,6 +107,7 @@ const AdminVideos = () => {
       );
 
     }
+
   };
 
 
@@ -105,7 +125,10 @@ const AdminVideos = () => {
 
       const data = await response.json();
 
-      console.log("Courses API:", data);
+      console.log(
+        "Courses API:",
+        data
+      );
 
       if (!response.ok) {
 
@@ -143,6 +166,7 @@ const AdminVideos = () => {
       );
 
     }
+
   };
 
 
@@ -161,36 +185,31 @@ const AdminVideos = () => {
 
 
   // =====================================================
-  // EDIT VIDEO
+  // HANDLE SEARCH FILTER
   // =====================================================
 
-  const editVideo = (video) => {
+  const handleFilterChange = (e) => {
 
-    setEditingId(video.id);
+    const {
+      name,
+      value,
+    } = e.target;
 
-    setFormData({
-      course: video.course || "",
-      title: video.title || "",
-      youtube_url: video.youtube_url || "",
-      description: video.description || "",
-      video_order: video.video_order || 1,
+    setFilters({
+      ...filters,
+      [name]: value,
     });
 
-    setMessage("");
-    setError("");
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
   };
 
 
   // =====================================================
-  // CANCEL EDIT
+  // OPEN ADD VIDEO FORM
   // =====================================================
 
-  const cancelEdit = () => {
+  const openAddForm = () => {
+
+    setShowSearchForm(false);
 
     setEditingId(null);
 
@@ -204,6 +223,417 @@ const AdminVideos = () => {
 
     setMessage("");
     setError("");
+
+    setShowForm(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+  };
+
+
+  // =====================================================
+  // CLOSE VIDEO FORM
+  // =====================================================
+
+  const closeForm = () => {
+
+    setShowForm(false);
+
+    setEditingId(null);
+
+    setFormData({
+      course: "",
+      title: "",
+      youtube_url: "",
+      description: "",
+      video_order: 1,
+    });
+
+    setMessage("");
+    setError("");
+
+  };
+
+
+  // =====================================================
+  // OPEN SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+
+    setShowForm(false);
+
+    setEditingId(null);
+
+    setFormData({
+      course: "",
+      title: "",
+      youtube_url: "",
+      description: "",
+      video_order: 1,
+    });
+
+    setMessage("");
+    setError("");
+
+    setShowSearchForm(
+      (previous) => !previous
+    );
+
+  };
+
+
+  // =====================================================
+  // RESET SEARCH
+  // =====================================================
+
+  const resetFilters = () => {
+
+    setFilters({
+      search: "",
+      course: "",
+      video_order: "",
+    });
+
+  };
+
+
+  // =====================================================
+  // GET COURSE NAME
+  // =====================================================
+
+  const getCourseName = (video) => {
+
+    if (video.course_name) {
+
+      return video.course_name;
+
+    }
+
+    if (
+      video.course &&
+      typeof video.course === "object"
+    ) {
+
+      return (
+        video.course.course_name ||
+        video.course.name ||
+        "-"
+      );
+
+    }
+
+    const course =
+      courses.find(
+        (item) =>
+          Number(item.id) ===
+          Number(
+            typeof video.course === "object"
+              ? video.course?.id
+              : video.course
+          )
+      );
+
+    return (
+      course?.course_name ||
+      "-"
+    );
+
+  };
+
+
+  // =====================================================
+  // GET COURSE ID
+  // =====================================================
+
+  const getCourseId = (video) => {
+
+    if (
+      video.course &&
+      typeof video.course === "object"
+    ) {
+
+      return video.course.id;
+
+    }
+
+    return video.course;
+
+  };
+
+
+  // =====================================================
+  // FILTER VIDEOS
+  // =====================================================
+
+  const filteredVideos = videos.filter(
+    (video) => {
+
+      const searchText =
+        filters.search
+          .trim()
+          .toLowerCase();
+
+
+      const courseName =
+        getCourseName(video)
+          .toLowerCase();
+
+
+      const title =
+        String(
+          video.title || ""
+        ).toLowerCase();
+
+
+      const youtubeUrl =
+        String(
+          video.youtube_url || ""
+        ).toLowerCase();
+
+
+      const description =
+        String(
+          video.description || ""
+        ).toLowerCase();
+
+
+      const videoOrder =
+        String(
+          video.video_order || ""
+        );
+
+
+      // -------------------------------------------------
+      // SEARCH
+      // -------------------------------------------------
+
+      const matchesSearch =
+        !searchText ||
+        courseName.includes(
+          searchText
+        ) ||
+        title.includes(
+          searchText
+        ) ||
+        youtubeUrl.includes(
+          searchText
+        ) ||
+        description.includes(
+          searchText
+        );
+
+
+      // -------------------------------------------------
+      // COURSE
+      // -------------------------------------------------
+
+      const matchesCourse =
+        !filters.course ||
+        String(
+          getCourseId(video)
+        ) ===
+          String(
+            filters.course
+          );
+
+
+      // -------------------------------------------------
+      // VIDEO ORDER
+      // -------------------------------------------------
+
+      const matchesOrder =
+        !filters.video_order ||
+        videoOrder ===
+          String(
+            filters.video_order
+          );
+
+
+      return (
+        matchesSearch &&
+        matchesCourse &&
+        matchesOrder
+      );
+
+    }
+  );
+
+
+  // =====================================================
+  // DOWNLOAD CSV
+  // =====================================================
+
+  const escapeCSV = (value) => {
+
+    return `"${String(
+      value ?? ""
+    ).replace(/"/g, '""')}"`;
+
+  };
+
+
+  const downloadVideoReport = () => {
+
+    if (
+      filteredVideos.length === 0
+    ) {
+
+      alert(
+        "No videos available to download."
+      );
+
+      return;
+
+    }
+
+
+    const headers = [
+      "Video ID",
+      "Course",
+      "Video Title",
+      "YouTube URL",
+      "Video Order",
+      "Description",
+    ];
+
+
+    const rows =
+      filteredVideos.map(
+        (video) => [
+
+          video.id || "",
+
+          getCourseName(video),
+
+          video.title || "",
+
+          video.youtube_url || "",
+
+          video.video_order || "",
+
+          video.description || "",
+
+        ]
+      );
+
+
+    const csv = [
+
+      headers
+        .map(escapeCSV)
+        .join(","),
+
+      ...rows.map(
+        (row) =>
+          row
+            .map(escapeCSV)
+            .join(",")
+      ),
+
+    ].join("\n");
+
+
+    const blob = new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;",
+      }
+    );
+
+
+    const url =
+      URL.createObjectURL(blob);
+
+
+    const link =
+      document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+      "filtered_course_videos_report.csv";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+  };
+
+
+  // =====================================================
+  // EDIT VIDEO
+  // =====================================================
+
+  const editVideo = (video) => {
+
+    setShowSearchForm(false);
+
+    setShowForm(true);
+
+    setEditingId(video.id);
+
+    setFormData({
+      course:
+        typeof video.course === "object"
+          ? video.course?.id || ""
+          : video.course || "",
+
+      title:
+        video.title || "",
+
+      youtube_url:
+        video.youtube_url || "",
+
+      description:
+        video.description || "",
+
+      video_order:
+        video.video_order || 1,
+    });
+
+    setMessage("");
+    setError("");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+  };
+
+
+  // =====================================================
+  // CANCEL EDIT
+  // =====================================================
+
+  const cancelEdit = () => {
+
+    setEditingId(null);
+
+    setShowForm(false);
+
+    setFormData({
+      course: "",
+      title: "",
+      youtube_url: "",
+      description: "",
+      video_order: 1,
+    });
+
+    setMessage("");
+    setError("");
+
   };
 
 
@@ -218,6 +648,7 @@ const AdminVideos = () => {
     setMessage("");
     setError("");
 
+
     if (
       !formData.course ||
       !formData.title ||
@@ -230,9 +661,12 @@ const AdminVideos = () => {
       );
 
       return;
+
     }
 
+
     setLoading(true);
+
 
     try {
 
@@ -240,44 +674,53 @@ const AdminVideos = () => {
         ? `${API_URL}/course-videos/${editingId}/`
         : `${API_URL}/course-videos/`;
 
+
       const method = editingId
         ? "PUT"
         : "POST";
 
 
-      const response = await fetch(
-        url,
-        {
-          method: method,
+      const response =
+        await fetch(
+          url,
+          {
+            method,
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
 
-          body: JSON.stringify({
+            body: JSON.stringify({
 
-            course:
-              Number(formData.course),
+              course:
+                Number(
+                  formData.course
+                ),
 
-            title:
-              formData.title,
+              title:
+                formData.title,
 
-            youtube_url:
-              formData.youtube_url,
+              youtube_url:
+                formData.youtube_url,
 
-            description:
-              formData.description,
+              description:
+                formData.description,
 
-            video_order:
-              Number(formData.video_order),
+              video_order:
+                Number(
+                  formData.video_order
+                ),
 
-          }),
-        }
-      );
+            }),
+
+          }
+        );
 
 
       const data =
         await response.json();
+
 
       console.log(
         "Video response:",
@@ -318,8 +761,6 @@ const AdminVideos = () => {
       }
 
 
-      // RESET
-
       setFormData({
         course: "",
         title: "",
@@ -328,7 +769,10 @@ const AdminVideos = () => {
         video_order: 1,
       });
 
+
       setEditingId(null);
+
+      setShowForm(false);
 
 
       await fetchVideos();
@@ -346,7 +790,9 @@ const AdminVideos = () => {
 
     }
 
+
     setLoading(false);
+
   };
 
 
@@ -361,12 +807,17 @@ const AdminVideos = () => {
         "Are you sure you want to delete this video?"
       );
 
+
     if (!confirmDelete) {
+
       return;
+
     }
+
 
     setMessage("");
     setError("");
+
 
     try {
 
@@ -395,8 +846,12 @@ const AdminVideos = () => {
       );
 
 
-      if (editingId === id) {
+      if (
+        editingId === id
+      ) {
+
         cancelEdit();
+
       }
 
 
@@ -414,30 +869,7 @@ const AdminVideos = () => {
       );
 
     }
-  };
 
-
-  // =====================================================
-  // GET COURSE NAME
-  // =====================================================
-
-  const getCourseName = (video) => {
-
-    if (video.course_name) {
-      return video.course_name;
-    }
-
-    const course =
-      courses.find(
-        (item) =>
-          Number(item.id) ===
-          Number(video.course)
-      );
-
-    return (
-      course?.course_name ||
-      "-"
-    );
   };
 
 
@@ -449,12 +881,17 @@ const AdminVideos = () => {
 
     <div className="admin-videos-layout">
 
-      {/* SIDEBAR */}
+
+      {/* =================================================
+          SIDEBAR
+      ================================================= */}
 
       <AdminSidebar />
 
 
-      {/* MAIN BODY */}
+      {/* =================================================
+          MAIN BODY
+      ================================================= */}
 
       <div className="admin-videos-body">
 
@@ -464,6 +901,7 @@ const AdminVideos = () => {
         ================================================= */}
 
         <div className="videos-header">
+
 
           <div>
 
@@ -478,10 +916,52 @@ const AdminVideos = () => {
           </div>
 
 
-          <div className="video-count">
+          <div className="videos-header-buttons">
 
-            Total Videos:{" "}
-            {videos.length}
+
+            {/* SEARCH BUTTON */}
+
+            <button
+              type="button"
+              className="search-video-btn"
+              onClick={openSearchForm}
+            >
+
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Videos"}
+
+            </button>
+
+
+            {/* ADD VIDEO BUTTON */}
+
+            <button
+              type="button"
+              className="add-video-header-btn"
+              onClick={
+                showForm
+                  ? closeForm
+                  : openAddForm
+              }
+            >
+
+              {showForm
+                ? "✕ Close Form"
+                : "+ Add Video"}
+
+            </button>
+
+
+            {/* COUNT */}
+
+            <div className="video-count">
+
+              Total Videos:{" "}
+
+              {videos.length}
+
+            </div>
 
           </div>
 
@@ -515,188 +995,379 @@ const AdminVideos = () => {
 
 
         {/* =================================================
-            ADD / EDIT VIDEO
+            SEARCH FORM
         ================================================= */}
 
-        <div className="video-card">
+        {showSearchForm && (
+
+          <div className="video-search-card">
 
 
-          <div className="video-card-title">
+            <div className="video-search-title">
 
-            <h2>
+              <h2>
+                Search Course Videos
+              </h2>
 
-              {editingId
-                ? "Edit Course Video"
-                : "Add Course Video"}
+              <p>
+                Filter videos by course, title, URL or video order
+              </p>
 
-            </h2>
+            </div>
 
-            <p>
 
-              {editingId
-                ? "Update course video details"
-                : "Add an online video for a course"}
+            <div className="video-search-form">
 
-            </p>
+
+              {/* SEARCH */}
+
+              <div className="video-search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={filters.search}
+                  onChange={handleFilterChange}
+                  placeholder="Search course, video title, URL or description..."
+                />
+
+              </div>
+
+
+              {/* COURSE */}
+
+              <div className="video-search-field">
+
+                <label>
+                  Course
+                </label>
+
+                <select
+                  name="course"
+                  value={filters.course}
+                  onChange={handleFilterChange}
+                >
+
+                  <option value="">
+                    All Courses
+                  </option>
+
+
+                  {courses.map(
+                    (course) => (
+
+                      <option
+                        key={course.id}
+                        value={course.id}
+                      >
+
+                        {course.course_name}
+
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+
+              {/* VIDEO ORDER */}
+
+              <div className="video-search-field">
+
+                <label>
+                  Video Order
+                </label>
+
+                <input
+                  type="number"
+                  name="video_order"
+                  value={filters.video_order}
+                  onChange={handleFilterChange}
+                  min="1"
+                  placeholder="Order"
+                />
+
+              </div>
+
+
+              {/* ACTIONS */}
+
+              <div className="video-search-actions">
+
+                <button
+                  type="button"
+                  className="reset-video-search-btn"
+                  onClick={resetFilters}
+                >
+
+                  Reset
+
+                </button>
+
+
+                <button
+                  type="button"
+                  className="download-video-btn"
+                  onClick={downloadVideoReport}
+                  disabled={
+                    filteredVideos.length === 0
+                  }
+                >
+
+                  ↓ Download Report
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* FILTER COUNT */}
+
+            <div className="video-filter-result">
+
+              Showing{" "}
+
+              <strong>
+                {filteredVideos.length}
+              </strong>{" "}
+
+              of{" "}
+
+              <strong>
+                {videos.length}
+              </strong>{" "}
+
+              videos
+
+            </div>
 
           </div>
 
-
-          <form
-            className="video-form"
-            onSubmit={handleSubmit}
-          >
+        )}
 
 
-            {/* COURSE */}
+        {/* =================================================
+            ADD / EDIT VIDEO FORM
+        ================================================= */}
 
-            <div className="video-input">
+        {showForm && (
 
-              <label>
-                Course <span>*</span>
-              </label>
+          <div className="video-card">
 
-              <select
-                name="course"
-                value={formData.course}
-                onChange={handleChange}
-                required
-              >
 
-                <option value="">
-                  Select Course
-                </option>
+            <div className="video-card-title">
 
-                {courses.map(
-                  (course) => (
+              <h2>
 
-                    <option
-                      key={course.id}
-                      value={course.id}
-                    >
-                      {course.course_name}
-                    </option>
+                {editingId
+                  ? "Edit Course Video"
+                  : "Add Course Video"}
 
-                  )
-                )}
+              </h2>
 
-              </select>
+
+              <p>
+
+                {editingId
+                  ? "Update course video details"
+                  : "Add an online video for a course"}
+
+              </p>
 
             </div>
 
 
-            {/* TITLE */}
-
-            <div className="video-input">
-
-              <label>
-                Video Title <span>*</span>
-              </label>
-
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Enter video title"
-                required
-              />
-
-            </div>
+            <form
+              className="video-form"
+              onSubmit={handleSubmit}
+            >
 
 
-            {/* YOUTUBE URL */}
+              {/* COURSE */}
 
-            <div className="video-input video-full">
+              <div className="video-input">
 
-              <label>
-                YouTube Video URL <span>*</span>
-              </label>
+                <label>
 
-              <input
-                type="url"
-                name="youtube_url"
-                value={formData.youtube_url}
-                onChange={handleChange}
-                placeholder="https://www.youtube.com/watch?v=..."
-                required
-              />
+                  Course <span>*</span>
 
-            </div>
+                </label>
 
 
-            {/* VIDEO ORDER */}
+                <select
+                  name="course"
+                  value={formData.course}
+                  onChange={handleChange}
+                  required
+                >
 
-            <div className="video-input">
-
-              <label>
-                Video Order <span>*</span>
-              </label>
-
-              <input
-                type="number"
-                name="video_order"
-                value={formData.video_order}
-                onChange={handleChange}
-                min="1"
-                required
-              />
-
-            </div>
+                  <option value="">
+                    Select Course
+                  </option>
 
 
-            {/* DESCRIPTION */}
+                  {courses.map(
+                    (course) => (
 
-            <div className="video-input video-full">
+                      <option
+                        key={course.id}
+                        value={course.id}
+                      >
 
-              <label>
-                Description
-              </label>
+                        {course.course_name}
 
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Enter video description"
-                rows="4"
-              />
+                      </option>
 
-            </div>
+                    )
+                  )}
 
+                </select>
 
-            {/* BUTTONS */}
-
-            <div className="video-button">
-
-              <button
-                type="submit"
-                className="submit-video-btn"
-                disabled={loading}
-              >
-
-                <FaEdit />
-
-                <span>
-                  {loading
-                    ? editingId
-                      ? "Updating..."
-                      : "Adding..."
-                    : editingId
-                      ? "Update Video"
-                      : "Add Video"}
-                </span>
-
-              </button>
+              </div>
 
 
-              {/* CANCEL */}
+              {/* TITLE */}
 
-              {editingId && (
+              <div className="video-input">
+
+                <label>
+
+                  Video Title <span>*</span>
+
+                </label>
+
+
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="Enter video title"
+                  required
+                />
+
+              </div>
+
+
+              {/* YOUTUBE URL */}
+
+              <div className="video-input video-full">
+
+                <label>
+
+                  YouTube Video URL <span>*</span>
+
+                </label>
+
+
+                <input
+                  type="url"
+                  name="youtube_url"
+                  value={
+                    formData.youtube_url
+                  }
+                  onChange={handleChange}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  required
+                />
+
+              </div>
+
+
+              {/* VIDEO ORDER */}
+
+              <div className="video-input">
+
+                <label>
+
+                  Video Order <span>*</span>
+
+                </label>
+
+
+                <input
+                  type="number"
+                  name="video_order"
+                  value={
+                    formData.video_order
+                  }
+                  onChange={handleChange}
+                  min="1"
+                  required
+                />
+
+              </div>
+
+
+              {/* DESCRIPTION */}
+
+              <div className="video-input video-full">
+
+                <label>
+                  Description
+                </label>
+
+
+                <textarea
+                  name="description"
+                  value={
+                    formData.description
+                  }
+                  onChange={handleChange}
+                  placeholder="Enter video description"
+                  rows="4"
+                />
+
+              </div>
+
+
+              {/* BUTTONS */}
+
+              <div className="video-button">
+
+
+                <button
+                  type="submit"
+                  className="submit-video-btn"
+                  disabled={loading}
+                >
+
+                  <FaEdit />
+
+                  <span>
+
+                    {loading
+                      ? editingId
+                        ? "Updating..."
+                        : "Adding..."
+                      : editingId
+                        ? "Update Video"
+                        : "Add Video"}
+
+                  </span>
+
+                </button>
+
+
+                {/* CANCEL */}
 
                 <button
                   type="button"
                   className="cancel-video-btn"
-                  onClick={cancelEdit}
+                  onClick={
+                    editingId
+                      ? cancelEdit
+                      : closeForm
+                  }
                 >
 
                   <FaTimes />
@@ -707,13 +1378,13 @@ const AdminVideos = () => {
 
                 </button>
 
-              )}
+              </div>
 
-            </div>
+            </form>
 
-          </form>
+          </div>
 
-        </div>
+        )}
 
 
         {/* =================================================
@@ -744,19 +1415,33 @@ const AdminVideos = () => {
 
                 <tr>
 
-                  <th>ID</th>
+                  <th>
+                    ID
+                  </th>
 
-                  <th>Course</th>
+                  <th>
+                    Course
+                  </th>
 
-                  <th>Video Title</th>
+                  <th>
+                    Video Title
+                  </th>
 
-                  <th>Video URL</th>
+                  <th>
+                    Video URL
+                  </th>
 
-                  <th>Order</th>
+                  <th>
+                    Order
+                  </th>
 
-                  <th>Description</th>
+                  <th>
+                    Description
+                  </th>
 
-                  <th>Action</th>
+                  <th>
+                    Action
+                  </th>
 
                 </tr>
 
@@ -765,7 +1450,8 @@ const AdminVideos = () => {
 
               <tbody>
 
-                {videos.length === 0 ? (
+
+                {filteredVideos.length === 0 ? (
 
                   <tr>
 
@@ -773,31 +1459,44 @@ const AdminVideos = () => {
                       colSpan="7"
                       className="video-empty"
                     >
-                      No course videos found.
+
+                      {videos.length === 0
+                        ? "No course videos found."
+                        : "No matching course videos found."}
+
                     </td>
 
                   </tr>
 
                 ) : (
 
-                  videos.map(
+                  filteredVideos.map(
                     (video) => (
 
                       <tr
-                        key={video.id}
+                        key={
+                          video.id
+                        }
                       >
+
 
                         {/* ID */}
 
                         <td>
+
                           #{video.id}
+
                         </td>
 
 
                         {/* COURSE */}
 
                         <td>
-                          {getCourseName(video)}
+
+                          {getCourseName(
+                            video
+                          )}
+
                         </td>
 
 
@@ -806,7 +1505,9 @@ const AdminVideos = () => {
                         <td>
 
                           <strong>
+
                             {video.title}
+
                           </strong>
 
                         </td>
@@ -817,12 +1518,16 @@ const AdminVideos = () => {
                         <td>
 
                           <a
-                            href={video.youtube_url}
+                            href={
+                              video.youtube_url
+                            }
                             target="_blank"
                             rel="noreferrer"
                             className="video-link"
                           >
+
                             Watch Video
+
                           </a>
 
                         </td>
@@ -831,7 +1536,9 @@ const AdminVideos = () => {
                         {/* ORDER */}
 
                         <td>
+
                           {video.video_order}
+
                         </td>
 
 
@@ -849,13 +1556,16 @@ const AdminVideos = () => {
 
                         <td className="video-actions">
 
+
                           {/* EDIT */}
 
                           <button
                             type="button"
                             className="edit-video-btn"
                             onClick={() =>
-                              editVideo(video)
+                              editVideo(
+                                video
+                              )
                             }
                           >
 
@@ -888,6 +1598,7 @@ const AdminVideos = () => {
 
                           </button>
 
+
                         </td>
 
                       </tr>
@@ -905,10 +1616,13 @@ const AdminVideos = () => {
 
         </div>
 
+
       </div>
 
     </div>
+
   );
+
 };
 
 export default AdminVideos;

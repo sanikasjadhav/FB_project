@@ -23,6 +23,16 @@ const AdminContacts = () => {
   const [error, setError] = useState("");
 
   // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const [showSearchForm, setShowSearchForm] = useState(false);
+
+  const [filters, setFilters] = useState({
+    search: "",
+  });
+
+  // =====================================================
   // FETCH CONTACTS
   // =====================================================
 
@@ -31,16 +41,11 @@ const AdminContacts = () => {
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        `${API_URL}/contacts/`
-      );
+      const response = await fetch(`${API_URL}/contacts/`);
 
       const data = await response.json();
 
-      console.log(
-        "Contacts API response:",
-        data
-      );
+      console.log("Contacts API response:", data);
 
       if (!response.ok) {
         setError("Unable to load contacts.");
@@ -56,14 +61,9 @@ const AdminContacts = () => {
         setContacts([]);
       }
     } catch (err) {
-      console.error(
-        "Fetch contacts error:",
-        err
-      );
+      console.error("Fetch contacts error:", err);
 
-      setError(
-        "Unable to connect to backend."
-      );
+      setError("Unable to connect to backend.");
 
       setContacts([]);
     } finally {
@@ -91,11 +91,69 @@ const AdminContacts = () => {
   };
 
   // =====================================================
+  // HANDLE SEARCH CHANGE
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // =====================================================
+  // FILTER CONTACTS
+  // =====================================================
+
+  const filteredContacts = contacts.filter((contact) => {
+    const searchText = filters.search.trim().toLowerCase();
+
+    if (!searchText) {
+      return true;
+    }
+
+    const name = (contact.name || "").toLowerCase();
+    const email = (contact.email || "").toLowerCase();
+    const phone = (contact.phone || "").toLowerCase();
+    const contactMessage = (
+      contact.message || ""
+    ).toLowerCase();
+
+    return (
+      name.includes(searchText) ||
+      email.includes(searchText) ||
+      phone.includes(searchText) ||
+      contactMessage.includes(searchText)
+    );
+  });
+
+  // =====================================================
+  // OPEN SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+    setShowSearchForm((previous) => !previous);
+  };
+
+  // =====================================================
+  // RESET SEARCH
+  // =====================================================
+
+  const resetFilters = () => {
+    setFilters({
+      search: "",
+    });
+  };
+
+  // =====================================================
   // EDIT CONTACT
   // =====================================================
 
   const editContact = (contact) => {
     setEditingId(contact.id);
+
+    // Close search form when editing
+    setShowSearchForm(false);
 
     setFormData({
       name: contact.name || "",
@@ -107,7 +165,6 @@ const AdminContacts = () => {
     setMessage("");
     setError("");
 
-    // Scroll to edit form
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -196,8 +253,8 @@ const AdminContacts = () => {
 
         setError(
           data.detail ||
-          JSON.stringify(data) ||
-          "Unable to update contact."
+            JSON.stringify(data) ||
+            "Unable to update contact."
         );
 
         return;
@@ -279,7 +336,6 @@ const AdminContacts = () => {
         return;
       }
 
-      // If deleted contact was being edited
       if (editingId === id) {
         cancelEdit();
       }
@@ -306,6 +362,70 @@ const AdminContacts = () => {
   };
 
   // =====================================================
+  // DOWNLOAD FILTERED CONTACT REPORT
+  // =====================================================
+
+  const escapeCSV = (value) => {
+    return `"${String(value ?? "").replace(
+      /"/g,
+      '""'
+    )}"`;
+  };
+
+  const downloadContactReport = () => {
+    if (filteredContacts.length === 0) {
+      alert("No contacts available to download.");
+      return;
+    }
+
+    const headers = [
+      "Contact ID",
+      "Name",
+      "Email",
+      "Phone",
+      "Message",
+    ];
+
+    const rows = filteredContacts.map(
+      (contact) => [
+        contact.id || "",
+        contact.name || "",
+        contact.email || "",
+        contact.phone || "",
+        contact.message || "",
+      ]
+    );
+
+    const csv = [
+      headers.map(escapeCSV).join(","),
+      ...rows.map((row) =>
+        row.map(escapeCSV).join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+      "filtered_contact_messages_report.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
+
+  // =====================================================
   // PAGE
   // =====================================================
 
@@ -313,11 +433,9 @@ const AdminContacts = () => {
     <div className="admin-contacts-layout">
 
       {/* SIDEBAR */}
-
       <AdminSidebar />
 
       {/* MAIN CONTENT */}
-
       <div className="admin-contacts-body">
 
         {/* HEADER */}
@@ -330,16 +448,117 @@ const AdminContacts = () => {
             </h1>
 
             <p>
-              Manage messages received from website visitors
+              Manage messages received from
+              website visitors
             </p>
           </div>
 
-          <div className="contacts-count">
-            Total Messages:{" "}
-            {contacts.length}
+          <div className="contacts-header-buttons">
+
+            {/* SEARCH BUTTON */}
+
+            <button
+              type="button"
+              className="search-contact-btn"
+              onClick={openSearchForm}
+            >
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Contacts"}
+            </button>
+
+            {/* COUNT */}
+
+            <div className="contacts-count">
+              Total Messages:{" "}
+              {contacts.length}
+            </div>
+
           </div>
 
         </div>
+
+        {/* =================================================
+            SEARCH FORM
+        ================================================= */}
+
+        {showSearchForm && (
+          <section className="contact-search-card">
+
+            <div className="contact-search-title">
+
+              <h2>
+                Search Contact Messages
+              </h2>
+
+              <p>
+                Search by name, email, phone
+                number, or message.
+              </p>
+
+            </div>
+
+            <div className="contact-search-form">
+
+              <div className="contact-search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={filters.search}
+                  onChange={handleFilterChange}
+                  placeholder="Search name, email, phone or message..."
+                />
+
+              </div>
+
+              <div className="contact-search-actions">
+
+                <button
+                  type="button"
+                  className="reset-contact-search-btn"
+                  onClick={resetFilters}
+                >
+                  Reset
+                </button>
+
+                <button
+                  type="button"
+                  className="download-contact-report-btn"
+                  onClick={
+                    downloadContactReport
+                  }
+                  disabled={
+                    filteredContacts.length === 0
+                  }
+                >
+                  ↓ Download Report
+                </button>
+
+              </div>
+
+            </div>
+
+            <div className="contact-filter-result">
+
+              Showing{" "}
+              <strong>
+                {filteredContacts.length}
+              </strong>{" "}
+              of{" "}
+              <strong>
+                {contacts.length}
+              </strong>{" "}
+              messages
+
+            </div>
+
+          </section>
+        )}
 
         {/* SUCCESS MESSAGE */}
 
@@ -371,7 +590,8 @@ const AdminContacts = () => {
               </h2>
 
               <p>
-                Update the selected contact message
+                Update the selected contact
+                message
               </p>
 
             </div>
@@ -499,7 +719,8 @@ const AdminContacts = () => {
             </h2>
 
             <p>
-              Messages submitted through Contact Us
+              Messages submitted through
+              Contact Us
             </p>
 
           </div>
@@ -514,29 +735,17 @@ const AdminContacts = () => {
 
                 <tr>
 
-                  <th>
-                    ID
-                  </th>
+                  <th>ID</th>
 
-                  <th>
-                    Name
-                  </th>
+                  <th>Name</th>
 
-                  <th>
-                    Email
-                  </th>
+                  <th>Email</th>
 
-                  <th>
-                    Phone
-                  </th>
+                  <th>Phone</th>
 
-                  <th>
-                    Message
-                  </th>
+                  <th>Message</th>
 
-                  <th>
-                    Action
-                  </th>
+                  <th>Action</th>
 
                 </tr>
 
@@ -547,7 +756,6 @@ const AdminContacts = () => {
                 {/* LOADING */}
 
                 {loading && (
-
                   <tr>
 
                     <td
@@ -558,13 +766,13 @@ const AdminContacts = () => {
                     </td>
 
                   </tr>
-
                 )}
 
                 {/* EMPTY */}
 
                 {!loading &&
-                  contacts.length === 0 && (
+                  filteredContacts.length ===
+                    0 && (
 
                     <tr>
 
@@ -572,18 +780,19 @@ const AdminContacts = () => {
                         colSpan="6"
                         className="contacts-empty"
                       >
-                        No contact messages found.
+                        {contacts.length === 0
+                          ? "No contact messages found."
+                          : "No contact messages match your search."}
                       </td>
 
                     </tr>
-
                   )}
 
                 {/* CONTACT DATA */}
 
                 {!loading &&
-                  contacts.length > 0 &&
-                  contacts.map(
+                  filteredContacts.length > 0 &&
+                  filteredContacts.map(
                     (contact) => (
 
                       <tr
@@ -627,15 +836,19 @@ const AdminContacts = () => {
                           <div className="contact-action-buttons">
 
                             <button
+                              type="button"
                               className="edit-contact-btn"
                               onClick={() =>
-                                editContact(contact)
+                                editContact(
+                                  contact
+                                )
                               }
                             >
                               Edit
                             </button>
 
                             <button
+                              type="button"
                               className="delete-contact-btn"
                               onClick={() =>
                                 deleteContact(
@@ -651,7 +864,6 @@ const AdminContacts = () => {
                         </td>
 
                       </tr>
-
                     )
                   )}
 

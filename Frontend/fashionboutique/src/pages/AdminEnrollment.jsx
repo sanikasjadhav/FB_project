@@ -5,7 +5,7 @@ import {
   FaPlus,
   FaEdit,
   FaTrash,
-  FaUserGraduate
+  FaUserGraduate,
 } from "react-icons/fa";
 
 import "./AdminEnrollment.css";
@@ -14,9 +14,9 @@ const API_URL = "http://127.0.0.1:8000/api";
 
 const AdminEnrollment = () => {
 
-  // =========================
+  // =====================================================
   // STATES
-  // =========================
+  // =====================================================
 
   const [enrollments, setEnrollments] = useState([]);
   const [students, setStudents] = useState([]);
@@ -24,6 +24,8 @@ const AdminEnrollment = () => {
   const [batches, setBatches] = useState([]);
 
   const [showForm, setShowForm] = useState(false);
+  const [showSearchForm, setShowSearchForm] = useState(false);
+
   const [editingId, setEditingId] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -33,18 +35,26 @@ const AdminEnrollment = () => {
     student: "",
     course: "",
     batch: "",
-    status: "Pending"
+    status: "Pending",
   });
 
+  // =====================================================
+  // SEARCH FILTERS
+  // =====================================================
+
+  const [filters, setFilters] = useState({
+    search: "",
+    status: "",
+    dateFrom: "",
+    dateTo: "",
+  });
 
   // =====================================================
   // FETCH ENROLLMENTS
   // =====================================================
 
   const fetchEnrollments = async () => {
-
     try {
-
       const response = await fetch(
         `${API_URL}/enrollments/`
       );
@@ -63,18 +73,14 @@ const AdminEnrollment = () => {
       );
 
       if (Array.isArray(data)) {
-
         setEnrollments(data);
-
       } else if (data.results) {
-
         setEnrollments(data.results);
-
       } else {
-
         setEnrollments([]);
-
       }
+
+      setError("");
 
     } catch (error) {
 
@@ -88,20 +94,15 @@ const AdminEnrollment = () => {
       );
 
       setEnrollments([]);
-
     }
-
   };
-
 
   // =====================================================
   // FETCH STUDENTS
   // =====================================================
 
   const fetchStudents = async () => {
-
     try {
-
       const response = await fetch(
         `${API_URL}/students/`
       );
@@ -115,17 +116,11 @@ const AdminEnrollment = () => {
       const data = await response.json();
 
       if (Array.isArray(data)) {
-
         setStudents(data);
-
       } else if (data.results) {
-
         setStudents(data.results);
-
       } else {
-
         setStudents([]);
-
       }
 
     } catch (error) {
@@ -136,20 +131,15 @@ const AdminEnrollment = () => {
       );
 
       setStudents([]);
-
     }
-
   };
-
 
   // =====================================================
   // FETCH COURSES
   // =====================================================
 
   const fetchCourses = async () => {
-
     try {
-
       const response = await fetch(
         `${API_URL}/courses/`
       );
@@ -163,17 +153,11 @@ const AdminEnrollment = () => {
       const data = await response.json();
 
       if (Array.isArray(data)) {
-
         setCourses(data);
-
       } else if (data.results) {
-
         setCourses(data.results);
-
       } else {
-
         setCourses([]);
-
       }
 
     } catch (error) {
@@ -184,20 +168,15 @@ const AdminEnrollment = () => {
       );
 
       setCourses([]);
-
     }
-
   };
-
 
   // =====================================================
   // FETCH BATCHES
   // =====================================================
 
   const fetchBatches = async () => {
-
     try {
-
       const response = await fetch(
         `${API_URL}/batches/`
       );
@@ -211,17 +190,11 @@ const AdminEnrollment = () => {
       const data = await response.json();
 
       if (Array.isArray(data)) {
-
         setBatches(data);
-
       } else if (data.results) {
-
         setBatches(data.results);
-
       } else {
-
         setBatches([]);
-
       }
 
     } catch (error) {
@@ -232,11 +205,8 @@ const AdminEnrollment = () => {
       );
 
       setBatches([]);
-
     }
-
   };
-
 
   // =====================================================
   // LOAD ALL DATA
@@ -252,17 +222,15 @@ const AdminEnrollment = () => {
         fetchEnrollments(),
         fetchStudents(),
         fetchCourses(),
-        fetchBatches()
+        fetchBatches(),
       ]);
 
       setLoading(false);
-
     };
 
     loadData();
 
   }, []);
-
 
   // =====================================================
   // FORM CHANGE
@@ -272,11 +240,142 @@ const AdminEnrollment = () => {
 
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-
   };
 
+  // =====================================================
+  // FILTER CHANGE
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // =====================================================
+  // OPEN / CLOSE SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+
+    // Close Add/Edit form
+    setShowForm(false);
+    setEditingId(null);
+
+    // Toggle Search form
+    setShowSearchForm(
+      (previous) => !previous
+    );
+  };
+
+  // =====================================================
+  // RESET FILTERS
+  // =====================================================
+
+  const resetFilters = () => {
+
+    setFilters({
+      search: "",
+      status: "",
+      dateFrom: "",
+      dateTo: "",
+    });
+  };
+
+  // =====================================================
+  // FILTER ENROLLMENTS
+  // =====================================================
+
+  const filteredEnrollments =
+    enrollments.filter((enrollment) => {
+
+      const searchText =
+        filters.search
+          .trim()
+          .toLowerCase();
+
+      const studentName = (
+        enrollment.student_name ||
+        enrollment.student_name_display ||
+        enrollment.student ||
+        ""
+      )
+        .toString()
+        .toLowerCase();
+
+      const courseName = (
+        enrollment.course_name ||
+        enrollment.course_name_display ||
+        enrollment.course ||
+        ""
+      )
+        .toString()
+        .toLowerCase();
+
+      const batchName = (
+        enrollment.batch_name ||
+        enrollment.batch ||
+        ""
+      )
+        .toString()
+        .toLowerCase();
+
+      // Search student/course/batch
+      const matchesSearch =
+        !searchText ||
+        studentName.includes(searchText) ||
+        courseName.includes(searchText) ||
+        batchName.includes(searchText);
+
+      // Status
+      const matchesStatus =
+        !filters.status ||
+        String(
+          enrollment.status || ""
+        ).toLowerCase() ===
+          filters.status.toLowerCase();
+
+      // Enrollment date
+      const enrollmentDate =
+        enrollment.enrollment_date
+          ? new Date(
+              enrollment.enrollment_date
+            )
+          : null;
+
+      // Date from
+      const matchesDateFrom =
+        !filters.dateFrom ||
+        (
+          enrollmentDate &&
+          enrollmentDate >=
+            new Date(
+              `${filters.dateFrom}T00:00:00`
+            )
+        );
+
+      // Date to
+      const matchesDateTo =
+        !filters.dateTo ||
+        (
+          enrollmentDate &&
+          enrollmentDate <=
+            new Date(
+              `${filters.dateTo}T23:59:59`
+            )
+        );
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesDateFrom &&
+        matchesDateTo
+      );
+    });
 
   // =====================================================
   // ADD ENROLLMENT
@@ -286,17 +385,23 @@ const AdminEnrollment = () => {
 
     setEditingId(null);
 
+    // Close search form
+    setShowSearchForm(false);
+
     setFormData({
       student: "",
       course: "",
       batch: "",
-      status: "Pending"
+      status: "Pending",
     });
 
     setShowForm(true);
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
-
 
   // =====================================================
   // EDIT ENROLLMENT
@@ -304,19 +409,26 @@ const AdminEnrollment = () => {
 
   const handleEdit = (enrollment) => {
 
+    // Close search form
+    setShowSearchForm(false);
+
     setEditingId(enrollment.id);
 
     setFormData({
       student: enrollment.student || "",
       course: enrollment.course || "",
       batch: enrollment.batch || "",
-      status: enrollment.status || "Pending"
+      status:
+        enrollment.status || "Pending",
     });
 
     setShowForm(true);
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
-
 
   // =====================================================
   // SAVE ENROLLMENT
@@ -336,14 +448,14 @@ const AdminEnrollment = () => {
         ? "PUT"
         : "POST";
 
-
       const response = await fetch(
         url,
         {
           method: method,
 
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type":
+              "application/json",
           },
 
           body: JSON.stringify({
@@ -360,23 +472,18 @@ const AdminEnrollment = () => {
                 : null,
 
             status:
-              formData.status
-
-          })
-
+              formData.status,
+          }),
         }
       );
 
-
       const data =
         await response.json();
-
 
       console.log(
         "Save enrollment response:",
         data
       );
-
 
       if (!response.ok) {
 
@@ -390,9 +497,7 @@ const AdminEnrollment = () => {
         );
 
         return;
-
       }
-
 
       alert(
         editingId
@@ -400,19 +505,15 @@ const AdminEnrollment = () => {
           : "Enrollment added successfully"
       );
 
-
       setShowForm(false);
-
       setEditingId(null);
-
 
       setFormData({
         student: "",
         course: "",
         batch: "",
-        status: "Pending"
+        status: "Pending",
       });
-
 
       fetchEnrollments();
 
@@ -426,11 +527,8 @@ const AdminEnrollment = () => {
       alert(
         "Unable to connect to Django server."
       );
-
     }
-
   };
-
 
   // =====================================================
   // DELETE ENROLLMENT
@@ -443,11 +541,9 @@ const AdminEnrollment = () => {
         "Are you sure you want to delete this enrollment?"
       );
 
-
     if (!confirmDelete) {
       return;
     }
-
 
     try {
 
@@ -455,24 +551,20 @@ const AdminEnrollment = () => {
         await fetch(
           `${API_URL}/enrollments/${id}/`,
           {
-            method: "DELETE"
+            method: "DELETE",
           }
         );
-
 
       if (!response.ok) {
 
         throw new Error(
           "Failed to delete enrollment"
         );
-
       }
-
 
       alert(
         "Enrollment deleted successfully"
       );
-
 
       fetchEnrollments();
 
@@ -486,31 +578,128 @@ const AdminEnrollment = () => {
       alert(
         "Unable to delete enrollment."
       );
-
     }
-
   };
 
-
   // =====================================================
-  // CANCEL
+  // CANCEL FORM
   // =====================================================
 
   const handleCancel = () => {
 
     setShowForm(false);
-
     setEditingId(null);
 
     setFormData({
       student: "",
       course: "",
       batch: "",
-      status: "Pending"
+      status: "Pending",
     });
-
   };
 
+  // =====================================================
+  // CSV HELPER
+  // =====================================================
+
+  const escapeCSV = (value) => {
+
+    return `"${String(
+      value ?? ""
+    ).replace(/"/g, '""')}"`;
+  };
+
+  // =====================================================
+  // DOWNLOAD FILTERED REPORT
+  // =====================================================
+
+  const downloadEnrollmentReport = () => {
+
+    if (
+      filteredEnrollments.length === 0
+    ) {
+
+      alert(
+        "No enrollments available to download."
+      );
+
+      return;
+    }
+
+    const headers = [
+      "Enrollment ID",
+      "Student",
+      "Course",
+      "Batch",
+      "Enrollment Date",
+      "Status",
+    ];
+
+    const rows =
+      filteredEnrollments.map(
+        (enrollment) => [
+
+          enrollment.id || "",
+
+          enrollment.student_name ||
+            enrollment.student ||
+            "",
+
+          enrollment.course_name ||
+            enrollment.course ||
+            "",
+
+          enrollment.batch_name ||
+            enrollment.batch ||
+            "",
+
+          enrollment.enrollment_date ||
+            "",
+
+          enrollment.status ||
+            "",
+        ]
+      );
+
+    const csv = [
+      headers
+        .map(escapeCSV)
+        .join(","),
+
+      ...rows.map((row) =>
+        row
+          .map(escapeCSV)
+          .join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;",
+      }
+    );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+      "filtered_enrollments_report.csv";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
 
   // =====================================================
   // LOADING
@@ -525,11 +714,8 @@ const AdminEnrollment = () => {
         Loading enrollments...
 
       </div>
-
     );
-
   }
-
 
   // =====================================================
   // PAGE
@@ -539,24 +725,21 @@ const AdminEnrollment = () => {
 
     <div className="admin-enrollment-page">
 
-
-      {/* =========================
+      {/* =================================================
           ADMIN SIDEBAR
-      ========================= */}
+      ================================================= */}
 
       <AdminSidebar />
 
-
-      {/* =========================
+      {/* =================================================
           MAIN CONTENT
-      ========================= */}
+      ================================================= */}
 
       <main className="enrollment-main">
 
-
-        {/* =========================
+        {/* =================================================
             HEADER
-        ========================= */}
+        ================================================= */}
 
         <div className="enrollment-header">
 
@@ -567,31 +750,62 @@ const AdminEnrollment = () => {
             </h1>
 
             <p>
-              Manage student course enrollments
+              Manage student course
+              enrollments
             </p>
 
           </div>
 
 
-          <button
-            className="add-enrollment-btn"
-            onClick={handleAdd}
-          >
+          <div className="enrollment-header-buttons">
 
-            <FaPlus />
+            {/* SEARCH BUTTON */}
 
-            <span>
-              Add Enrollment
-            </span>
+            <button
+              type="button"
+              className="search-enrollment-btn"
+              onClick={openSearchForm}
+            >
 
-          </button>
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Enrollments"}
+
+            </button>
+
+
+            {/* ADD BUTTON */}
+
+            <button
+              type="button"
+              className="add-enrollment-btn"
+              onClick={
+                showForm
+                  ? handleCancel
+                  : handleAdd
+              }
+            >
+
+              <FaPlus />
+
+              <span>
+
+                {showForm
+                  ? "Close Form"
+                  : "Add Enrollment"}
+
+              </span>
+
+            </button>
+
+          </div>
 
         </div>
 
 
-        {/* =========================
+        {/* =================================================
             ERROR
-        ========================= */}
+        ================================================= */}
 
         {error && (
 
@@ -604,14 +818,206 @@ const AdminEnrollment = () => {
         )}
 
 
-        {/* =========================
+        {/* =================================================
+            SEARCH FORM
+        ================================================= */}
+
+        {showSearchForm && (
+
+          <div className="enrollment-search-card">
+
+            <div className="enrollment-search-title">
+
+              <h2>
+                Search Enrollments
+              </h2>
+
+              <p>
+                Filter student enrollment
+                records
+              </p>
+
+            </div>
+
+
+            <div className="enrollment-search-form">
+
+              {/* SEARCH */}
+
+              <div className="search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={filters.search}
+                  onChange={
+                    handleFilterChange
+                  }
+                  placeholder="Search student, course or batch..."
+                />
+
+              </div>
+
+
+              {/* STATUS */}
+
+              <div className="search-field">
+
+                <label>
+                  Status
+                </label>
+
+                <select
+                  name="status"
+                  value={filters.status}
+                  onChange={
+                    handleFilterChange
+                  }
+                >
+
+                  <option value="">
+                    All Status
+                  </option>
+
+                  <option value="Pending">
+                    Pending
+                  </option>
+
+                  <option value="Enrolled">
+                    Enrolled
+                  </option>
+
+                  <option value="Completed">
+                    Completed
+                  </option>
+
+                  <option value="Cancelled">
+                    Cancelled
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              {/* DATE FROM */}
+
+              <div className="search-field">
+
+                <label>
+                  Enrollment Date From
+                </label>
+
+                <input
+                  type="date"
+                  name="dateFrom"
+                  value={
+                    filters.dateFrom
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                />
+
+              </div>
+
+
+              {/* DATE TO */}
+
+              <div className="search-field">
+
+                <label>
+                  Enrollment Date To
+                </label>
+
+                <input
+                  type="date"
+                  name="dateTo"
+                  value={
+                    filters.dateTo
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                />
+
+              </div>
+
+
+              {/* SEARCH BUTTONS */}
+
+              <div className="enrollment-search-actions">
+
+                <button
+                  type="button"
+                  className="reset-enrollment-btn"
+                  onClick={
+                    resetFilters
+                  }
+                >
+
+                  Reset
+
+                </button>
+
+
+                <button
+                  type="button"
+                  className="download-enrollment-btn"
+                  onClick={
+                    downloadEnrollmentReport
+                  }
+                  disabled={
+                    filteredEnrollments.length ===
+                    0
+                  }
+                >
+
+                  ↓ Download Report
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* RESULT COUNT */}
+
+            <div className="enrollment-filter-result">
+
+              Showing{" "}
+
+              <strong>
+                {filteredEnrollments.length}
+              </strong>
+
+              {" "}of{" "}
+
+              <strong>
+                {enrollments.length}
+              </strong>
+
+              {" "}enrollments
+
+            </div>
+
+          </div>
+
+        )}
+
+
+        {/* =================================================
             ADD / EDIT FORM
-        ========================= */}
+        ================================================= */}
 
         {showForm && (
 
           <div className="enrollment-form-card">
-
 
             <div className="form-title">
 
@@ -619,8 +1025,7 @@ const AdminEnrollment = () => {
 
                 {editingId
                   ? "Edit Enrollment"
-                  : "Add New Enrollment"
-                }
+                  : "Add New Enrollment"}
 
               </h2>
 
@@ -631,10 +1036,7 @@ const AdminEnrollment = () => {
               onSubmit={handleSubmit}
             >
 
-
-              {/* =========================
-                  STUDENT
-              ========================= */}
+              {/* STUDENT */}
 
               <div className="form-group">
 
@@ -642,11 +1044,14 @@ const AdminEnrollment = () => {
                   Student
                 </label>
 
-
                 <select
                   name="student"
-                  value={formData.student}
-                  onChange={handleChange}
+                  value={
+                    formData.student
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
@@ -664,7 +1069,10 @@ const AdminEnrollment = () => {
                       >
 
                         {student.first_name
-                          ? `${student.first_name} ${student.last_name || ""}`
+                          ? `${student.first_name} ${
+                              student.last_name ||
+                              ""
+                            }`
                           : student.email}
 
                       </option>
@@ -677,9 +1085,7 @@ const AdminEnrollment = () => {
               </div>
 
 
-              {/* =========================
-                  COURSE
-              ========================= */}
+              {/* COURSE */}
 
               <div className="form-group">
 
@@ -687,11 +1093,14 @@ const AdminEnrollment = () => {
                   Course
                 </label>
 
-
                 <select
                   name="course"
-                  value={formData.course}
-                  onChange={handleChange}
+                  value={
+                    formData.course
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
@@ -722,9 +1131,7 @@ const AdminEnrollment = () => {
               </div>
 
 
-              {/* =========================
-                  BATCH
-              ========================= */}
+              {/* BATCH */}
 
               <div className="form-group">
 
@@ -732,11 +1139,14 @@ const AdminEnrollment = () => {
                   Batch
                 </label>
 
-
                 <select
                   name="batch"
-                  value={formData.batch}
-                  onChange={handleChange}
+                  value={
+                    formData.batch
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
@@ -766,9 +1176,7 @@ const AdminEnrollment = () => {
               </div>
 
 
-              {/* =========================
-                  STATUS
-              ========================= */}
+              {/* STATUS */}
 
               <div className="form-group">
 
@@ -776,11 +1184,14 @@ const AdminEnrollment = () => {
                   Enrollment Status
                 </label>
 
-
                 <select
                   name="status"
-                  value={formData.status}
-                  onChange={handleChange}
+                  value={
+                    formData.status
+                  }
+                  onChange={
+                    handleChange
+                  }
                   required
                 >
 
@@ -805,12 +1216,9 @@ const AdminEnrollment = () => {
               </div>
 
 
-              {/* =========================
-                  BUTTONS
-              ========================= */}
+              {/* FORM BUTTONS */}
 
               <div className="form-buttons">
-
 
                 <button
                   type="submit"
@@ -819,8 +1227,7 @@ const AdminEnrollment = () => {
 
                   {editingId
                     ? "Update Enrollment"
-                    : "Save Enrollment"
-                  }
+                    : "Save Enrollment"}
 
                 </button>
 
@@ -828,7 +1235,9 @@ const AdminEnrollment = () => {
                 <button
                   type="button"
                   className="cancel-btn"
-                  onClick={handleCancel}
+                  onClick={
+                    handleCancel
+                  }
                 >
 
                   Cancel
@@ -844,12 +1253,11 @@ const AdminEnrollment = () => {
         )}
 
 
-        {/* =========================
+        {/* =================================================
             TABLE
-        ========================= */}
+        ================================================= */}
 
         <div className="enrollment-table-card">
-
 
           <div className="table-heading">
 
@@ -860,7 +1268,8 @@ const AdminEnrollment = () => {
               </h2>
 
               <p>
-                View and manage student enrollments
+                View and manage student
+                enrollments
               </p>
 
             </div>
@@ -871,7 +1280,7 @@ const AdminEnrollment = () => {
               <FaUserGraduate />
 
               <span>
-                {enrollments.length}
+                {filteredEnrollments.length}
               </span>
 
             </div>
@@ -879,14 +1288,13 @@ const AdminEnrollment = () => {
           </div>
 
 
-          {/* =========================
+          {/* =================================================
               TABLE
-          ========================= */}
+          ================================================= */}
 
           <div className="enrollment-table-wrapper">
 
             <table className="enrollment-table">
-
 
               <thead>
 
@@ -899,8 +1307,6 @@ const AdminEnrollment = () => {
                   <th>
                     Student
                   </th>
-
-                  
 
                   <th>
                     Course
@@ -929,16 +1335,17 @@ const AdminEnrollment = () => {
 
               <tbody>
 
+                {filteredEnrollments.length >
+                0 ? (
 
-                {enrollments.length > 0 ? (
-
-                  enrollments.map(
+                  filteredEnrollments.map(
                     (enrollment) => (
 
                       <tr
-                        key={enrollment.id}
+                        key={
+                          enrollment.id
+                        }
                       >
-
 
                         {/* ID */}
 
@@ -962,11 +1369,6 @@ const AdminEnrollment = () => {
                           </strong>
 
                         </td>
-
-
-                        {/* EMAIL */}
-
-                        
 
 
                         {/* COURSE */}
@@ -1007,9 +1409,12 @@ const AdminEnrollment = () => {
 
                           <span
                             className={
-                              `enrollment-status ${(
-                                enrollment.status || ""
-                              ).toLowerCase()}`
+                              `enrollment-status ${
+                                (
+                                  enrollment.status ||
+                                  ""
+                                ).toLowerCase()
+                              }`
                             }
                           >
 
@@ -1026,7 +1431,6 @@ const AdminEnrollment = () => {
                         <td>
 
                           <div className="enrollment-actions">
-
 
                             {/* EDIT */}
 
@@ -1067,11 +1471,9 @@ const AdminEnrollment = () => {
 
                             </button>
 
-
                           </div>
 
                         </td>
-
 
                       </tr>
 
@@ -1083,7 +1485,7 @@ const AdminEnrollment = () => {
                   <tr>
 
                     <td
-                      colSpan="8"
+                      colSpan="7"
                       className="no-enrollment"
                     >
 
@@ -1092,13 +1494,21 @@ const AdminEnrollment = () => {
                       </div>
 
                       <h3>
-                        No Enrollments Found
+
+                        {enrollments.length ===
+                        0
+                          ? "No Enrollments Found"
+                          : "No Matching Enrollments"}
+
                       </h3>
 
                       <p>
-                        Add your first student
-                        enrollment using the
-                        button above.
+
+                        {enrollments.length ===
+                        0
+                          ? "Add your first student enrollment using the button above."
+                          : "Try changing your search or filter options."}
+
                       </p>
 
                     </td>
@@ -1106,7 +1516,6 @@ const AdminEnrollment = () => {
                   </tr>
 
                 )}
-
 
               </tbody>
 
@@ -1116,13 +1525,10 @@ const AdminEnrollment = () => {
 
         </div>
 
-
       </main>
 
     </div>
-
   );
-
 };
 
 export default AdminEnrollment;

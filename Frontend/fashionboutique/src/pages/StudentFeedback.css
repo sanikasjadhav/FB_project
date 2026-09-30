@@ -1,0 +1,455 @@
+
+/* =========================================
+   STUDENT FEEDBACK PAGE
+========================================= */
+
+.student-feedback-layout {
+  min-height: 100vh;
+  width: 100%;
+  background: #f5f7f7;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.student-feedback-page {
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  min-height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.feedback-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   PAGE HEADING
+========================================= */
+
+.feedback-container > h1 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.feedback-subtitle {
+  margin: 8px 0 30px;
+  color: #666;
+  font-size: 16px;
+}
+
+
+/* =========================================
+   SUCCESS MESSAGE
+========================================= */
+
+.feedback-success {
+  background: #e7f7ed;
+  color: #18733b;
+  border: 1px solid #a9dfbd;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.feedback-error {
+  background: #fff0f0;
+  color: #c62828;
+  border: 1px solid #f0b4b4;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   FORM CARD
+========================================= */
+
+.feedback-form-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
+}
+
+.feedback-form-card h2 {
+  margin: 0 0 25px;
+  color: #063b3d;
+  font-size: 24px;
+}
+
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   SELECT
+========================================= */
+
+.form-group select {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #d5dddd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #333;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 3px rgba(19, 82, 85, 0.1);
+}
+
+
+/* =========================================
+   TEXTAREA
+========================================= */
+
+.form-group textarea {
+  width: 100%;
+  min-height: 130px;
+  padding: 13px 14px;
+  border: 1px solid #d5dddd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #333;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-group textarea:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 3px rgba(19, 82, 85, 0.1);
+}
+
+.form-group textarea::placeholder {
+  color: #999;
+}
+
+
+/* =========================================
+   STAR RATING
+========================================= */
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+
+/* Individual star */
+
+.star {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 40px;
+  line-height: 1;
+  color: #d4d4d4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+/* Hover */
+
+.star:hover {
+  color: #f5b942;
+  transform: scale(1.15);
+}
+
+
+/* Selected */
+
+.star.active {
+  color: #f5b942;
+}
+
+
+/* Selected rating text */
+
+.selected-rating {
+  margin: 8px 0 0;
+  color: #063b3d;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+.submit-feedback-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 7px;
+  background: #063b3d;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.submit-feedback-btn:hover {
+  background: #135255;
+  transform: translateY(-1px);
+}
+
+.submit-feedback-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* =========================================
+   PREVIOUS FEEDBACK
+========================================= */
+
+.previous-feedback {
+  margin-top: 20px;
+}
+
+.previous-feedback > h2 {
+  margin: 0 0 20px;
+  color: #063b3d;
+  font-size: 25px;
+}
+
+
+/* =========================================
+   FEEDBACK LIST
+========================================= */
+
+.feedback-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+
+/* =========================================
+   FEEDBACK CARD
+========================================= */
+
+.feedback-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.07);
+  border-left: 4px solid #f5b942;
+}
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.feedback-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.feedback-card-header h3 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 18px;
+}
+
+
+/* =========================================
+   RATING STARS IN CARD
+========================================= */
+
+.feedback-rating {
+  white-space: nowrap;
+  font-size: 17px;
+}
+
+
+/* =========================================
+   FEEDBACK TEXT
+========================================= */
+
+.feedback-card p {
+  margin: 0 0 15px;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   RATING LABEL
+========================================= */
+
+.rating-label {
+  display: inline-block;
+  padding: 5px 12px;
+  background: #f5b942;
+  color: #063b3d;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   NO FEEDBACK
+========================================= */
+
+.no-feedback {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: #777;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.feedback-loading {
+  padding: 30px;
+  text-align: center;
+  color: #666;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .student-feedback-page {
+    padding: 30px;
+  }
+
+  .feedback-list {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+  .student-feedback-page {
+    margin-left: 0;
+    width: 100%;
+    padding: 25px 20px;
+  }
+
+  .feedback-container > h1 {
+    font-size: 28px;
+  }
+
+  .feedback-form-card {
+    padding: 22px;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 500px) {
+
+  .student-feedback-page {
+    padding: 20px 15px;
+  }
+
+  .feedback-container > h1 {
+    font-size: 25px;
+  }
+
+  .feedback-subtitle {
+    font-size: 14px;
+  }
+
+  .feedback-form-card {
+    padding: 18px;
+  }
+
+  .feedback-form-card h2 {
+    font-size: 21px;
+  }
+
+  .star {
+    font-size: 34px;
+  }
+
+  .feedback-card {
+    padding: 18px;
+  }
+
+  .feedback-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}

@@ -4,30 +4,19 @@
 
 .admin-categories-page {
   min-height: 100vh;
-
-  width: 100%;
-
-  display: flex;
-
-  background: #f5f6f6;
+  background: #f5f7f7;
 }
 
 
 /* =========================================================
    MAIN CONTENT
-
-   Sidebar width = 260px
 ========================================================= */
 
 .admin-categories-main {
-  width: calc(100% - 260px);
-
-  min-height: 100vh;
-
   margin-left: 260px;
-
+  width: calc(100% - 260px);
+  min-height: 100vh;
   padding: 30px;
-
   box-sizing: border-box;
 }
 
@@ -37,75 +26,315 @@
 ========================================================= */
 
 .categories-header {
-  width: 100%;
-
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
-  background: #ffffff;
-
-  padding: 25px;
-
-  border-radius: 12px;
-
-  margin-bottom: 25px;
-
-  box-sizing: border-box;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
 }
-
-
-/* HEADER TITLE */
 
 .categories-header h1 {
   margin: 0;
-
-  color: #135255;
-
-  font-size: 28px;
-
+  color: #063b3d;
+  font-size: 30px;
   font-weight: 700;
 }
 
-
-/* HEADER DESCRIPTION */
-
 .categories-header p {
   margin: 7px 0 0;
-
-  color: #777777;
-
+  color: #777;
   font-size: 14px;
 }
 
 
 /* =========================================================
-   ADD CATEGORY BUTTON
+   HEADER BUTTONS
 ========================================================= */
 
-.add-category-btn {
+.categories-header-buttons {
   display: flex;
-
   align-items: center;
+  gap: 12px;
+}
 
+.search-category-btn,
+.add-category-header-btn {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-category-btn {
+  background: #135255;
+  color: white;
+}
+
+.search-category-btn:hover {
+  background: #104446;
+  transform: translateY(-1px);
+}
+
+.add-category-header-btn {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.add-category-header-btn:hover {
+  background: #e4a72e;
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   COUNT CARD
+========================================================= */
+
+.categories-count-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  width: fit-content;
+
+  margin-left: auto;
+  margin-bottom: 22px;
+
+  background: white;
+  padding: 15px 20px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.count-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  border-radius: 9px;
 
-  padding: 12px 20px;
+  background: #e7f2f2;
+
+  font-size: 21px;
+}
+
+.categories-count-card small {
+  display: block;
+
+  color: #777;
+
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+
+.categories-count-card strong {
+  display: block;
+
+  color: #063b3d;
+
+  font-size: 22px;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.category-message {
+  padding: 13px 17px;
+
+  border-radius: 8px;
+
+  margin-bottom: 20px;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.category-message.error {
+  background: #ffe8e8;
+  color: #a40000;
+
+  border-left: 4px solid #d00000;
+}
+
+.category-message.success {
+  background: #e4f7ea;
+  color: #176b35;
+
+  border-left: 4px solid #229447;
+}
+
+
+/* =========================================================
+   SEARCH CARD
+========================================================= */
+
+.category-search-card {
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 25px;
+
+  margin-bottom: 25px;
+
+  border: 1px solid #eeeeee;
+
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   SEARCH HEADER
+========================================================= */
+
+.category-search-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 22px;
+}
+
+.category-search-header h2 {
+  margin: 0 0 6px;
+
+  color: #063b3d;
+
+  font-size: 22px;
+}
+
+.category-search-header p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.close-category-search-btn {
+  width: 35px;
+  height: 35px;
 
   border: none;
 
+  border-radius: 50%;
+
+  background: #f1f1f1;
+
+  color: #555;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.close-category-search-btn:hover {
+  background: #e2e2e2;
+
+  color: #063b3d;
+}
+
+
+/* =========================================================
+   SEARCH FORM
+========================================================= */
+
+.category-search-form {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 18px;
+}
+
+.category-search-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.category-search-field label {
+  color: #063b3d;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.category-search-field input {
+  width: 100%;
+
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  border: 1px solid #d7d7d7;
+
   border-radius: 7px;
 
-  background: #f5b942;
+  outline: none;
 
-  color: #135255;
+  background: white;
+
+  color: #333;
+
+  font-size: 14px;
+
+  transition: 0.3s;
+}
+
+.category-search-field input:focus {
+  border-color: #135255;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(19, 82, 85, 0.08);
+}
+
+
+/* =========================================================
+   SEARCH ACTIONS
+========================================================= */
+
+.category-search-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 22px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+.reset-category-filter-btn,
+.download-category-report-btn {
+  border: none;
+
+  padding: 11px 20px;
+
+  border-radius: 7px;
 
   font-size: 14px;
 
@@ -113,85 +342,128 @@
 
   cursor: pointer;
 
-  transition: all 0.2s ease;
+  transition: 0.3s;
 }
 
+.reset-category-filter-btn {
+  background: #eeeeee;
 
-.add-category-btn:hover {
-  transform: translateY(-2px);
+  color: #333;
+}
 
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.12);
+.reset-category-filter-btn:hover {
+  background: #dddddd;
+}
+
+.download-category-report-btn {
+  background: #063b3d;
+
+  color: white;
+}
+
+.download-category-report-btn:hover {
+  background: #104e50;
+
+  transform: translateY(-1px);
+}
+
+.download-category-report-btn:disabled {
+  background: #aaaaaa;
+
+  cursor: not-allowed;
+
+  transform: none;
 }
 
 
 /* =========================================================
-   FORM CARD
+   FILTER RESULT
+========================================================= */
+
+.category-filter-result {
+  margin-top: 15px;
+
+  color: #666;
+
+  font-size: 13px;
+}
+
+.category-filter-result strong {
+  color: #063b3d;
+}
+
+
+/* =========================================================
+   ADD / EDIT FORM
 ========================================================= */
 
 .category-form-card {
-  width: 100%;
-
-  background: #ffffff;
-
-  padding: 25px;
+  background: white;
 
   border-radius: 12px;
 
+  padding: 25px;
+
   margin-bottom: 25px;
 
-  box-sizing: border-box;
+  border: 1px solid #eeeeee;
 
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
 }
 
+.category-form-heading {
+  display: flex;
 
-/* =========================================================
-   FORM TITLE
-========================================================= */
+  justify-content: space-between;
+  align-items: flex-start;
 
-.category-form-title {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
+.category-form-heading h2 {
+  margin: 0 0 6px;
 
-.category-form-title h2 {
+  color: #063b3d;
+
+  font-size: 22px;
+}
+
+.category-form-heading p {
   margin: 0;
 
-  color: #135255;
+  color: #777;
 
-  font-size: 21px;
-
-  font-weight: 700;
+  font-size: 14px;
 }
 
 
 /* =========================================================
-   FORM GROUP
+   FORM
 ========================================================= */
 
-.category-form-group {
-  margin-bottom: 18px;
+.category-form {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
 }
 
+.category-form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
 
 .category-form-group label {
-  display: block;
+  color: #063b3d;
 
-  margin-bottom: 7px;
-
-  color: #135255;
-
-  font-size: 14px;
+  font-size: 13px;
 
   font-weight: 600;
 }
-
-
-/* =========================================================
-   INPUTS
-========================================================= */
 
 .category-form-group input,
 .category-form-group textarea {
@@ -199,121 +471,109 @@
 
   box-sizing: border-box;
 
-  padding: 12px 14px;
+  padding: 12px;
 
-  border: 1px solid #dddddd;
+  border: 1px solid #d7d7d7;
 
   border-radius: 7px;
 
   outline: none;
 
+  background: white;
+
+  color: #333;
+
   font-family: inherit;
 
   font-size: 14px;
 
-  color: #333333;
-
-  background: #ffffff;
-
-  transition: all 0.2s ease;
+  transition: 0.3s;
 }
 
-
-/* PLACEHOLDER */
-
-.category-form-group input::placeholder,
-.category-form-group textarea::placeholder {
-  color: #999999;
+.category-form-group input {
+  height: 44px;
 }
-
-
-/* TEXTAREA */
 
 .category-form-group textarea {
+  min-height: 110px;
+
   resize: vertical;
-
-  min-height: 100px;
 }
-
-
-/* =========================================================
-   INPUT FOCUS
-========================================================= */
 
 .category-form-group input:focus,
 .category-form-group textarea:focus {
-  border-color: #f5b942;
+  border-color: #135255;
 
   box-shadow:
-    0 0 0 2px rgba(245, 185, 66, 0.15);
+    0 0 0 2px
+    rgba(19, 82, 85, 0.08);
 }
 
 
 /* =========================================================
-   FORM BUTTONS
+   SAVE BUTTON
 ========================================================= */
 
-.category-form-buttons {
-  display: flex;
-
-  gap: 10px;
-
-  margin-top: 20px;
-}
-
-
-/* SAVE */
-
 .save-category-btn {
-  padding: 11px 20px;
+  grid-column: 1 / -1;
+
+  justify-self: end;
 
   border: none;
+
+  padding: 12px 24px;
 
   border-radius: 7px;
 
   background: #f5b942;
 
-  color: #135255;
-
-  cursor: pointer;
+  color: #063b3d;
 
   font-size: 14px;
 
   font-weight: 600;
 
-  transition: 0.2s;
+  cursor: pointer;
+
+  transition: 0.3s;
 }
 
-
 .save-category-btn:hover {
-  opacity: 0.9;
+  background: #e4a72e;
 
   transform: translateY(-1px);
 }
 
+.save-category-btn:disabled {
+  opacity: 0.6;
 
-/* CANCEL */
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+========================================================= */
 
 .cancel-category-btn {
-  padding: 11px 20px;
-
   border: none;
+
+  padding: 9px 17px;
 
   border-radius: 7px;
 
   background: #eeeeee;
 
-  color: #555555;
+  color: #333;
 
-  cursor: pointer;
-
-  font-size: 14px;
+  font-size: 13px;
 
   font-weight: 600;
 
-  transition: 0.2s;
+  cursor: pointer;
 }
-
 
 .cancel-category-btn:hover {
   background: #dddddd;
@@ -321,51 +581,63 @@
 
 
 /* =========================================================
-   TABLE CARD
+   CATEGORY LIST CARD
 ========================================================= */
 
-.category-table-card {
-  width: 100%;
-
-  background: #ffffff;
-
-  padding: 25px;
+.category-list-card {
+  background: white;
 
   border-radius: 12px;
 
-  box-sizing: border-box;
+  padding: 25px;
 
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eeeeee;
+
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
 }
 
 
 /* =========================================================
-   TABLE HEADING
+   LIST HEADER
 ========================================================= */
 
-.category-table-heading {
+.category-list-heading {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
   margin-bottom: 20px;
 }
 
+.category-list-heading h2 {
+  margin: 0 0 5px;
 
-.category-table-heading h2 {
-  margin: 0;
+  color: #063b3d;
 
-  color: #135255;
-
-  font-size: 21px;
-
-  font-weight: 700;
+  font-size: 22px;
 }
 
+.category-list-heading p {
+  margin: 0;
 
-.category-table-heading p {
-  margin: 5px 0 0;
+  color: #777;
 
-  color: #777777;
+  font-size: 14px;
+}
+
+.category-list-count {
+  background: #e7f2f2;
+
+  color: #063b3d;
+
+  padding: 8px 14px;
+
+  border-radius: 20px;
 
   font-size: 13px;
+
+  font-weight: 600;
 }
 
 
@@ -377,8 +649,6 @@
   width: 100%;
 
   overflow-x: auto;
-
-  box-sizing: border-box;
 }
 
 
@@ -389,20 +659,17 @@
 .category-table {
   width: 100%;
 
-  min-width: 700px;
-
   border-collapse: collapse;
+
+  min-width: 800px;
 }
 
-
-/* TABLE HEADER */
-
-.category-table th {
-  padding: 14px;
-
+.category-table thead th {
   background: #063b3d;
 
-  color: #ffffff;
+  color: white;
+
+  padding: 14px 12px;
 
   text-align: left;
 
@@ -413,32 +680,36 @@
   white-space: nowrap;
 }
 
+.category-table thead th:first-child {
+  border-radius: 7px 0 0 0;
+}
 
-/* TABLE DATA */
+.category-table thead th:last-child {
+  border-radius: 0 7px 0 0;
+}
 
-.category-table td {
-  padding: 14px;
+.category-table tbody td {
+  padding: 15px 12px;
 
   border-bottom: 1px solid #eeeeee;
 
-  color: #555555;
+  color: #444;
 
-  font-size: 14px;
+  font-size: 13px;
 
   vertical-align: middle;
 }
 
-
-/* ROW HOVER */
-
 .category-table tbody tr:hover {
-  background: #fafafa;
+  background: #f8fbfb;
 }
 
 
-/* CATEGORY NAME */
+/* =========================================================
+   CATEGORY ID
+========================================================= */
 
-.category-table td strong {
+.category-id {
   color: #135255;
 
   font-weight: 600;
@@ -446,7 +717,29 @@
 
 
 /* =========================================================
-   ACTION BUTTONS
+   CATEGORY NAME
+========================================================= */
+
+.category-name {
+  color: #063b3d;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.category-description {
+  color: #666;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACTIONS
 ========================================================= */
 
 .category-actions {
@@ -455,80 +748,94 @@
   align-items: center;
 
   gap: 8px;
-
-  white-space: nowrap;
 }
 
+.edit-category-btn,
+.delete-category-btn {
+  border: none;
 
-/* EDIT */
+  padding: 7px 12px;
+
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
 
 .edit-category-btn {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 5px;
-
-  padding: 7px 11px;
-
-  border: none;
-
-  border-radius: 5px;
-
-  background: #f5b942;
+  background: #e7f2f2;
 
   color: #135255;
+}
 
-  cursor: pointer;
+.edit-category-btn:hover {
+  background: #135255;
 
-  font-size: 12px;
+  color: white;
+}
 
-  font-weight: 600;
+.delete-category-btn {
+  background: #ffe7e7;
 
-  transition: 0.2s;
+  color: #c62828;
+}
+
+.delete-category-btn:hover {
+  background: #c62828;
+
+  color: white;
 }
 
 
-/* DELETE */
+/* =========================================================
+   LOADING
+========================================================= */
 
-.delete-category-btn {
+.category-loading {
+  min-height: 250px;
+
   display: flex;
+
+  flex-direction: column;
 
   align-items: center;
 
   justify-content: center;
 
-  gap: 5px;
-
-  padding: 7px 11px;
-
-  border: none;
-
-  border-radius: 5px;
-
-  background: #ffe5e5;
-
-  color: #c62828;
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  transition: 0.2s;
+  color: #777;
 }
 
+.category-spinner {
+  width: 35px;
+  height: 35px;
 
-/* HOVER */
+  border: 4px solid #e5e5e5;
 
-.edit-category-btn:hover,
-.delete-category-btn:hover {
-  opacity: 0.85;
+  border-top-color: #135255;
 
-  transform: translateY(-1px);
+  border-radius: 50%;
+
+  animation:
+    category-spin 0.8s linear infinite;
+
+  margin-bottom: 12px;
+}
+
+.category-loading p {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+@keyframes category-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -537,59 +844,52 @@
 ========================================================= */
 
 .no-categories {
-  padding: 60px 20px !important;
-
   text-align: center;
 
-  color: #777777 !important;
+  padding: 60px 20px;
 }
-
 
 .no-category-icon {
   font-size: 45px;
 
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
-
 
 .no-categories h3 {
-  margin: 0 0 7px;
+  margin: 0 0 8px;
 
-  color: #135255;
+  color: #063b3d;
 
-  font-size: 18px;
+  font-size: 20px;
 }
-
 
 .no-categories p {
   margin: 0;
 
-  font-size: 14px;
+  color: #777;
 
-  color: #777777;
+  font-size: 14px;
 }
 
 
 /* =========================================================
-   LOADING
+   RESPONSIVE
 ========================================================= */
 
-.admin-category-loading {
-  min-height: 100vh;
+@media (max-width: 1000px) {
+  .admin-categories-main {
+    padding: 25px 20px;
+  }
 
-  display: flex;
+  .category-form {
+    grid-template-columns: 1fr;
+  }
 
-  align-items: center;
+  .save-category-btn {
+    grid-column: auto;
 
-  justify-content: center;
-
-  background: #f5f6f6;
-
-  color: #135255;
-
-  font-size: 20px;
-
-  font-weight: 600;
+    justify-self: start;
+  }
 }
 
 
@@ -597,47 +897,35 @@
    TABLET
 ========================================================= */
 
-@media (max-width: 1000px) {
-
+@media (max-width: 900px) {
   .admin-categories-main {
-    width: calc(100% - 240px);
+    margin-left: 0;
 
-    margin-left: 240px;
-
-    padding: 25px;
-  }
-
-}
-
-
-/* =========================================================
-   SMALL TABLET
-========================================================= */
-
-@media (max-width: 800px) {
-
-  .admin-categories-main {
-    width: calc(100% - 220px);
-
-    margin-left: 220px;
+    width: 100%;
 
     padding: 20px;
   }
-
 
   .categories-header {
     flex-direction: column;
 
     align-items: flex-start;
 
-    gap: 15px;
+    gap: 18px;
   }
 
-
-  .add-category-btn {
-    width: auto;
+  .categories-header-buttons {
+    width: 100%;
   }
 
+  .search-category-btn,
+  .add-category-header-btn {
+    flex: 1;
+  }
+
+  .categories-count-card {
+    margin-left: 0;
+  }
 }
 
 
@@ -646,44 +934,64 @@
 ========================================================= */
 
 @media (max-width: 600px) {
-
   .admin-categories-main {
-    width: calc(100% - 200px);
-
-    margin-left: 200px;
-
     padding: 15px;
   }
-
-
-  .categories-header {
-    padding: 18px;
-  }
-
 
   .categories-header h1 {
-    font-size: 24px;
+    font-size: 25px;
   }
 
-
-  .category-form-card {
-    padding: 18px;
-  }
-
-
-  .category-table-card {
-    padding: 15px;
-  }
-
-
-  .category-form-buttons {
+  .categories-header-buttons {
     flex-direction: column;
-  }
 
-
-  .save-category-btn,
-  .cancel-category-btn {
     width: 100%;
   }
 
+  .search-category-btn,
+  .add-category-header-btn {
+    width: 100%;
+  }
+
+  .categories-count-card {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-left: 0;
+  }
+
+  .category-search-card,
+  .category-form-card,
+  .category-list-card {
+    padding: 18px;
+  }
+
+  .category-search-actions {
+    flex-direction: column;
+  }
+
+  .reset-category-filter-btn,
+  .download-category-report-btn {
+    width: 100%;
+  }
+
+  .category-list-heading {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+  .category-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .edit-category-btn,
+  .delete-category-btn {
+    width: 100%;
+  }
 }

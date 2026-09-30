@@ -1,444 +1,720 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaPlus,
-  FaEdit,
-  FaTrash
-} from "react-icons/fa";
-
 import AdminSidebar from "../components/AdminSidebar";
 import "./AdminCategories.css";
 
+const API_URL = "http://127.0.0.1:8000/api";
+
 const AdminCategories = () => {
+  // =====================================================
+  // STATES
+  // =====================================================
 
   const [categories, setCategories] = useState([]);
 
-  const [showForm, setShowForm] = useState(false);
-
+  // Add/Edit form
+  const [categoryName, setCategoryName] = useState("");
+  const [description, setDescription] = useState("");
   const [editingId, setEditingId] = useState(null);
 
+  // Page states
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  const [formData, setFormData] = useState({
-    category_name: "",
-    description: ""
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Show / Hide Add Form
+  const [showForm, setShowForm] = useState(false);
+
+  // Show / Hide Search Form
+  const [showSearchForm, setShowSearchForm] = useState(false);
+
+  // Search filters
+  const [filters, setFilters] = useState({
+    search: "",
   });
-
 
   // =====================================================
   // FETCH CATEGORIES
   // =====================================================
 
   const fetchCategories = async () => {
-
     try {
+      setLoading(true);
+      setError("");
 
       const response = await fetch(
-        "http://127.0.0.1:8000/api/categories/"
+        `${API_URL}/categories/`
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch categories");
+        throw new Error(
+          "Failed to load categories."
+        );
       }
 
       const data = await response.json();
 
-      console.log("Categories from backend:", data);
+      console.log("Categories API:", data);
 
       if (Array.isArray(data)) {
-
         setCategories(data);
-
-      } else if (data.results) {
-
+      } else if (Array.isArray(data.results)) {
         setCategories(data.results);
-
       } else {
-
         setCategories([]);
-
       }
-
-    } catch (error) {
-
+    } catch (err) {
       console.error(
-        "Error fetching categories:",
-        error
+        "Category fetch error:",
+        err
+      );
+
+      setError(
+        err.message ||
+          "Unable to load categories."
       );
 
       setCategories([]);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-
   // =====================================================
-  // LOAD CATEGORIES
+  // INITIAL LOAD
   // =====================================================
 
   useEffect(() => {
-
     fetchCategories();
-
   }, []);
 
-
   // =====================================================
-  // FORM CHANGE
+  // CLEAR FORM
   // =====================================================
 
-  const handleChange = (e) => {
-
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-
+  const clearForm = () => {
+    setCategoryName("");
+    setDescription("");
+    setEditingId(null);
+    setError("");
+    setSuccess("");
   };
 
-
   // =====================================================
-  // ADD CATEGORY
+  // OPEN ADD CATEGORY FORM
   // =====================================================
 
-  const handleAdd = () => {
+  const openAddForm = () => {
+    clearForm();
 
-    setEditingId(null);
-
-    setFormData({
-      category_name: "",
-      description: ""
-    });
-
+    setShowSearchForm(false);
     setShowForm(true);
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
+  // =====================================================
+  // CLOSE ADD CATEGORY FORM
+  // =====================================================
+
+  const closeForm = () => {
+    clearForm();
+    setShowForm(false);
+  };
+
+  // =====================================================
+  // OPEN SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+    setShowForm(false);
+    setEditingId(null);
+
+    setShowSearchForm(
+      (previous) => !previous
+    );
+  };
+
+  // =====================================================
+  // SEARCH FILTER CHANGE
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+
+    setFilters((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  // =====================================================
+  // RESET SEARCH
+  // =====================================================
+
+  const resetFilters = () => {
+    setFilters({
+      search: "",
+    });
+  };
+
+  // =====================================================
+  // FILTER CATEGORIES
+  // =====================================================
+
+  const filteredCategories =
+    categories.filter((category) => {
+      const searchText =
+        filters.search
+          .trim()
+          .toLowerCase();
+
+      if (!searchText) {
+        return true;
+      }
+
+      const categoryName = (
+        category.category_name ||
+        category.name ||
+        ""
+      ).toLowerCase();
+
+      const categoryDescription = (
+        category.description ||
+        ""
+      ).toLowerCase();
+
+      return (
+        categoryName.includes(searchText) ||
+        categoryDescription.includes(
+          searchText
+        )
+      );
+    });
+
+  // =====================================================
+  // ADD / UPDATE CATEGORY
+  // =====================================================
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
+    setSuccess("");
+
+    if (!categoryName.trim()) {
+      setError(
+        "Please enter a category name."
+      );
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const url = editingId
+        ? `${API_URL}/categories/${editingId}/`
+        : `${API_URL}/categories/`;
+
+      const method = editingId
+        ? "PUT"
+        : "POST";
+
+      const response = await fetch(url, {
+        method: method,
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          category_name:
+            categoryName.trim(),
+
+          description:
+            description.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log(
+        "Category response:",
+        data
+      );
+
+      if (!response.ok) {
+        console.error(
+          "Category save error:",
+          data
+        );
+
+        throw new Error(
+          data.detail ||
+            data.category_name?.[0] ||
+            data.name?.[0] ||
+            "Unable to save category."
+        );
+      }
+
+      if (editingId) {
+        setSuccess(
+          "Category updated successfully."
+        );
+      } else {
+        setSuccess(
+          "Category added successfully."
+        );
+      }
+
+      clearForm();
+      setShowForm(false);
+
+      await fetchCategories();
+    } catch (err) {
+      console.error(
+        "Save category error:",
+        err
+      );
+
+      setError(
+        err.message ||
+          "Unable to save category."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // =====================================================
   // EDIT CATEGORY
   // =====================================================
 
   const handleEdit = (category) => {
-
     setEditingId(category.id);
 
-    setFormData({
+    setCategoryName(
+      category.category_name ||
+        category.name ||
+        ""
+    );
 
-      category_name:
-        category.category_name || "",
+    setDescription(
+      category.description || ""
+    );
 
-      description:
-        category.description || ""
+    setError("");
+    setSuccess("");
 
-    });
-
+    setShowSearchForm(false);
     setShowForm(true);
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
-
-
-  // =====================================================
-  // SAVE CATEGORY
-  // =====================================================
-
-  const handleSubmit = async (e) => {
-
-    e.preventDefault();
-
-    try {
-
-      const url = editingId
-        ? `http://127.0.0.1:8000/api/categories/${editingId}/`
-        : "http://127.0.0.1:8000/api/categories/";
-
-
-      const method =
-        editingId ? "PUT" : "POST";
-
-
-      const response = await fetch(
-        url,
-        {
-          method: method,
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-
-            category_name:
-              formData.category_name,
-
-            description:
-              formData.description
-
-          })
-
-        }
-      );
-
-
-      if (!response.ok) {
-
-        const errorData =
-          await response.json();
-
-        console.error(
-          "Backend error:",
-          errorData
-        );
-
-        alert(
-          "Failed to save category"
-        );
-
-        return;
-
-      }
-
-
-      if (editingId) {
-
-        alert(
-          "Category updated successfully"
-        );
-
-      } else {
-
-        alert(
-          "Category added successfully"
-        );
-
-      }
-
-
-      // Close form
-
-      setShowForm(false);
-
-      setEditingId(null);
-
-      setFormData({
-        category_name: "",
-        description: ""
-      });
-
-
-      // Refresh category list
-
-      fetchCategories();
-
-
-    } catch (error) {
-
-      console.error(
-        "Error saving category:",
-        error
-      );
-
-      alert(
-        "Server error"
-      );
-
-    }
-
-  };
-
 
   // =====================================================
   // DELETE CATEGORY
   // =====================================================
 
   const handleDelete = async (id) => {
-
     const confirmDelete =
       window.confirm(
         "Are you sure you want to delete this category?"
       );
 
-
     if (!confirmDelete) {
       return;
     }
 
-
     try {
+      setError("");
+      setSuccess("");
 
-      const response =
-        await fetch(
-
-          `http://127.0.0.1:8000/api/categories/${id}/`,
-
-          {
-            method: "DELETE"
-          }
-
-        );
-
+      const response = await fetch(
+        `${API_URL}/categories/${id}/`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
+        const data =
+          await response
+            .json()
+            .catch(() => ({}));
 
-        const errorData =
-          await response.json();
-
-        console.error(
-          errorData
+        throw new Error(
+          data.detail ||
+            "Unable to delete category."
         );
-
-        alert(
-          "Failed to delete category"
-        );
-
-        return;
-
       }
 
-
-      alert(
-        "Category deleted successfully"
+      setSuccess(
+        "Category deleted successfully."
       );
 
-
-      fetchCategories();
-
-
-    } catch (error) {
-
+      await fetchCategories();
+    } catch (err) {
       console.error(
-        "Error deleting category:",
-        error
+        "Delete category error:",
+        err
       );
 
-      alert(
-        "Server error"
+      setError(
+        err.message ||
+          "Unable to delete category."
       );
-
     }
-
   };
 
-
   // =====================================================
-  // CANCEL FORM
+  // CSV ESCAPE
   // =====================================================
 
-  const handleCancel = () => {
-
-    setShowForm(false);
-
-    setEditingId(null);
-
-    setFormData({
-      category_name: "",
-      description: ""
-    });
-
+  const escapeCSV = (value) => {
+    return `"${String(
+      value ?? ""
+    ).replace(/"/g, '""')}"`;
   };
 
+  // =====================================================
+  // DOWNLOAD FILTERED REPORT
+  // =====================================================
+
+  const downloadCategoryReport =
+    () => {
+      if (
+        filteredCategories.length === 0
+      ) {
+        alert(
+          "No categories available to download."
+        );
+        return;
+      }
+
+      const headers = [
+        "Category ID",
+        "Category Name",
+        "Description",
+      ];
+
+      const rows =
+        filteredCategories.map(
+          (category) => [
+            category.id || "",
+            category.category_name ||
+              category.name ||
+              "",
+            category.description ||
+              "",
+          ]
+        );
+
+      const csv = [
+        headers
+          .map(escapeCSV)
+          .join(","),
+        ...rows.map((row) =>
+          row
+            .map(escapeCSV)
+            .join(",")
+        ),
+      ].join("\n");
+
+      const blob = new Blob(
+        [csv],
+        {
+          type: "text/csv;charset=utf-8;",
+        }
+      );
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        "filtered_categories_report.csv";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+    };
 
   // =====================================================
-  // LOADING
-  // =====================================================
-
-  if (loading) {
-
-    return (
-
-      <div className="admin-category-loading">
-
-        Loading categories...
-
-      </div>
-
-    );
-
-  }
-
-
-  // =====================================================
-  // PAGE
+  // RENDER
   // =====================================================
 
   return (
-
     <div className="admin-categories-page">
 
-
-      {/* ================= SIDEBAR ================= */}
+      {/* =================================================
+          SIDEBAR
+      ================================================= */}
 
       <AdminSidebar />
 
-
-      {/* ================= MAIN CONTENT ================= */}
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
 
       <main className="admin-categories-main">
 
-
-        {/* ================= HEADER ================= */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
         <div className="categories-header">
 
           <div>
-
-            <h1>
-              Categories
-            </h1>
+            <h1>Categories</h1>
 
             <p>
-              Manage fashion boutique course categories
+              Manage course categories
+              for your Fashion Boutique
+              learning platform.
             </p>
+          </div>
+
+          {/* HEADER BUTTONS */}
+
+          <div className="categories-header-buttons">
+
+            {/* SEARCH BUTTON */}
+
+            <button
+              type="button"
+              className="search-category-btn"
+              onClick={
+                openSearchForm
+              }
+            >
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Categories"}
+            </button>
+
+            {/* ADD BUTTON */}
+
+            <button
+              type="button"
+              className="add-category-header-btn"
+              onClick={
+                showForm
+                  ? closeForm
+                  : openAddForm
+              }
+            >
+              {showForm
+                ? "✕ Close Form"
+                : "+ Add Category"}
+            </button>
 
           </div>
 
+        </div>
 
-          <button
-            className="add-category-btn"
-            onClick={handleAdd}
-          >
+        {/* =================================================
+            COUNT CARD
+        ================================================= */}
 
-            <FaPlus />
+        <div className="categories-count-card">
 
-            <span>
-              Add Category
-            </span>
+          <span className="count-icon">
+            📂
+          </span>
 
-          </button>
+          <div>
+            <small>
+              Total Categories
+            </small>
+
+            <strong>
+              {categories.length}
+            </strong>
+          </div>
 
         </div>
 
+        {/* =================================================
+            MESSAGE
+        ================================================= */}
 
-        {/* ================= ADD / EDIT FORM ================= */}
+        {error && (
+          <div className="category-message error">
+            ⚠️ {error}
+          </div>
+        )}
 
-        {showForm && (
+        {success && (
+          <div className="category-message success">
+            ✓ {success}
+          </div>
+        )}
 
-          <div className="category-form-card">
+        {/* =================================================
+            SEARCH CATEGORY FORM
+        ================================================= */}
 
-            <div className="category-form-title">
+        {showSearchForm && (
+          <section className="category-search-card">
 
-              <h2>
+            <div className="category-search-header">
 
-                {editingId
-                  ? "Edit Category"
-                  : "Add New Category"
+              <div>
+                <h2>
+                  Search Categories
+                </h2>
+
+                <p>
+                  Search categories by
+                  name or description.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="close-category-search-btn"
+                onClick={() =>
+                  setShowSearchForm(
+                    false
+                  )
                 }
-
-              </h2>
+              >
+                ✕
+              </button>
 
             </div>
 
+            <div className="category-search-form">
+
+              <div className="category-search-field">
+
+                <label>
+                  Search Category
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={
+                    filters.search
+                  }
+                  onChange={
+                    handleFilterChange
+                  }
+                  placeholder="Search category name or description..."
+                />
+
+              </div>
+
+            </div>
+
+            <div className="category-search-actions">
+
+              <button
+                type="button"
+                className="reset-category-filter-btn"
+                onClick={
+                  resetFilters
+                }
+              >
+                Reset
+              </button>
+
+              <button
+                type="button"
+                className="download-category-report-btn"
+                onClick={
+                  downloadCategoryReport
+                }
+                disabled={
+                  filteredCategories.length ===
+                  0
+                }
+              >
+                ↓ Download Report
+              </button>
+
+            </div>
+
+            <div className="category-filter-result">
+
+              Showing{" "}
+              <strong>
+                {
+                  filteredCategories.length
+                }
+              </strong>{" "}
+              of{" "}
+              <strong>
+                {categories.length}
+              </strong>{" "}
+              categories
+
+            </div>
+
+          </section>
+        )}
+
+        {/* =================================================
+            ADD / EDIT CATEGORY FORM
+        ================================================= */}
+
+        {showForm && (
+          <section className="category-form-card">
+
+            <div className="category-form-heading">
+
+              <div>
+                <h2>
+                  {editingId
+                    ? "Edit Category"
+                    : "Add New Category"}
+                </h2>
+
+                <p>
+                  {editingId
+                    ? "Update the selected category."
+                    : "Create a new course category."}
+                </p>
+              </div>
+
+              {editingId && (
+                <button
+                  type="button"
+                  className="cancel-category-btn"
+                  onClick={
+                    closeForm
+                  }
+                >
+                  Cancel
+                </button>
+              )}
+
+            </div>
 
             <form
-              onSubmit={handleSubmit}
+              onSubmit={
+                handleSubmit
+              }
+              className="category-form"
             >
-
-
-              {/* CATEGORY NAME */}
 
               <div className="category-form-group">
 
@@ -447,29 +723,19 @@ const AdminCategories = () => {
                 </label>
 
                 <input
-
                   type="text"
-
-                  name="category_name"
-
                   value={
-                    formData.category_name
+                    categoryName
                   }
-
-                  onChange={
-                    handleChange
+                  onChange={(e) =>
+                    setCategoryName(
+                      e.target.value
+                    )
                   }
-
                   placeholder="Enter category name"
-
-                  required
-
                 />
 
               </div>
-
-
-              {/* DESCRIPTION */}
 
               <div className="category-form-group">
 
@@ -478,203 +744,192 @@ const AdminCategories = () => {
                 </label>
 
                 <textarea
-
-                  name="description"
-
                   value={
-                    formData.description
+                    description
                   }
-
-                  onChange={
-                    handleChange
+                  onChange={(e) =>
+                    setDescription(
+                      e.target.value
+                    )
                   }
-
                   placeholder="Enter category description"
-
                   rows="4"
-
-                  required
-
                 />
 
               </div>
 
-
-              {/* BUTTONS */}
-
-              <div className="category-form-buttons">
-
-
-                <button
-                  type="submit"
-                  className="save-category-btn"
-                >
-
-                  {editingId
-                    ? "Update Category"
-                    : "Save Category"
-                  }
-
-                </button>
-
-
-                <button
-                  type="button"
-                  className="cancel-category-btn"
-                  onClick={handleCancel}
-                >
-
-                  Cancel
-
-                </button>
-
-
-              </div>
+              <button
+                type="submit"
+                className="save-category-btn"
+                disabled={saving}
+              >
+                {saving
+                  ? "Saving..."
+                  : editingId
+                  ? "Update Category"
+                  : "Add Category"}
+              </button>
 
             </form>
 
-          </div>
-
+          </section>
         )}
 
+        {/* =================================================
+            CATEGORY LIST
+        ================================================= */}
 
-        {/* ================= CATEGORY TABLE ================= */}
+        <section className="category-list-card">
 
-        <div className="category-table-card">
+          <div className="category-list-heading">
 
+            <div>
+              <h2>
+                Category Records
+              </h2>
 
-          <div className="category-table-heading">
+              <p>
+                View and manage all
+                course categories.
+              </p>
+            </div>
 
-            <h2>
-              Category List
-            </h2>
-
-            <p>
-              View and manage all available categories
-            </p>
+            <div className="category-list-count">
+              {filteredCategories.length}{" "}
+              Categories
+            </div>
 
           </div>
 
+          {/* =================================================
+              LOADING
+          ================================================= */}
 
-          <div className="category-table-wrapper">
+          {loading ? (
 
-            <table className="category-table">
+            <div className="category-loading">
 
+              <div className="category-spinner"></div>
 
-              <thead>
+              <p>
+                Loading categories...
+              </p>
 
-                <tr>
+            </div>
 
-                  <th>
-                    ID
-                  </th>
+          ) : filteredCategories.length ===
+            0 ? (
 
-                  <th>
-                    Category Name
-                  </th>
+            <div className="no-categories">
 
-                  <th>
-                    Description
-                  </th>
+              <div className="no-category-icon">
+                📂
+              </div>
 
-                  <th>
-                    Actions
-                  </th>
+              <h3>
+                No Categories Found
+              </h3>
 
-                </tr>
+              <p>
+                {categories.length ===
+                0
+                  ? "Add your first course category using the Add Category button."
+                  : "No categories match your search."}
+              </p>
 
-              </thead>
+            </div>
 
+          ) : (
 
-              <tbody>
+            <div className="category-table-wrapper">
 
+              <table className="category-table">
 
-                {categories.length > 0 ? (
+                <thead>
 
-                  categories.map(
-                    (category) => (
+                  <tr>
 
-                     <tr key={course.id}>
+                    <th>
+                      Cat_Id
+                    </th>
 
-                        {/* ID */}
+                    <th>
+                      Category Name
+                    </th>
+
+                    <th>
+                      Description
+                    </th>
+
+                    <th>
+                      Action
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {filteredCategories.map(
+                    (
+                      category,
+                      index
+                    ) => (
+
+                      <tr
+                        key={
+                          category.id ||
+                          index
+                        }
+                      >
+
                         <td>
-                          #{course.id}
-                        </td>
-
-                        {/* CATEGORY */}
-                        <td>
-                          {
-                            categories.find(
-                              (category) => category.id === course.category
-                            )?.category_name || "N/A"
-                          }
-                        </td>
-
-                        {/* COURSE NAME */}
-                        <td>
-                          <strong>
-                            {course.course_name || "N/A"}
-                          </strong>
-                        </td>
-
-                        {/* DESCRIPTION */}
-                        <td>
-                          {course.description || "N/A"}
-                        </td>
-
-                        {/* DURATION */}
-                        <td>
-                          {course.duration || "N/A"}
-                        </td>
-
-                        {/* FEES */}
-                        <td>
-                          ₹{course.fees || "0.00"}
-                        </td>
-
-                        {/* STATUS */}
-                        <td>
-                          <span
-                            className={
-                              course.status === "Active"
-                                ? "course-status active"
-                                : "course-status inactive"
+                          <span className="category-id">
+                            #
+                            {
+                              category.id
                             }
-                          >
-                            {course.status || "N/A"}
                           </span>
                         </td>
 
-                      
+                        <td>
+                          <strong className="category-name">
+                            {category.category_name ||
+                              category.name ||
+                              "N/A"}
+                          </strong>
+                        </td>
 
-                        {/* ACTIONS */}
+                        <td>
+
+                          <span className="category-description">
+
+                            {category.description ||
+                              "No description"}
+
+                          </span>
+
+                        </td>
 
                         <td>
 
                           <div className="category-actions">
 
-
-                            {/* EDIT */}
-
                             <button
+                              type="button"
                               className="edit-category-btn"
                               onClick={() =>
-                                handleEdit(category)
+                                handleEdit(
+                                  category
+                                )
                               }
                             >
-
-                              <FaEdit />
-
-                              <span>
-                                Edit
-                              </span>
-
+                              ✏️ Edit
                             </button>
 
-
-                            {/* DELETE */}
-
                             <button
+                              type="button"
                               className="delete-category-btn"
                               onClick={() =>
                                 handleDelete(
@@ -682,75 +937,32 @@ const AdminCategories = () => {
                                 )
                               }
                             >
-
-                              <FaTrash />
-
-                              <span>
-                                Delete
-                              </span>
-
+                              🗑️ Delete
                             </button>
-
 
                           </div>
 
                         </td>
 
-
                       </tr>
 
                     )
+                  )}
 
-                  )
+                </tbody>
 
-                ) : (
+              </table>
 
-                  <tr>
+            </div>
 
-                    <td
-                      colSpan="4"
-                      className="no-categories"
-                    >
+          )}
 
-                      <div className="no-category-icon">
-                        📂
-                      </div>
-
-                      <h3>
-                        No Categories Found
-                      </h3>
-
-                      <p>
-                        Add your first category
-                        using the button above.
-                      </p>
-
-                    </td>
-
-                  </tr>
-
-                )}
-
-
-              </tbody>
-
-
-            </table>
-
-          </div>
-
-
-        </div>
-
+        </section>
 
       </main>
 
-
     </div>
-
   );
-
 };
-
 
 export default AdminCategories;

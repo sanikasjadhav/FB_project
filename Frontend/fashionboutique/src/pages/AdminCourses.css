@@ -686,3 +686,289 @@
   }
 
 }
+/* =====================================================
+   COURSE HEADER BUTTONS
+===================================================== */
+
+.courses-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =====================================================
+   SEARCH COURSE BUTTON
+===================================================== */
+
+.search-course-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  border: none;
+  padding: 11px 18px;
+  border-radius: 7px;
+
+  background: #135255;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.search-course-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   COURSE SEARCH CARD
+===================================================== */
+
+.course-search-card {
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  margin-bottom: 25px;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.course-search-title {
+  margin-bottom: 20px;
+}
+
+.course-search-title h2 {
+  margin: 0 0 6px;
+
+  color: #063b3d;
+
+  font-size: 21px;
+}
+
+.course-search-title p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   SEARCH FORM
+===================================================== */
+
+.course-search-form {
+  display: grid;
+
+  grid-template-columns:
+    2fr 1fr 1fr 1fr;
+
+  gap: 15px;
+
+  align-items: end;
+}
+
+.course-search-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #333;
+}
+
+.course-search-field input,
+.course-search-field select {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #d6d6d6;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  background: white;
+
+  font-size: 14px;
+
+  transition: 0.2s;
+}
+
+.course-search-field input:focus,
+.course-search-field select:focus {
+  border-color: #135255;
+
+  box-shadow:
+    0 0 0 2px rgba(
+      19,
+      82,
+      85,
+      0.08
+    );
+}
+
+/* =====================================================
+   SEARCH ACTIONS
+===================================================== */
+
+.course-search-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+.reset-course-search-btn {
+  border: none;
+
+  padding: 12px 20px;
+
+  border-radius: 7px;
+
+  background: #777;
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.reset-course-search-btn:hover {
+  background: #555;
+}
+
+.download-course-report-btn {
+  border: none;
+
+  padding: 12px 20px;
+
+  border-radius: 7px;
+
+  background: #f5b942;
+
+  color: #063b3d;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.download-course-report-btn:hover {
+  background: #e6a92f;
+}
+
+.download-course-report-btn:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   FILTER RESULT
+===================================================== */
+
+.course-filter-result {
+  margin-top: 16px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid #eeeeee;
+
+  color: #666;
+
+  font-size: 14px;
+}
+
+.course-filter-result strong {
+  color: #063b3d;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .course-search-form {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .courses-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .courses-header-buttons {
+    width: 100%;
+  }
+
+  .search-course-btn,
+  .add-course-btn {
+    flex: 1;
+
+    justify-content: center;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .courses-header-buttons {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .search-course-btn,
+  .add-course-btn {
+    width: 100%;
+  }
+
+  .course-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .course-search-actions {
+    flex-direction: column;
+  }
+
+  .reset-course-search-btn,
+  .download-course-report-btn {
+    width: 100%;
+  }
+
+}

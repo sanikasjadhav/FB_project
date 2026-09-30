@@ -619,3 +619,210 @@
   }
 
 }
+/* =====================================================
+   CERTIFICATE HEADER BUTTONS
+===================================================== */
+
+.certificate-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* =====================================================
+   SEARCH CERTIFICATE BUTTON
+===================================================== */
+
+.search-certificate-btn {
+  border: none;
+  padding: 11px 18px;
+  border-radius: 7px;
+  background: #135255;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-certificate-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.certificate-search-card {
+  background: white;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 25px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.certificate-search-title {
+  margin-bottom: 20px;
+}
+
+.certificate-search-title h2 {
+  margin: 0 0 6px;
+  color: #063b3d;
+  font-size: 21px;
+}
+
+.certificate-search-title p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+/* =====================================================
+   SEARCH FORM
+===================================================== */
+
+.certificate-search-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+}
+
+.certificate-search-field {
+  flex: 1;
+}
+
+.certificate-search-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.certificate-search-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #d6d6d6;
+  border-radius: 7px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.certificate-search-field input:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.08);
+}
+
+/* =====================================================
+   SEARCH ACTIONS
+===================================================== */
+
+.certificate-search-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.reset-certificate-search-btn {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 7px;
+  background: #777;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reset-certificate-search-btn:hover {
+  background: #555;
+}
+
+.download-certificate-report-btn {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 7px;
+  background: #f5b942;
+  color: #063b3d;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.download-certificate-report-btn:hover {
+  background: #e6a92f;
+}
+
+.download-certificate-report-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   FILTER RESULT
+===================================================== */
+
+.certificate-filter-result {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #eeeeee;
+  color: #666;
+  font-size: 14px;
+}
+
+.certificate-filter-result strong {
+  color: #063b3d;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .certificate-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .certificate-header-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .certificate-search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .certificate-search-actions {
+    width: 100%;
+  }
+
+  .reset-certificate-search-btn,
+  .download-certificate-report-btn {
+    flex: 1;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .certificate-header-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-certificate-btn,
+  .certificate-count {
+    width: 100%;
+    text-align: center;
+  }
+
+  .certificate-search-actions {
+    flex-direction: column;
+  }
+
+}

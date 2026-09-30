@@ -547,3 +547,261 @@
   }
 
 }
+/* =====================================================
+   HEADER
+===================================================== */
+
+.study-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.study-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* =====================================================
+   SEARCH BUTTON
+===================================================== */
+
+.search-study-btn {
+  border: none;
+  background: #135255;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-study-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   ADD STUDY MATERIAL BUTTON
+===================================================== */
+
+.add-study-btn {
+  border: none;
+  background: #f5b942;
+  color: #063b3d;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-study-btn:hover {
+  background: #e5a82f;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.study-search-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.study-search-title {
+  margin-bottom: 20px;
+}
+
+.study-search-title h2 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.study-search-title p {
+  margin: 6px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   SEARCH FORM
+===================================================== */
+
+.study-search-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.study-search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.study-search-field label {
+  color: #063b3d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.study-search-field input,
+.study-search-field select {
+  width: 100%;
+  height: 43px;
+  padding: 0 12px;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.study-search-field input:focus,
+.study-search-field select:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.1);
+}
+
+
+/* =====================================================
+   SEARCH ACTIONS
+===================================================== */
+
+.study-search-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reset-study-search-btn,
+.download-study-btn {
+  height: 43px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s ease;
+}
+
+.reset-study-search-btn {
+  background: #eeeeee;
+  color: #333333;
+}
+
+.reset-study-search-btn:hover {
+  background: #dddddd;
+}
+
+.download-study-btn {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.download-study-btn:hover {
+  background: #e5a82f;
+}
+
+.download-study-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   FILTER RESULT
+===================================================== */
+
+.study-filter-result {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #eeeeee;
+  color: #666666;
+  font-size: 14px;
+}
+
+.study-filter-result strong {
+  color: #063b3d;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .study-search-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .study-search-actions {
+    grid-column: 1 / -1;
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .study-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .study-header-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-study-btn,
+  .add-study-btn {
+    width: 100%;
+  }
+
+  .study-count {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .study-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .study-search-actions {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reset-study-search-btn,
+  .download-study-btn {
+    width: 100%;
+  }
+
+}

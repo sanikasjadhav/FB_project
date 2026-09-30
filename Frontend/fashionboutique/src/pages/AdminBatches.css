@@ -4,10 +4,7 @@
 
 .admin-batch-page {
   min-height: 100vh;
-
-  display: flex;
-
-  background: #f5f6f6;
+  background: #f5f7f7;
 }
 
 
@@ -16,12 +13,10 @@
 ========================================================= */
 
 .batch-main {
-  width: calc(100% - 260px);
-
   margin-left: 260px;
-
+  width: calc(100% - 260px);
+  min-height: 100vh;
   padding: 30px;
-
   box-sizing: border-box;
 }
 
@@ -32,236 +27,359 @@
 
 .batch-header {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
-  background: #ffffff;
-
-  padding: 25px;
-
-  border-radius: 12px;
-
   margin-bottom: 25px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .batch-header h1 {
   margin: 0;
-
-  color: #135255;
-
-  font-size: 28px;
+  color: #063b3d;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 .batch-header p {
   margin: 7px 0 0;
-
-  color: #777777;
-
+  color: #777;
   font-size: 14px;
 }
 
 
 /* =========================================================
-   ADD BATCH BUTTON
+   HEADER BUTTONS
 ========================================================= */
 
-.add-batch-btn {
+.batch-header-buttons {
   display: flex;
-
   align-items: center;
+  gap: 12px;
+}
 
-  gap: 8px;
-
-  padding: 12px 20px;
-
+.search-batch-btn,
+.add-batch-btn {
   border: none;
-
-  border-radius: 7px;
-
-  background: #f5b942;
-
-  color: #135255;
-
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
+  transition: all 0.3s ease;
+}
 
-  transition: 0.2s;
+.search-batch-btn {
+  background: #135255;
+  color: white;
+}
+
+.search-batch-btn:hover {
+  background: #104446;
+  transform: translateY(-1px);
+}
+
+.add-batch-btn {
+  background: #f5b942;
+  color: #063b3d;
 }
 
 .add-batch-btn:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.12);
+  background: #e4a72e;
+  transform: translateY(-1px);
 }
 
 
 /* =========================================================
-   FORM CARD
+   ERROR
 ========================================================= */
 
-.batch-form-card {
-  background: #ffffff;
-
-  padding: 25px;
-
-  border-radius: 12px;
-
-  margin-bottom: 25px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-
-/* =========================================================
-   FORM TITLE
-========================================================= */
-
-.batch-form-title {
+.batch-error {
+  background: #ffe5e5;
+  color: #a30000;
+  padding: 14px 18px;
+  border-radius: 8px;
   margin-bottom: 20px;
-}
-
-.batch-form-title h2 {
-  margin: 0;
-
-  color: #135255;
-
-  font-size: 21px;
+  border-left: 4px solid #d00000;
 }
 
 
 /* =========================================================
-   FORM ROW
+   SEARCH CARD
 ========================================================= */
 
-.batch-form-row {
+.batch-search-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eeeeee;
+}
+
+
+/* =========================================================
+   SEARCH HEADER
+========================================================= */
+
+.batch-search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.batch-search-header h2 {
+  margin: 0 0 6px;
+  color: #063b3d;
+  font-size: 22px;
+}
+
+.batch-search-header p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.close-search-btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f1f1;
+  color: #555;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-search-btn:hover {
+  background: #e3e3e3;
+  color: #063b3d;
+}
+
+
+/* =========================================================
+   SEARCH FORM
+========================================================= */
+
+.batch-search-form {
   display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-
-/* =========================================================
-   FORM GROUP
-========================================================= */
-
-.batch-form-group {
-  margin-bottom: 18px;
-}
-
-.batch-form-group label {
-  display: block;
-
-  margin-bottom: 7px;
-
-  color: #135255;
-
-  font-size: 14px;
-
-  font-weight: 600;
-}
-
-
-/* =========================================================
-   INPUT / SELECT
-========================================================= */
-
-.batch-form-group input,
-.batch-form-group select {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 12px 14px;
-
-  border: 1px solid #dddddd;
-
-  border-radius: 7px;
-
-  outline: none;
-
-  font-family: inherit;
-
-  font-size: 14px;
-
-  background: #ffffff;
-
-  color: #333333;
-
-  transition: 0.2s;
-}
-
-
-/* =========================================================
-   INPUT FOCUS
-========================================================= */
-
-.batch-form-group input:focus,
-.batch-form-group select:focus {
-  border-color: #f5b942;
-
-  box-shadow:
-    0 0 0 2px rgba(245, 185, 66, 0.15);
-}
-
-
-/* =========================================================
-   FORM BUTTONS
-========================================================= */
-
-.batch-form-buttons {
+.search-field {
   display: flex;
-
-  gap: 10px;
-
-  margin-top: 20px;
-}
-
-.batch-save-btn,
-.batch-cancel-btn {
-  display: flex;
-
-  align-items: center;
-
+  flex-direction: column;
   gap: 7px;
+}
 
-  padding: 11px 20px;
-
-  border: none;
-
-  border-radius: 7px;
-
-  cursor: pointer;
-
-  font-size: 14px;
-
+.search-field label {
+  color: #063b3d;
+  font-size: 13px;
   font-weight: 600;
 }
 
-.batch-save-btn {
-  background: #f5b942;
-
-  color: #135255;
+.search-field input,
+.search-field select {
+  width: 100%;
+  height: 43px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px;
+  outline: none;
+  background: white;
+  color: #333;
+  font-size: 14px;
+  transition: 0.3s;
 }
 
-.batch-cancel-btn {
+.search-field input:focus,
+.search-field select:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.08);
+}
+
+
+/* =========================================================
+   SEARCH ACTIONS
+========================================================= */
+
+.search-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eeeeee;
+}
+
+.reset-filter-btn,
+.download-report-btn {
+  border: none;
+  padding: 11px 20px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reset-filter-btn {
   background: #eeeeee;
-
-  color: #555555;
+  color: #333;
 }
 
-.batch-save-btn:hover,
-.batch-cancel-btn:hover {
-  opacity: 0.9;
+.reset-filter-btn:hover {
+  background: #dddddd;
+}
+
+.download-report-btn {
+  background: #063b3d;
+  color: white;
+}
+
+.download-report-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+.download-report-btn:disabled {
+  background: #aaaaaa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* =========================================================
+   FILTER RESULT
+========================================================= */
+
+.filter-result {
+  margin-top: 15px;
+  color: #666;
+  font-size: 13px;
+}
+
+.filter-result strong {
+  color: #063b3d;
+}
+
+
+/* =========================================================
+   ADD / EDIT FORM
+========================================================= */
+
+.batch-form-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eeeeee;
+}
+
+.batch-form-heading {
+  margin-bottom: 25px;
+}
+
+.batch-form-heading h2 {
+  margin: 0 0 6px;
+  color: #063b3d;
+  font-size: 22px;
+}
+
+.batch-form-heading p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.batch-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  color: #063b3d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 43px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px;
+  outline: none;
+  background: white;
+  color: #333;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.08);
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+========================================================= */
+
+.batch-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.cancel-batch-btn,
+.save-batch-btn {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel-batch-btn {
+  background: #eeeeee;
+  color: #333;
+}
+
+.cancel-batch-btn:hover {
+  background: #dddddd;
+}
+
+.save-batch-btn {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.save-batch-btn:hover {
+  background: #e4a72e;
 }
 
 
@@ -270,14 +388,11 @@
 ========================================================= */
 
 .batch-table-card {
-  background: #ffffff;
-
-  padding: 25px;
-
+  background: white;
   border-radius: 12px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eeeeee;
 }
 
 
@@ -286,23 +401,31 @@
 ========================================================= */
 
 .batch-table-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
 .batch-table-heading h2 {
-  margin: 0;
-
-  color: #135255;
-
-  font-size: 21px;
+  margin: 0 0 5px;
+  color: #063b3d;
+  font-size: 22px;
 }
 
 .batch-table-heading p {
-  margin: 5px 0 0;
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
 
-  color: #777777;
-
+.batch-count {
+  background: #e9f4f4;
+  color: #063b3d;
+  padding: 8px 14px;
+  border-radius: 20px;
   font-size: 13px;
+  font-weight: 600;
 }
 
 
@@ -312,7 +435,6 @@
 
 .batch-table-wrapper {
   width: 100%;
-
   overflow-x: auto;
 }
 
@@ -323,83 +445,94 @@
 
 .batch-table {
   width: 100%;
-
   border-collapse: collapse;
-
-  min-width: 1100px;
+  min-width: 1050px;
 }
 
-
-/* =========================================================
-   TABLE HEADER
-========================================================= */
-
-.batch-table th {
-  padding: 14px;
-
+.batch-table thead th {
   background: #063b3d;
-
-  color: #ffffff;
-
+  color: white;
+  padding: 14px 12px;
   text-align: left;
-
   font-size: 13px;
-
+  font-weight: 600;
   white-space: nowrap;
 }
 
+.batch-table thead th:first-child {
+  border-radius: 7px 0 0 0;
+}
 
-/* =========================================================
-   TABLE DATA
-========================================================= */
+.batch-table thead th:last-child {
+  border-radius: 0 7px 0 0;
+}
 
-.batch-table td {
-  padding: 14px;
-
+.batch-table tbody td {
+  padding: 14px 12px;
   border-bottom: 1px solid #eeeeee;
-
-  color: #555555;
-
-  font-size: 14px;
-
+  color: #444;
+  font-size: 13px;
   vertical-align: middle;
 }
 
 .batch-table tbody tr:hover {
-  background: #fafafa;
-}
-
-.batch-table td strong {
-  color: #135255;
+  background: #f8fbfb;
 }
 
 
 /* =========================================================
-   BATCH TYPE
+   MODE BADGES
 ========================================================= */
 
-.batch-type {
+.mode-badge {
   display: inline-block;
-
   padding: 5px 10px;
-
-  border-radius: 20px;
-
-  font-size: 12px;
-
+  border-radius: 15px;
+  font-size: 11px;
   font-weight: 600;
 }
 
-.batch-type.online {
-  background: #e3f2fd;
-
-  color: #1565c0;
+.mode-badge.online {
+  background: #e4f4ff;
+  color: #12618a;
 }
 
-.batch-type.offline {
-  background: #fff3cd;
+.mode-badge.offline {
+  background: #fff0df;
+  color: #a05a00;
+}
 
-  color: #856404;
+.mode-badge.both {
+  background: #eee7ff;
+  color: #6542a4;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 11px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-badge.upcoming {
+  background: #fff4d7;
+  color: #8a6200;
+}
+
+.status-badge.ongoing {
+  background: #def6e7;
+  color: #18733a;
+}
+
+.status-badge.completed {
+  background: #e7e7e7;
+  color: #555;
 }
 
 
@@ -407,79 +540,41 @@
    ACTION BUTTONS
 ========================================================= */
 
-.batch-actions {
+.action-buttons {
   display: flex;
-
-  gap: 8px;
-}
-
-.batch-edit-btn,
-.batch-delete-btn {
-  display: flex;
-
   align-items: center;
-
-  gap: 5px;
-
-  padding: 7px 11px;
-
-  border: none;
-
-  border-radius: 5px;
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-  font-weight: 600;
+  gap: 7px;
 }
 
-.batch-edit-btn {
-  background: #f5b942;
+.edit-btn,
+.delete-btn {
+  border: none;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
+.edit-btn {
+  background: #e8f2f2;
   color: #135255;
 }
 
-.batch-delete-btn {
-  background: #ffe5e5;
+.edit-btn:hover {
+  background: #135255;
+  color: white;
+}
 
+.delete-btn {
+  background: #ffe7e7;
   color: #c62828;
 }
 
-.batch-edit-btn:hover,
-.batch-delete-btn:hover {
-  opacity: 0.85;
-}
-
-
-/* =========================================================
-   NO BATCHES
-========================================================= */
-
-.no-batches {
-  padding: 60px 20px !important;
-
-  text-align: center;
-
-  color: #777777 !important;
-}
-
-.no-batches div {
-  font-size: 45px;
-
-  margin-bottom: 10px;
-}
-
-.no-batches h3 {
-  margin: 0 0 7px;
-
-  color: #135255;
-}
-
-.no-batches p {
-  margin: 0;
-
-  font-size: 14px;
+.delete-btn:hover {
+  background: #c62828;
+  color: white;
 }
 
 
@@ -487,76 +582,137 @@
    LOADING
 ========================================================= */
 
-.admin-page-loading {
-  min-height: 100vh;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  color: #135255;
-
-  font-size: 20px;
+.batch-loading {
+  text-align: center;
+  padding: 50px 20px;
+  color: #777;
+  font-size: 15px;
 }
 
 
 /* =========================================================
-   TABLET
+   NO DATA
 ========================================================= */
 
-@media (max-width: 1000px) {
+.no-data {
+  text-align: center !important;
+  padding: 50px 20px !important;
+  color: #888 !important;
+  font-size: 14px !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
 
   .batch-main {
-    width: calc(100% - 240px);
+    padding: 25px 20px;
+  }
 
-    margin-left: 240px;
+  .batch-search-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
+}
+
+
+/* =========================================================
+   RESPONSIVE - 900px
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .batch-main {
+    margin-left: 0;
+    width: 100%;
     padding: 20px;
   }
 
   .batch-header {
     flex-direction: column;
-
     align-items: flex-start;
+    gap: 18px;
+  }
 
-    gap: 15px;
+  .batch-header-buttons {
+    width: 100%;
+  }
+
+  .search-batch-btn,
+  .add-batch-btn {
+    flex: 1;
+  }
+
+  .batch-form {
+    grid-template-columns: 1fr;
+  }
+
+  .batch-form-actions {
+    grid-column: auto;
   }
 
 }
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE - 600px
 ========================================================= */
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
 
   .batch-main {
-    width: calc(100% - 220px);
-
-    margin-left: 220px;
-
     padding: 15px;
   }
 
-  .batch-header {
-    padding: 18px;
+  .batch-header h1 {
+    font-size: 25px;
   }
 
-  .batch-form-card {
-    padding: 18px;
+  .batch-header-buttons {
+    flex-direction: column;
+    width: 100%;
   }
 
+  .search-batch-btn,
+  .add-batch-btn {
+    width: 100%;
+  }
+
+  .batch-search-card,
+  .batch-form-card,
   .batch-table-card {
-    padding: 15px;
+    padding: 18px;
   }
 
-  .batch-form-row {
+  .batch-search-form {
     grid-template-columns: 1fr;
+  }
 
-    gap: 0;
+  .search-actions {
+    flex-direction: column;
+  }
+
+  .reset-filter-btn,
+  .download-report-btn {
+    width: 100%;
+  }
+
+  .batch-table-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .batch-form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-batch-btn,
+  .save-batch-btn {
+    width: 100%;
   }
 
 }

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import StudentSidebar from "../components/StudentSidebar";
@@ -12,6 +11,7 @@ function StudentCourses() {
   const navigate = useNavigate();
 
   const [courses, setCourses] = useState([]);
+
   const [category, setCategory] = useState(
     location.state?.category || null
   );
@@ -36,6 +36,7 @@ function StudentCourses() {
       const student = JSON.parse(savedStudent);
 
       console.log("LOGGED IN STUDENT:", student);
+      console.log("LOGGED IN STUDENT ID:", student?.id);
 
       return student;
     } catch (error) {
@@ -82,50 +83,132 @@ function StudentCourses() {
   };
 
   // =====================================================
-  // LOAD STUDENT ENROLLMENTS
+  // LOAD ALL STUDENT ENROLLMENTS
   // =====================================================
 
   const fetchStudentEnrollments = async (studentId) => {
+    let url =
+      `${API_URL}/enrollments/?student_id=${studentId}`;
 
-    const response = await fetch(
-      `${API_URL}/enrollments/?student_id=${studentId}`
+    let allEnrollments = [];
+
+    while (url) {
+      console.log(
+        "FETCHING ENROLLMENT URL:",
+        url
+      );
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(
+          "Failed to fetch enrollments"
+        );
+      }
+
+      const data = await response.json();
+
+      console.log(
+        "ENROLLMENT API RESPONSE:",
+        data
+      );
+
+      // Non-paginated response
+      if (Array.isArray(data)) {
+        allEnrollments = [
+          ...allEnrollments,
+          ...data,
+        ];
+
+        break;
+      }
+
+      // Paginated DRF response
+      if (Array.isArray(data.results)) {
+        allEnrollments = [
+          ...allEnrollments,
+          ...data.results,
+        ];
+
+        url = data.next;
+      } else {
+        break;
+      }
+    }
+
+    console.log(
+      "ALL ENROLLMENTS:",
+      allEnrollments
     );
 
-    if (!response.ok) {
-      throw new Error(
-        "Failed to fetch enrollments"
+    return allEnrollments;
+  };
+
+  // =====================================================
+  // GET STUDENT ID FROM ENROLLMENT
+  // =====================================================
+
+  const getStudentIdFromEnrollment = (
+    enrollment
+  ) => {
+    // Example:
+    // student_id: 14
+
+    if (
+      enrollment.student_id !== undefined &&
+      enrollment.student_id !== null
+    ) {
+      return Number(
+        enrollment.student_id
       );
     }
 
-    const data = await response.json();
+    // Example:
+    // student: 14
 
-    console.log(
-      "ENROLLMENT API RESPONSE:",
-      data
-    );
-
-    if (Array.isArray(data)) {
-      return data;
+    if (
+      typeof enrollment.student === "number" ||
+      typeof enrollment.student === "string"
+    ) {
+      return Number(
+        enrollment.student
+      );
     }
 
-    if (Array.isArray(data.results)) {
-      return data.results;
+    // Example:
+    // student: { id: 14 }
+
+    if (
+      enrollment.student &&
+      typeof enrollment.student === "object" &&
+      enrollment.student.id !== undefined &&
+      enrollment.student.id !== null
+    ) {
+      return Number(
+        enrollment.student.id
+      );
     }
 
-    return [];
+    return null;
   };
 
   // =====================================================
   // GET COURSE ID FROM ENROLLMENT
   // =====================================================
 
-  const getCourseIdFromEnrollment = (enrollment) => {
-
+  const getCourseIdFromEnrollment = (
+    enrollment
+  ) => {
     // Example:
-    // course: 6
+    // course: 2
 
     if (
-      typeof enrollment.course === "number"
+      enrollment.course !== undefined &&
+      enrollment.course !== null &&
+      (
+        typeof enrollment.course === "number" ||
+        typeof enrollment.course === "string"
+      )
     ) {
       return Number(
         enrollment.course
@@ -133,13 +216,16 @@ function StudentCourses() {
     }
 
     // Example:
-    // course: { id: 6, course_name: "Advance Tailoring" }
+    // course: { id: 2 }
 
     if (
       enrollment.course &&
       typeof enrollment.course === "object"
     ) {
-      if (enrollment.course.id) {
+      if (
+        enrollment.course.id !== undefined &&
+        enrollment.course.id !== null
+      ) {
         return Number(
           enrollment.course.id
         );
@@ -147,9 +233,12 @@ function StudentCourses() {
     }
 
     // Example:
-    // course_id: 6
+    // course_id: 2
 
-    if (enrollment.course_id) {
+    if (
+      enrollment.course_id !== undefined &&
+      enrollment.course_id !== null
+    ) {
       return Number(
         enrollment.course_id
       );
@@ -159,25 +248,47 @@ function StudentCourses() {
   };
 
   // =====================================================
-  // FETCH EVERYTHING
+  // CHECK WHETHER ENROLLMENT IS ACTIVE
+  // =====================================================
+  // Only Enrolled and Completed courses should show
+  // "Enrolled Successfully".
+  //
+  // Pending      -> NOT enrolled for this page
+  // Enrolled     -> enrolled
+  // Completed    -> enrolled
+  // Cancelled    -> NOT enrolled
+  // =====================================================
+
+  const isValidEnrollmentStatus = (status) => {
+    const normalizedStatus = String(
+      status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+    return (
+      normalizedStatus === "enrolled" ||
+      normalizedStatus === "completed"
+    );
+  };
+
+  // =====================================================
+  // FETCH COURSES AND ENROLLMENTS
   // =====================================================
 
   const fetchCoursesAndEnrollments = async () => {
-
     try {
-
       setLoading(true);
       setMessage("");
 
-      // -----------------------------------------------
+      // =================================================
       // CURRENT STUDENT
-      // -----------------------------------------------
+      // =================================================
 
       const student =
         getLoggedInStudent();
 
       if (!student) {
-
         setMessage(
           "Student information not found. Please login again."
         );
@@ -185,13 +296,10 @@ function StudentCourses() {
         return;
       }
 
-      if (!student.id) {
-
-        console.error(
-          "Student ID is missing:",
-          student
-        );
-
+      if (
+        student.id === undefined ||
+        student.id === null
+      ) {
         setMessage(
           "Student ID not found. Please login again."
         );
@@ -204,9 +312,9 @@ function StudentCourses() {
         student.id
       );
 
-      // -----------------------------------------------
+      // =================================================
       // FETCH COURSES
-      // -----------------------------------------------
+      // =================================================
 
       const allCourses =
         await fetchCourses();
@@ -216,45 +324,55 @@ function StudentCourses() {
         allCourses
       );
 
-      // -----------------------------------------------
-      // FILTER CATEGORY
-      // -----------------------------------------------
+      // =================================================
+      // FILTER COURSES BY CATEGORY
+      // =================================================
 
       const filteredCourses =
-        allCourses.filter((course) => {
+        allCourses.filter(
+          (course) => {
 
-          if (
-            typeof course.category ===
-            "number"
-          ) {
-            return (
-              Number(course.category) ===
-              Number(categoryId)
-            );
+            // category = number
+            if (
+              typeof course.category ===
+              "number"
+            ) {
+              return (
+                Number(course.category) ===
+                Number(categoryId)
+              );
+            }
+
+            // category = object
+            if (
+              course.category &&
+              typeof course.category ===
+                "object"
+            ) {
+              return (
+                Number(
+                  course.category.id
+                ) ===
+                Number(categoryId)
+              );
+            }
+
+            // category_id
+            if (
+              course.category_id !== undefined &&
+              course.category_id !== null
+            ) {
+              return (
+                Number(
+                  course.category_id
+                ) ===
+                Number(categoryId)
+              );
+            }
+
+            return false;
           }
-
-          if (
-            course.category &&
-            typeof course.category ===
-              "object"
-          ) {
-            return (
-              Number(
-                course.category.id
-              ) === Number(categoryId)
-            );
-          }
-
-          if (course.category_id) {
-            return (
-              Number(
-                course.category_id
-              ) === Number(categoryId)
-            );
-          }
-
-          return false;
-        });
+        );
 
       console.log(
         "COURSES FOR CATEGORY:",
@@ -265,15 +383,14 @@ function StudentCourses() {
         filteredCourses
       );
 
-      // -----------------------------------------------
+      // =================================================
       // SET CATEGORY
-      // -----------------------------------------------
+      // =================================================
 
       if (
         !category &&
         filteredCourses.length > 0
       ) {
-
         const firstCourse =
           filteredCourses[0];
 
@@ -288,9 +405,9 @@ function StudentCourses() {
         }
       }
 
-      // -----------------------------------------------
-      // FETCH ONLY CURRENT STUDENT ENROLLMENTS
-      // -----------------------------------------------
+      // =================================================
+      // FETCH CURRENT STUDENT ENROLLMENTS
+      // =================================================
 
       const enrollments =
         await fetchStudentEnrollments(
@@ -298,58 +415,131 @@ function StudentCourses() {
         );
 
       console.log(
-        "CURRENT STUDENT ENROLLMENTS:",
+        "ALL ENROLLMENTS RETURNED:",
         enrollments
       );
 
-      // -----------------------------------------------
-      // GET ENROLLED COURSE IDS
-      // -----------------------------------------------
+      // =================================================
+      // FILTER ONLY LOGGED-IN STUDENT
+      // =================================================
+
+      const currentStudentEnrollments =
+        enrollments.filter(
+          (enrollment) => {
+
+            const enrollmentStudentId =
+              getStudentIdFromEnrollment(
+                enrollment
+              );
+
+            return (
+              enrollmentStudentId !== null &&
+              Number(
+                enrollmentStudentId
+              ) ===
+              Number(student.id)
+            );
+          }
+        );
+
+      console.log(
+        "CURRENT STUDENT ENROLLMENTS:",
+        currentStudentEnrollments
+      );
+
+      // =================================================
+      // GET ONLY ENROLLED/COMPLETED COURSE IDS
+      // =================================================
 
       const enrolledIds = [];
 
-      enrollments.forEach(
+      currentStudentEnrollments.forEach(
         (enrollment) => {
 
-          // Ignore cancelled enrollment
-          if (
+          const status =
             String(
+              enrollment.status || ""
+            )
+              .trim()
+              .toLowerCase();
+
+          // ---------------------------------------------
+          // IMPORTANT:
+          // Pending is NOT treated as enrolled.
+          // Cancelled is NOT treated as enrolled.
+          // Only Enrolled and Completed are accepted.
+          // ---------------------------------------------
+
+          if (
+            !isValidEnrollmentStatus(
               enrollment.status
-            ).toLowerCase() ===
-            "cancelled"
+            )
           ) {
+            console.log(
+              "NOT COUNTING ENROLLMENT:",
+              {
+                course:
+                  enrollment.course_name ||
+                  enrollment.course,
+                status: status,
+              }
+            );
+
             return;
           }
+
+          // ---------------------------------------------
+          // GET COURSE ID
+          // ---------------------------------------------
 
           const courseId =
             getCourseIdFromEnrollment(
               enrollment
             );
 
-          if (courseId !== null) {
-
+          if (
+            courseId !== null &&
+            !Number.isNaN(courseId)
+          ) {
             enrolledIds.push(
               Number(courseId)
             );
 
             console.log(
-              "ENROLLED COURSE:",
-              enrollment.course_name ||
-                enrollment.course,
-              "COURSE ID:",
-              courseId
+              "COUNTING ENROLLED COURSE:",
+              {
+                course:
+                  enrollment.course_name ||
+                  enrollment.course,
+                courseId: courseId,
+                status: status,
+              }
             );
           }
         }
       );
 
-      // Remove duplicates
-      const uniqueEnrolledIds =
-        [...new Set(enrolledIds)];
+      // =================================================
+      // REMOVE DUPLICATES
+      // =================================================
+
+      const uniqueEnrolledIds = [
+        ...new Set(
+          enrolledIds
+        ),
+      ];
+
+      console.log(
+        "======================================"
+      );
 
       console.log(
         "FINAL ENROLLED COURSE IDS:",
         uniqueEnrolledIds
+      );
+
+      console.log(
+        "======================================"
       );
 
       setEnrolledCourseIds(
@@ -369,7 +559,6 @@ function StudentCourses() {
       );
 
     } finally {
-
       setLoading(false);
     }
   };
@@ -379,13 +568,11 @@ function StudentCourses() {
   // =====================================================
 
   useEffect(() => {
-
     fetchCoursesAndEnrollments();
-
   }, [categoryId]);
 
   // =====================================================
-  // CHECK COURSE ENROLLMENT
+  // CHECK SPECIFIC COURSE
   // =====================================================
 
   const isCourseEnrolled = (
@@ -393,14 +580,18 @@ function StudentCourses() {
   ) => {
 
     const result =
-      enrolledCourseIds.includes(
-        Number(courseId)
+      enrolledCourseIds.some(
+        (enrolledId) =>
+          Number(enrolledId) ===
+          Number(courseId)
       );
 
     console.log(
       "CHECK COURSE:",
       courseId,
-      "ENROLLED:",
+      "ENROLLED COURSE IDS:",
+      enrolledCourseIds,
+      "RESULT:",
       result
     );
 
@@ -415,7 +606,6 @@ function StudentCourses() {
     course
   ) => {
 
-    // Safety check
     if (
       isCourseEnrolled(
         course.id
@@ -440,18 +630,23 @@ function StudentCourses() {
   // =====================================================
 
   const handleBack = () => {
-    navigate("/categories");
+    navigate(
+      "/categories"
+    );
   };
 
   // =====================================================
   // FORMAT FEE
   // =====================================================
 
-  const formatFee = (fee) => {
-
+  const formatFee = (
+    fee
+  ) => {
     return Number(
       fee || 0
-    ).toLocaleString("en-IN");
+    ).toLocaleString(
+      "en-IN"
+    );
   };
 
   // =====================================================
@@ -465,9 +660,9 @@ function StudentCourses() {
 
       <main className="student-courses-main">
 
-        {/* ==========================================
+        {/* ================================================
             HEADER
-        ========================================== */}
+        ================================================= */}
 
         <div className="student-courses-header">
 
@@ -495,9 +690,9 @@ function StudentCourses() {
 
         </div>
 
-        {/* ==========================================
-            MESSAGE
-        ========================================== */}
+        {/* ================================================
+            ERROR MESSAGE
+        ================================================= */}
 
         {message && (
           <div className="student-course-error">
@@ -505,9 +700,9 @@ function StudentCourses() {
           </div>
         )}
 
-        {/* ==========================================
+        {/* ================================================
             LOADING
-        ========================================== */}
+        ================================================= */}
 
         {loading && (
           <div className="student-course-loading">
@@ -515,9 +710,9 @@ function StudentCourses() {
           </div>
         )}
 
-        {/* ==========================================
+        {/* ================================================
             NO COURSES
-        ========================================== */}
+        ================================================= */}
 
         {!loading &&
           !message &&
@@ -538,9 +733,9 @@ function StudentCourses() {
             </div>
           )}
 
-        {/* ==========================================
+        {/* ================================================
             COURSE GRID
-        ========================================== */}
+        ================================================= */}
 
         {!loading &&
           courses.length > 0 && (
@@ -549,6 +744,10 @@ function StudentCourses() {
 
               {courses.map(
                 (course) => {
+
+                  // ---------------------------------------
+                  // CHECK ONLY THIS COURSE
+                  // ---------------------------------------
 
                   const alreadyEnrolled =
                     isCourseEnrolled(
@@ -568,8 +767,8 @@ function StudentCourses() {
                       }
                     >
 
-                      {/* ================================
-                          ICON
+                      {/* =================================
+                          COURSE ICON
                       ================================= */}
 
                       <div className="course-icon-circle">
@@ -581,15 +780,15 @@ function StudentCourses() {
 
                       </div>
 
-                      {/* ================================
-                          NAME
+                      {/* =================================
+                          COURSE NAME
                       ================================= */}
 
                       <h2>
                         {course.course_name}
                       </h2>
 
-                      {/* ================================
+                      {/* =================================
                           DESCRIPTION
                       ================================= */}
 
@@ -600,11 +799,13 @@ function StudentCourses() {
 
                       </p>
 
-                      {/* ================================
-                          DETAILS
+                      {/* =================================
+                          COURSE DETAILS
                       ================================= */}
 
                       <div className="course-details">
+
+                        {/* Duration */}
 
                         <div className="course-detail-row">
 
@@ -620,6 +821,8 @@ function StudentCourses() {
                           </span>
 
                         </div>
+
+                        {/* Course Fee */}
 
                         <div className="course-detail-row">
 
@@ -640,6 +843,8 @@ function StudentCourses() {
 
                         </div>
 
+                        {/* Status */}
+
                         <div className="course-detail-row">
 
                           <span>
@@ -649,15 +854,17 @@ function StudentCourses() {
                           </span>
 
                           <span
-                            className={`course-status ${
-                              String(
-                                course.status ||
-                                  "Active"
-                              ).toLowerCase() ===
-                              "active"
-                                ? "status-active"
-                                : "status-inactive"
-                            }`}
+                            className={
+                              `course-status ${
+                                String(
+                                  course.status ||
+                                    "Active"
+                                ).toLowerCase() ===
+                                "active"
+                                  ? "status-active"
+                                  : "status-inactive"
+                              }`
+                            }
                           >
                             {course.status ||
                               "Active"}
@@ -668,7 +875,7 @@ function StudentCourses() {
                       </div>
 
                       {/* =================================
-                          ONLY SHOW ONE OF THESE
+                          ENROLLED OR VIEW DETAILS
                       ================================= */}
 
                       {alreadyEnrolled ? (

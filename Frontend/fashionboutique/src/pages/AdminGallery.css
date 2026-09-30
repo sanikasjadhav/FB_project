@@ -1,763 +1,546 @@
-/* =========================================================
-   ADMIN GALLERY PAGE
-========================================================= */
+
+/* =====================================================
+   ADMIN GALLERY LAYOUT
+===================================================== */
 
 .admin-gallery-layout {
-  min-height: 100vh;
-  width: 100%;
-
-  display: flex;
-
-  background: #f5f6f6;
-
-  box-sizing: border-box;
+    min-height: 100vh;
+    width: 100%;
+    background: #f5f7f7;
 }
 
-
-/* =========================================================
+/* =====================================================
    MAIN BODY
-========================================================= */
+===================================================== */
 
 .admin-gallery-body {
-  margin-left: 260px;
-
-  width: calc(100% - 260px);
-
-  min-height: 100vh;
-
-  padding: 35px 45px;
-
-  box-sizing: border-box;
-
-  overflow-x: auto;
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    padding: 35px 40px 60px;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
-
-/* =========================================================
+/* =====================================================
    HEADER
-========================================================= */
+===================================================== */
 
 .gallery-header {
-  width: 100%;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-bottom: 30px;
-
-  box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
 }
 
 .gallery-header h1 {
-  margin: 0;
-
-  color: #104e50;
-
-  font-size: 34px;
-
-  font-weight: 700;
+    margin: 0;
+    color: #063b3d;
+    font-size: 32px;
+    font-weight: 700;
 }
 
 .gallery-header p {
-  margin: 8px 0 0;
-
-  color: #777;
-
-  font-size: 16px;
+    margin: 7px 0 0;
+    color: #6b7778;
+    font-size: 15px;
 }
 
 .gallery-count {
-  background: #f5b942;
-
-  color: #104e50;
-
-  padding: 14px 25px;
-
-  border-radius: 9px;
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  white-space: nowrap;
+    background: #063b3d;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
-
-/* =========================================================
+/* =====================================================
    ALERTS
-========================================================= */
+===================================================== */
 
 .gallery-alert {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 15px 20px;
-
-  margin-bottom: 25px;
-
-  border-radius: 8px;
-
-  font-size: 14px;
-
-  font-weight: 600;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .gallery-alert.success {
-  background: #e6f7ee;
-
-  color: #18794e;
-
-  border: 1px solid #b9e6ce;
+    background: #e6f6ec;
+    color: #187044;
+    border: 1px solid #b9e4c9;
 }
 
 .gallery-alert.error {
-  background: #fdeaea;
-
-  color: #c0392b;
-
-  border: 1px solid #f1b7b2;
+    background: #fdeaea;
+    color: #b32626;
+    border: 1px solid #f1c2c2;
 }
 
-
-/* =========================================================
+/* =====================================================
    CARD
-========================================================= */
+===================================================== */
 
 .gallery-card {
-  display: block !important;
-
-  width: 100% !important;
-
-  max-width: none !important;
-
-  min-width: 0;
-
-  box-sizing: border-box;
-
-  background: #ffffff;
-
-  padding: 30px;
-
-  margin: 0 0 30px 0;
-
-  border-radius: 12px;
-
-  border: 1px solid #eeeeee;
-
-  box-shadow:
-    0 4px 18px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.07);
 }
 
-
-/* =========================================================
+/* =====================================================
    CARD TITLE
-========================================================= */
+===================================================== */
 
 .gallery-card-title {
-  width: 100%;
-
-  margin-bottom: 28px;
+    margin-bottom: 25px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e5eeee;
 }
 
 .gallery-card-title h2 {
-  margin: 0;
-
-  color: #104e50;
-
-  font-size: 24px;
-
-  font-weight: 700;
+    margin: 0;
+    color: #063b3d;
+    font-size: 22px;
+    font-weight: 700;
 }
 
 .gallery-card-title p {
-  margin: 8px 0 0;
-
-  color: #888;
-
-  font-size: 15px;
+    margin: 7px 0 0;
+    color: #777777;
+    font-size: 14px;
 }
 
-
-/* =========================================================
+/* =====================================================
    FORM
-========================================================= */
+===================================================== */
 
 .gallery-form {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, 1fr);
-
-  column-gap: 30px;
-
-  row-gap: 24px;
-
-  box-sizing: border-box;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 25px;
+    box-sizing: border-box;
 }
 
-
-/* =========================================================
-   INPUT
-========================================================= */
+/* =====================================================
+   FORM INPUT
+===================================================== */
 
 .gallery-input {
-  width: 100%;
-
-  min-width: 0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  box-sizing: border-box;
-}
-
-.gallery-input.gallery-full {
-  grid-column: 1 / -1;
-
-  width: 100%;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .gallery-input label {
-  margin-bottom: 9px;
-
-  color: #333;
-
-  font-size: 15px;
-
-  font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #263d3e;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .gallery-input label span {
-  color: #e53935;
+    color: #d33b3b;
 }
 
-
-/* =========================================================
-   INPUT / SELECT / TEXTAREA
-========================================================= */
-
-.gallery-input input,
-.gallery-input select,
+.gallery-input input[type="text"],
+.gallery-input input[type="url"],
 .gallery-input textarea {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 13px 15px;
-
-  border: 1px solid #d8d8d8;
-
-  border-radius: 8px;
-
-  background: #ffffff;
-
-  color: #333;
-
-  font-size: 14px;
-
-  outline: none;
-
-  transition: 0.2s ease;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d5dddd;
+    border-radius: 7px;
+    padding: 12px 14px;
+    background: #ffffff;
+    color: #263d3e;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
 }
 
-.gallery-input input,
-.gallery-input select {
-  height: 48px;
+.gallery-input input[type="text"],
+.gallery-input input[type="url"] {
+    height: 46px;
 }
 
 .gallery-input textarea {
-  min-height: 120px;
-
-  resize: vertical;
+    min-height: 110px;
+    resize: vertical;
+    font-family: inherit;
 }
 
-.gallery-input input:focus,
-.gallery-input select:focus,
+.gallery-input input[type="text"]:focus,
+.gallery-input input[type="url"]:focus,
 .gallery-input textarea:focus {
-  border-color: #f5b942;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(245, 185, 66, 0.15);
+    border-color: #135255;
+    box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.08);
 }
 
+/* =====================================================
+   FILE INPUT
+===================================================== */
 
-/* =========================================================
+.gallery-input input[type="file"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #d5dddd;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #263d3e;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.gallery-input input[type="file"]:hover {
+    border-color: #135255;
+}
+
+.gallery-input input[type="file"]:focus {
+    outline: none;
+    border-color: #135255;
+}
+
+/* =====================================================
+   DESCRIPTION FULL WIDTH
+===================================================== */
+
+.gallery-full {
+    grid-column: 1 / -1;
+}
+
+/* =====================================================
+   FILE HELP TEXT
+===================================================== */
+
+.gallery-input small {
+    display: block;
+    margin-top: 7px;
+    color: #777777;
+    font-size: 12px;
+}
+
+/* =====================================================
+   SELECTED IMAGE
+===================================================== */
+
+.selected-image-name {
+    margin-top: 10px;
+    padding: 9px 12px;
+    background: #eef7f7;
+    border-radius: 6px;
+    color: #135255;
+    font-size: 13px;
+    word-break: break-word;
+}
+
+/* =====================================================
+   EXISTING IMAGE
+===================================================== */
+
+.existing-image-preview {
+    margin-top: 15px;
+}
+
+.existing-image-preview p {
+    margin: 0 0 8px;
+    color: #555555;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.existing-image-preview img {
+    display: block;
+    width: 160px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #dce5e5;
+}
+
+/* =====================================================
    BUTTON AREA
-========================================================= */
+===================================================== */
 
 .gallery-button {
-  grid-column: 1 / -1;
-
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: flex-start;
-
-  gap: 12px;
-
-  margin-top: 5px;
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 5px;
 }
 
-
-/* =========================================================
+/* =====================================================
    ADD / UPDATE BUTTON
-========================================================= */
+===================================================== */
 
 .gallery-button button[type="submit"] {
-  min-width: 180px;
-
-  padding: 14px 28px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: #f5b942;
-
-  color: #104e50;
-
-  font-size: 15px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
+    border: none;
+    background: #063b3d;
+    color: #ffffff;
+    padding: 13px 25px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .gallery-button button[type="submit"]:hover {
-  background: #e4a934;
-
-  transform: translateY(-1px);
+    background: #135255;
+    transform: translateY(-1px);
 }
 
 .gallery-button button[type="submit"]:disabled {
-  opacity: 0.6;
-
-  cursor: not-allowed;
-
-  transform: none;
+    background: #9baaaa;
+    cursor: not-allowed;
+    transform: none;
 }
 
-
-/* =========================================================
+/* =====================================================
    CANCEL BUTTON
-========================================================= */
+===================================================== */
 
 .cancel-gallery-btn {
-  min-width: 120px;
-
-  padding: 14px 22px;
-
-  border: 1px solid #ddd;
-
-  border-radius: 8px;
-
-  background: #f1f1f1;
-
-  color: #555;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
+    border: 1px solid #d33b3b !important;
+    background: #ffffff !important;
+    color: #c12d2d !important;
+    padding: 12px 22px !important;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .cancel-gallery-btn:hover {
-  background: #ddd;
-
-  color: #333;
+    background: #fff1f1 !important;
+    transform: translateY(-1px);
 }
 
-.cancel-gallery-btn:disabled {
-  opacity: 0.6;
-
-  cursor: not-allowed;
-}
-
-
-/* =========================================================
-   GALLERY RECORDS
-========================================================= */
-
-.gallery-records {
-  width: 100%;
-}
-
-
-/* =========================================================
+/* =====================================================
    GALLERY GRID
-========================================================= */
+===================================================== */
 
 .gallery-grid {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 25px;
-
-  box-sizing: border-box;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
 }
 
-
-/* =========================================================
+/* =====================================================
    GALLERY ITEM
-========================================================= */
+===================================================== */
 
 .gallery-item {
-  width: 100%;
-
-  min-width: 0;
-
-  overflow: hidden;
-
-  background: #ffffff;
-
-  border: 1px solid #eeeeee;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 3px 12px rgba(0, 0, 0, 0.07);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    min-width: 0;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e1e8e8;
+    border-radius: 10px;
+    transition: 0.2s;
 }
 
 .gallery-item:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 7px 20px rgba(0, 0, 0, 0.11);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
 }
 
-
-/* =========================================================
-   IMAGE WRAPPER
-========================================================= */
+/* =====================================================
+   IMAGE
+===================================================== */
 
 .gallery-image-wrapper {
-  width: 100%;
-
-  height: 230px;
-
-  overflow: hidden;
-
-  background: #f1f1f1;
+    width: 100%;
+    height: 210px;
+    overflow: hidden;
+    background: #eef2f2;
 }
 
 .gallery-image-wrapper img {
-  width: 100%;
-
-  height: 100%;
-
-  display: block;
-
-  object-fit: cover;
-
-  transition: transform 0.3s ease;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.gallery-item:hover
-.gallery-image-wrapper img {
-  transform: scale(1.04);
-}
-
-
-/* =========================================================
+/* =====================================================
    ITEM CONTENT
-========================================================= */
+===================================================== */
 
 .gallery-item-content {
-  padding: 20px;
+    padding: 18px;
 }
 
 .gallery-item-content h3 {
-  margin: 0 0 9px;
-
-  color: #104e50;
-
-  font-size: 19px;
-
-  font-weight: 700;
+    margin: 0 0 8px;
+    color: #063b3d;
+    font-size: 17px;
+    font-weight: 700;
+    word-break: break-word;
 }
 
 .gallery-item-content p {
-  margin: 0 0 18px;
-
-  min-height: 42px;
-
-  color: #777;
-
-  font-size: 14px;
-
-  line-height: 1.6;
-
-  word-break: break-word;
+    margin: 0 0 16px;
+    color: #687777;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 40px;
+    word-break: break-word;
 }
 
-
-/* =========================================================
+/* =====================================================
    ACTION BUTTONS
-========================================================= */
+===================================================== */
 
 .gallery-action-buttons {
-  width: 100%;
-
-  display: flex;
-
-  gap: 10px;
-
-  align-items: center;
+    display: flex;
+    gap: 10px;
 }
 
-
-/* =========================================================
-   EDIT BUTTON
-========================================================= */
+.gallery-action-buttons button {
+    border: none;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
 .edit-gallery-btn {
-  flex: 1;
-
-  min-width: 0;
-
-  padding: 10px 15px;
-
-  border: none;
-
-  border-radius: 6px;
-
-  background: #e8f3f3;
-
-  color: #104e50;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
+    background: #063b3d;
+    color: #ffffff;
 }
 
 .edit-gallery-btn:hover {
-  background: #104e50;
-
-  color: #ffffff;
-
-  transform: translateY(-1px);
+    background: #135255;
 }
 
-
-/* =========================================================
-   DELETE BUTTON
-========================================================= */
-
 .delete-gallery-btn {
-  flex: 1;
-
-  min-width: 0;
-
-  padding: 10px 15px;
-
-  border: none;
-
-  border-radius: 6px;
-
-  background: #ffe1e1;
-
-  color: #c0392b;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
+    background: #f5dddd;
+    color: #b32626;
 }
 
 .delete-gallery-btn:hover {
-  background: #c0392b;
-
-  color: #ffffff;
-
-  transform: translateY(-1px);
+    background: #f0caca;
 }
 
-
-/* =========================================================
+/* =====================================================
    EMPTY
-========================================================= */
+===================================================== */
 
 .gallery-empty {
-  grid-column: 1 / -1;
-
-  width: 100%;
-
-  padding: 55px 20px;
-
-  box-sizing: border-box;
-
-  text-align: center;
-
-  color: #888;
-
-  font-size: 15px;
-
-  background: #fafafa;
-
-  border: 1px dashed #ddd;
-
-  border-radius: 10px;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 45px 20px;
+    color: #777777;
+    border: 1px dashed #ccd7d7;
+    border-radius: 8px;
 }
 
-
-/* =========================================================
-   RESPONSIVE - LARGE TABLET
-========================================================= */
-
-@media (max-width: 1200px) {
-
-  .gallery-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-}
-
-
-/* =========================================================
-   RESPONSIVE - 1100
-========================================================= */
+/* =====================================================
+   TABLET
+===================================================== */
 
 @media (max-width: 1100px) {
 
-  .admin-gallery-body {
-    margin-left: 260px;
+    .admin-gallery-body {
+        padding: 30px;
+    }
 
-    width: calc(100% - 260px);
-
-    padding: 30px;
-  }
-
-  .gallery-form {
-    grid-template-columns:
-      1fr 1fr;
-  }
+    .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
 }
 
-
-/* =========================================================
-   TABLET
-========================================================= */
+/* =====================================================
+   MOBILE / SMALL SCREEN
+===================================================== */
 
 @media (max-width: 800px) {
 
-  .admin-gallery-body {
-    margin-left: 0;
+    .admin-gallery-body {
+        margin-left: 0;
+        width: 100%;
+        padding: 25px 20px 50px;
+    }
 
-    width: 100%;
+    .gallery-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-    padding: 25px 20px;
-  }
+    .gallery-form {
+        grid-template-columns: 1fr;
+    }
 
-  .gallery-header {
-    flex-direction: column;
+    .gallery-full {
+        grid-column: auto;
+    }
 
-    align-items: flex-start;
+    .gallery-button {
+        grid-column: auto;
+    }
 
-    gap: 15px;
-  }
-
-  .gallery-count {
-    width: 100%;
-
-    box-sizing: border-box;
-
-    text-align: center;
-  }
-
-  .gallery-form {
-    grid-template-columns: 1fr;
-  }
-
-  .gallery-input.gallery-full {
-    grid-column: auto;
-  }
-
-  .gallery-button {
-    grid-column: auto;
-
-    flex-direction: column;
-
-    align-items: stretch;
-  }
-
-  .gallery-button button {
-    width: 100%;
-  }
-
-  .gallery-grid {
-    grid-template-columns: 1fr;
-  }
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
 
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
+/* =====================================================
+   VERY SMALL SCREEN
+===================================================== */
 
 @media (max-width: 500px) {
 
-  .admin-gallery-body {
-    padding: 20px 15px;
-  }
+    .admin-gallery-body {
+        padding: 20px 15px 40px;
+    }
 
-  .gallery-card {
-    padding: 20px 16px;
-  }
+    .gallery-card {
+        padding: 20px;
+    }
 
-  .gallery-header h1 {
-    font-size: 27px;
-  }
+    .gallery-header h1 {
+        font-size: 27px;
+    }
 
-  .gallery-card-title h2 {
-    font-size: 21px;
-  }
+    .gallery-card-title h2 {
+        font-size: 20px;
+    }
 
-  .gallery-image-wrapper {
-    height: 220px;
-  }
+    .gallery-button {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-  .gallery-action-buttons {
-    flex-direction: column;
-  }
+    .gallery-button button {
+        width: 100%;
+    }
 
-  .edit-gallery-btn,
-  .delete-gallery-btn {
-    width: 100%;
-  }
+    .gallery-action-buttons {
+        flex-direction: column;
+    }
 
+    .gallery-action-buttons button {
+        width: 100%;
+    }
 }

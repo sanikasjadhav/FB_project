@@ -32,6 +32,11 @@ const AdminSidebar = () => {
       ========================= */}
       <div className="admin-logo">
 
+        <img
+          src="/images/logofbn.jpg"
+          alt="Fashion Boutique"
+        />
+
         <h2>
           Fashion Boutique
         </h2>

@@ -27,6 +27,18 @@ const AdminStudyMaterial = () => {
   const [editingId, setEditingId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
+  // ADD FORM STATE
+  const [showForm, setShowForm] = useState(false);
+
+  // SEARCH FORM STATE
+  const [showSearchForm, setShowSearchForm] = useState(false);
+
+  // SEARCH FILTERS
+  const [filters, setFilters] = useState({
+    search: "",
+    course: "",
+  });
+
 
   // =====================================================
   // LOAD DATA
@@ -173,6 +185,367 @@ const AdminStudyMaterial = () => {
 
 
   // =====================================================
+  // OPEN ADD FORM
+  // =====================================================
+
+  const openAddForm = () => {
+
+    // Close search form
+    setShowSearchForm(false);
+
+    // Clear editing
+    setEditingId(null);
+    setIsEditing(false);
+
+    // Clear form
+    setFormData({
+      course: "",
+      title: "",
+      file: null,
+    });
+
+    // Clear messages
+    setMessage("");
+    setError("");
+
+    // Open form
+    setShowForm(true);
+
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+  };
+
+
+  // =====================================================
+  // CLOSE ADD / EDIT FORM
+  // =====================================================
+
+  const closeForm = () => {
+
+    setShowForm(false);
+
+    setEditingId(null);
+    setIsEditing(false);
+
+    setFormData({
+      course: "",
+      title: "",
+      file: null,
+    });
+
+    setMessage("");
+    setError("");
+
+    const fileInput =
+      document.getElementById(
+        "study-material-file"
+      );
+
+    if (fileInput) {
+
+      fileInput.value = "";
+
+    }
+
+  };
+
+
+  // =====================================================
+  // OPEN SEARCH FORM
+  // =====================================================
+
+  const openSearchForm = () => {
+
+    // Close add/edit form
+    setShowForm(false);
+
+    setEditingId(null);
+    setIsEditing(false);
+
+    setFormData({
+      course: "",
+      title: "",
+      file: null,
+    });
+
+    setMessage("");
+    setError("");
+
+    setShowSearchForm(
+      (previous) => !previous
+    );
+
+  };
+
+
+  // =====================================================
+  // HANDLE SEARCH FILTER
+  // =====================================================
+
+  const handleFilterChange = (e) => {
+
+    const {
+      name,
+      value,
+    } = e.target;
+
+    setFilters({
+      ...filters,
+      [name]: value,
+    });
+
+  };
+
+
+  // =====================================================
+  // RESET SEARCH FILTERS
+  // =====================================================
+
+  const resetFilters = () => {
+
+    setFilters({
+      search: "",
+      course: "",
+    });
+
+  };
+
+
+  // =====================================================
+  // GET COURSE ID
+  // =====================================================
+
+  const getCourseId = (material) => {
+
+    if (
+      typeof material.course === "object" &&
+      material.course !== null
+    ) {
+
+      return material.course.id;
+
+    }
+
+    return material.course;
+
+  };
+
+
+  // =====================================================
+  // GET COURSE NAME
+  // =====================================================
+
+  const getCourseName = (material) => {
+
+    // If API directly provides course_name
+    if (material.course_name) {
+
+      return material.course_name;
+
+    }
+
+
+    // If course is an object
+    if (
+      material.course &&
+      typeof material.course === "object"
+    ) {
+
+      return (
+        material.course.course_name ||
+        material.course.name ||
+        "-"
+      );
+
+    }
+
+
+    // If course is an ID
+    const course = courses.find(
+      (item) =>
+        String(item.id) ===
+        String(getCourseId(material))
+    );
+
+
+    return (
+      course?.course_name ||
+      course?.name ||
+      "-"
+    );
+
+  };
+
+
+  // =====================================================
+  // FILTER MATERIALS
+  // =====================================================
+
+  const filteredMaterials =
+    materials.filter((material) => {
+
+      const searchText =
+        filters.search
+          .trim()
+          .toLowerCase();
+
+
+      const materialTitle =
+        (
+          material.title || ""
+        ).toLowerCase();
+
+
+      const courseName =
+        getCourseName(material)
+          .toLowerCase();
+
+
+      const fileName =
+        (
+          material.file || ""
+        ).toLowerCase();
+
+
+      // SEARCH
+      const matchesSearch =
+        !searchText ||
+        materialTitle.includes(searchText) ||
+        courseName.includes(searchText) ||
+        fileName.includes(searchText);
+
+
+      // COURSE
+      const materialCourseId =
+        getCourseId(material);
+
+
+      const matchesCourse =
+        !filters.course ||
+        String(materialCourseId) ===
+        String(filters.course);
+
+
+      return (
+        matchesSearch &&
+        matchesCourse
+      );
+
+    });
+
+
+  // =====================================================
+  // CSV ESCAPE
+  // =====================================================
+
+  const escapeCSV = (value) => {
+
+    return `"${String(
+      value ?? ""
+    ).replace(/"/g, '""')}"`;
+
+  };
+
+
+  // =====================================================
+  // DOWNLOAD FILTERED REPORT
+  // =====================================================
+
+  const downloadMaterialReport = () => {
+
+    if (
+      filteredMaterials.length === 0
+    ) {
+
+      alert(
+        "No study materials available to download."
+      );
+
+      return;
+
+    }
+
+
+    const headers = [
+      "Material ID",
+      "Course",
+      "Material Title",
+      "File",
+    ];
+
+
+    const rows =
+      filteredMaterials.map(
+        (material) => [
+
+          material.id || "",
+
+          getCourseName(material),
+
+          material.title || "",
+
+          material.file || "",
+
+        ]
+      );
+
+
+    const csv = [
+
+      headers
+        .map(escapeCSV)
+        .join(","),
+
+      ...rows.map(
+        (row) =>
+          row
+            .map(escapeCSV)
+            .join(",")
+      ),
+
+    ].join("\n");
+
+
+    const blob = new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;",
+      }
+    );
+
+
+    const url =
+      URL.createObjectURL(blob);
+
+
+    const link =
+      document.createElement("a");
+
+
+    link.href = url;
+
+
+    link.download =
+      "filtered_study_materials_report.csv";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+  };
+
+
+  // =====================================================
   // ADD / UPDATE MATERIAL
   // =====================================================
 
@@ -182,6 +555,7 @@ const AdminStudyMaterial = () => {
 
     setMessage("");
     setError("");
+
 
     // Validation
     if (
@@ -196,6 +570,7 @@ const AdminStudyMaterial = () => {
       return;
     }
 
+
     // File required only while adding
     if (
       !isEditing &&
@@ -209,21 +584,26 @@ const AdminStudyMaterial = () => {
       return;
     }
 
+
     setLoading(true);
+
 
     try {
 
       const data = new FormData();
+
 
       data.append(
         "course",
         formData.course
       );
 
+
       data.append(
         "title",
         formData.title
       );
+
 
       // Add file only if selected
       if (formData.file) {
@@ -250,13 +630,16 @@ const AdminStudyMaterial = () => {
           }
         );
 
+
         const result =
           await response.json();
+
 
         console.log(
           "Study material update response:",
           result
         );
+
 
         if (!response.ok) {
 
@@ -268,6 +651,7 @@ const AdminStudyMaterial = () => {
 
           return;
         }
+
 
         setMessage(
           "Study material updated successfully."
@@ -290,13 +674,16 @@ const AdminStudyMaterial = () => {
           }
         );
 
+
         const result =
           await response.json();
+
 
         console.log(
           "Study material save response:",
           result
         );
+
 
         if (!response.ok) {
 
@@ -308,6 +695,7 @@ const AdminStudyMaterial = () => {
 
           return;
         }
+
 
         setMessage(
           "Study material added successfully."
@@ -326,8 +714,10 @@ const AdminStudyMaterial = () => {
         file: null,
       });
 
+
       setEditingId(null);
       setIsEditing(false);
+      setShowForm(false);
 
 
       // Clear file input
@@ -336,8 +726,11 @@ const AdminStudyMaterial = () => {
           "study-material-file"
         );
 
+
       if (fileInput) {
+
         fileInput.value = "";
+
       }
 
 
@@ -351,13 +744,16 @@ const AdminStudyMaterial = () => {
         err
       );
 
+
       setError(
         "Unable to connect to backend."
       );
 
     }
 
+
     setLoading(false);
+
   };
 
 
@@ -372,23 +768,39 @@ const AdminStudyMaterial = () => {
       material
     );
 
+
+    // Close search
+    setShowSearchForm(false);
+
+    // Open form
+    setShowForm(true);
+
+
     setEditingId(material.id);
+
     setIsEditing(true);
 
+
     setFormData({
-      course: material.course || "",
-      title: material.title || "",
+      course:
+        getCourseId(material) || "",
+
+      title:
+        material.title || "",
+
       file: null,
     });
+
 
     setMessage("");
     setError("");
 
-    // Scroll to form
+
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+
   };
 
 
@@ -399,7 +811,11 @@ const AdminStudyMaterial = () => {
   const cancelEdit = () => {
 
     setEditingId(null);
+
     setIsEditing(false);
+
+    setShowForm(false);
+
 
     setFormData({
       course: "",
@@ -407,17 +823,23 @@ const AdminStudyMaterial = () => {
       file: null,
     });
 
+
     setMessage("");
     setError("");
+
 
     const fileInput =
       document.getElementById(
         "study-material-file"
       );
 
+
     if (fileInput) {
+
       fileInput.value = "";
+
     }
+
   };
 
 
@@ -432,12 +854,17 @@ const AdminStudyMaterial = () => {
         "Are you sure you want to delete this study material?"
       );
 
+
     if (!confirmDelete) {
+
       return;
+
     }
+
 
     setMessage("");
     setError("");
+
 
     try {
 
@@ -455,21 +882,30 @@ const AdminStudyMaterial = () => {
         let result = {};
 
         try {
-          result = await response.json();
+
+          result =
+            await response.json();
+
         } catch {
+
           result = {};
+
         }
+
 
         console.error(
           "Delete backend error:",
           result
         );
 
+
         setError(
           "Unable to delete study material."
         );
 
+
         return;
+
       }
 
 
@@ -480,11 +916,14 @@ const AdminStudyMaterial = () => {
 
       // If currently editing deleted material
       if (editingId === id) {
+
         cancelEdit();
+
       }
 
 
       await fetchMaterials();
+
 
     } catch (err) {
 
@@ -493,36 +932,13 @@ const AdminStudyMaterial = () => {
         err
       );
 
+
       setError(
         "Unable to connect to backend."
       );
-    }
-  };
-
-
-  // =====================================================
-  // GET COURSE NAME
-  // =====================================================
-
-  const getCourseName = (material) => {
-
-    if (material.course_name) {
-
-      return material.course_name;
 
     }
 
-    const course =
-      courses.find(
-        (item) =>
-          Number(item.id) ===
-          Number(material.course)
-      );
-
-    return (
-      course?.course_name ||
-      "-"
-    );
   };
 
 
@@ -533,8 +949,11 @@ const AdminStudyMaterial = () => {
   const getFileUrl = (material) => {
 
     if (!material.file) {
+
       return null;
+
     }
+
 
     if (
       material.file.startsWith("http")
@@ -544,7 +963,9 @@ const AdminStudyMaterial = () => {
 
     }
 
+
     return `http://127.0.0.1:8000${material.file}`;
+
   };
 
 
@@ -590,11 +1011,52 @@ const AdminStudyMaterial = () => {
           </div>
 
 
-          <div className="study-count">
+          <div className="study-header-buttons">
 
-            Total Materials:{" "}
 
-            {materials.length}
+            {/* SEARCH BUTTON */}
+
+            <button
+              type="button"
+              className="search-study-btn"
+              onClick={openSearchForm}
+            >
+
+              {showSearchForm
+                ? "✕ Close Search"
+                : "🔍 Search Materials"}
+
+            </button>
+
+
+            {/* ADD BUTTON */}
+
+            <button
+              type="button"
+              className="add-study-btn"
+              onClick={
+                showForm
+                  ? closeForm
+                  : openAddForm
+              }
+            >
+
+              {showForm
+                ? "✕ Close Form"
+                : "+ Add Study Material"}
+
+            </button>
+
+
+            {/* COUNT */}
+
+            <div className="study-count">
+
+              Total Materials:{" "}
+
+              {materials.length}
+
+            </div>
 
           </div>
 
@@ -628,194 +1090,337 @@ const AdminStudyMaterial = () => {
 
 
         {/* =================================================
-            ADD / EDIT MATERIAL
+            SEARCH FORM
         ================================================= */}
 
-        <div className="study-card">
+        {showSearchForm && (
+
+          <div className="study-search-card">
 
 
-          <div className="study-card-title">
+            <div className="study-search-title">
 
-            <h2>
+              <h2>
+                Search Study Materials
+              </h2>
 
-              {isEditing
-                ? "Edit Study Material"
-                : "Add Study Material"}
+              <p>
+                Filter materials by course or material title
+              </p>
 
-            </h2>
+            </div>
 
-            <p>
 
-              {isEditing
-                ? "Update study material details"
-                : "Upload notes, PDFs, documents or other learning resources"}
+            <div className="study-search-form">
 
-            </p>
+
+              {/* SEARCH */}
+
+              <div className="study-search-field">
+
+                <label>
+                  Search
+                </label>
+
+                <input
+                  type="text"
+                  name="search"
+                  value={filters.search}
+                  onChange={handleFilterChange}
+                  placeholder="Search material title, course or file..."
+                />
+
+              </div>
+
+
+              {/* COURSE */}
+
+              <div className="study-search-field">
+
+                <label>
+                  Course
+                </label>
+
+                <select
+                  name="course"
+                  value={filters.course}
+                  onChange={handleFilterChange}
+                >
+
+                  <option value="">
+                    All Courses
+                  </option>
+
+
+                  {courses.map(
+                    (course) => (
+
+                      <option
+                        key={course.id}
+                        value={course.id}
+                      >
+
+                        {course.course_name}
+
+                      </option>
+
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+
+              {/* ACTIONS */}
+
+              <div className="study-search-actions">
+
+                <button
+                  type="button"
+                  className="reset-study-search-btn"
+                  onClick={resetFilters}
+                >
+
+                  Reset
+
+                </button>
+
+
+                <button
+                  type="button"
+                  className="download-study-btn"
+                  onClick={downloadMaterialReport}
+                  disabled={
+                    filteredMaterials.length === 0
+                  }
+                >
+
+                  ↓ Download Report
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* FILTER RESULT */}
+
+            <div className="study-filter-result">
+
+              Showing{" "}
+
+              <strong>
+                {filteredMaterials.length}
+              </strong>{" "}
+
+              of{" "}
+
+              <strong>
+                {materials.length}
+              </strong>{" "}
+
+              study materials
+
+            </div>
 
           </div>
 
-
-          <form
-            className="study-form"
-            onSubmit={handleSubmit}
-          >
+        )}
 
 
-            {/* =================================================
-                COURSE
-            ================================================= */}
+        {/* =================================================
+            ADD / EDIT MATERIAL FORM
+        ================================================= */}
 
-            <div className="study-input">
+        {showForm && (
 
-              <label>
-
-                Course <span>*</span>
-
-              </label>
+          <div className="study-card">
 
 
-              <select
-                name="course"
-                value={formData.course}
-                onChange={handleChange}
-                required
-              >
+            <div className="study-card-title">
 
-                <option value="">
-
-                  Select Course
-
-                </option>
-
-
-                {courses.map(
-                  (course) => (
-
-                    <option
-                      key={course.id}
-                      value={course.id}
-                    >
-
-                      {course.course_name}
-
-                    </option>
-
-                  )
-                )}
-
-              </select>
-
-            </div>
-
-
-            {/* =================================================
-                TITLE
-            ================================================= */}
-
-            <div className="study-input">
-
-              <label>
-
-                Material Title <span>*</span>
-
-              </label>
-
-
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Enter material title"
-                required
-              />
-
-            </div>
-
-
-            {/* =================================================
-                FILE
-            ================================================= */}
-
-            <div className="study-input study-full">
-
-              <label>
-
-                Study Material File{" "}
-
-                {!isEditing && (
-                  <span>*</span>
-                )}
-
-              </label>
-
-
-              <input
-                id="study-material-file"
-                type="file"
-                onChange={handleFileChange}
-                required={!isEditing}
-              />
-
-
-              <small>
+              <h2>
 
                 {isEditing
-                  ? "Select a new file only if you want to replace the existing file."
-                  : "Select PDF, DOC, DOCX or other study material file."}
+                  ? "Edit Study Material"
+                  : "Add Study Material"}
 
-              </small>
+              </h2>
+
+
+              <p>
+
+                {isEditing
+                  ? "Update study material details"
+                  : "Upload notes, PDFs, documents or other learning resources"}
+
+              </p>
 
             </div>
 
 
-            {/* =================================================
-                BUTTONS
-            ================================================= */}
+            <form
+              className="study-form"
+              onSubmit={handleSubmit}
+            >
 
-            <div className="study-button">
 
-              <button
-                type="submit"
-                disabled={loading}
-              >
+              {/* =================================================
+                  COURSE
+              ================================================= */}
 
-                {loading
-                  ? (
-                    isEditing
-                      ? "Updating..."
-                      : "Uploading..."
-                  )
-                  : (
-                    isEditing
-                      ? "Update Study Material"
-                      : "Add Study Material"
+              <div className="study-input">
+
+                <label>
+
+                  Course <span>*</span>
+
+                </label>
+
+
+                <select
+                  name="course"
+                  value={formData.course}
+                  onChange={handleChange}
+                  required
+                >
+
+                  <option value="">
+
+                    Select Course
+
+                  </option>
+
+
+                  {courses.map(
+                    (course) => (
+
+                      <option
+                        key={course.id}
+                        value={course.id}
+                      >
+
+                        {course.course_name}
+
+                      </option>
+
+                    )
                   )}
 
-              </button>
+                </select>
+
+              </div>
 
 
-              {/* CANCEL */}
+              {/* =================================================
+                  TITLE
+              ================================================= */}
 
-              {isEditing && (
+              <div className="study-input">
+
+                <label>
+
+                  Material Title <span>*</span>
+
+                </label>
+
+
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="Enter material title"
+                  required
+                />
+
+              </div>
+
+
+              {/* =================================================
+                  FILE
+              ================================================= */}
+
+              <div className="study-input study-full">
+
+                <label>
+
+                  Study Material File{" "}
+
+                  {!isEditing && (
+                    <span>*</span>
+                  )}
+
+                </label>
+
+
+                <input
+                  id="study-material-file"
+                  type="file"
+                  onChange={handleFileChange}
+                  required={!isEditing}
+                />
+
+
+                <small>
+
+                  {isEditing
+                    ? "Select a new file only if you want to replace the existing file."
+                    : "Select PDF, DOC, DOCX or other study material file."}
+
+                </small>
+
+              </div>
+
+
+              {/* =================================================
+                  BUTTONS
+              ================================================= */}
+
+              <div className="study-button">
+
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                >
+
+                  {loading
+                    ? (
+                      isEditing
+                        ? "Updating..."
+                        : "Uploading..."
+                    )
+                    : (
+                      isEditing
+                        ? "Update Study Material"
+                        : "Add Study Material"
+                    )}
+
+                </button>
+
+
+                {/* CANCEL */}
 
                 <button
                   type="button"
                   className="cancel-edit-btn"
-                  onClick={cancelEdit}
+                  onClick={isEditing ? cancelEdit : closeForm}
                 >
 
                   Cancel
 
                 </button>
 
-              )}
+              </div>
 
-            </div>
+            </form>
 
-          </form>
+          </div>
 
-        </div>
+        )}
 
 
         {/* =================================================
@@ -874,7 +1479,7 @@ const AdminStudyMaterial = () => {
               <tbody>
 
 
-                {materials.length === 0 ? (
+                {filteredMaterials.length === 0 ? (
 
                   <tr>
 
@@ -883,7 +1488,9 @@ const AdminStudyMaterial = () => {
                       className="study-empty"
                     >
 
-                      No study materials found.
+                      {materials.length === 0
+                        ? "No study materials found."
+                        : "No matching study materials found."}
 
                     </td>
 
@@ -891,7 +1498,7 @@ const AdminStudyMaterial = () => {
 
                 ) : (
 
-                  materials.map(
+                  filteredMaterials.map(
                     (material) => {
 
                       const fileUrl =
@@ -909,9 +1516,7 @@ const AdminStudyMaterial = () => {
                         >
 
 
-                          {/* =================================================
-                              ID
-                          ================================================= */}
+                          {/* ID */}
 
                           <td>
 
@@ -920,9 +1525,7 @@ const AdminStudyMaterial = () => {
                           </td>
 
 
-                          {/* =================================================
-                              COURSE
-                          ================================================= */}
+                          {/* COURSE */}
 
                           <td>
 
@@ -933,9 +1536,7 @@ const AdminStudyMaterial = () => {
                           </td>
 
 
-                          {/* =================================================
-                              TITLE
-                          ================================================= */}
+                          {/* TITLE */}
 
                           <td>
 
@@ -948,9 +1549,7 @@ const AdminStudyMaterial = () => {
                           </td>
 
 
-                          {/* =================================================
-                              FILE
-                          ================================================= */}
+                          {/* FILE */}
 
                           <td>
 
@@ -976,9 +1575,7 @@ const AdminStudyMaterial = () => {
                           </td>
 
 
-                          {/* =================================================
-                              ACTION
-                          ================================================= */}
+                          {/* ACTION */}
 
                           <td>
 
@@ -1047,6 +1644,7 @@ const AdminStudyMaterial = () => {
     </div>
 
   );
+
 };
 
 export default AdminStudyMaterial;

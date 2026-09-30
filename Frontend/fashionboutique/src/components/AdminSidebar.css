@@ -3,57 +3,73 @@
 ========================================================= */
 
 .admin-sidebar {
-  width: 260px;
-  min-height: 100vh;
-
   position: fixed;
-
-  left: 0;
   top: 0;
-  bottom: 0;
+  left: 0;
 
-  background: #063b3d;
+  width: 260px;
+  height: 100vh;
 
-  color: #ffffff;
+  background: #063B3D;
 
   display: flex;
   flex-direction: column;
+
+  box-sizing: border-box;
 
   z-index: 1000;
 }
 
 
 /* =========================================================
-   LOGO
+   ADMIN LOGO
 ========================================================= */
 
 .admin-logo {
-  padding: 25px 15px;
+  padding: 22px 15px 20px;
 
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+
+  flex-shrink: 0;
+}
+
+.admin-logo img {
+  width: 78px;
+  height: 78px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  margin-bottom: 10px;
+
+  display: block;
 }
 
 .admin-logo h2 {
   margin: 0;
 
-  color: #f5b942;
+  color: #ffffff !important;
 
-  font-size: 21px;
+  font-size: 22px;
+  font-weight: 800;
 
-  font-weight: 700;
+  text-align: center;
 }
 
 .admin-logo span {
-  display: block;
-
-  margin-top: 6px;
+  margin-top: 5px;
 
   color: #ffffff !important;
 
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 600;
+
+  text-align: center;
 }
 
 
@@ -64,9 +80,16 @@
 .admin-navigation {
   flex: 1;
 
-  padding: 15px 10px;
+  padding: 18px 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
 
   overflow-y: auto;
+
+  box-sizing: border-box;
 }
 
 
@@ -77,40 +100,34 @@
 .admin-navigation .sidebar-link {
   width: 100%;
 
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 11px 14px;
-
-  margin-bottom: 4px;
+  padding: 14px 17px;
 
   border: none;
-
-  border-radius: 7px;
+  border-radius: 8px;
 
   background: transparent;
 
   color: #ffffff !important;
 
-  text-align: left;
-
   font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
 
-  font-size: 14px;
-
-  font-weight: 400;
+  text-align: left;
 
   cursor: pointer;
 
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
 
   box-sizing: border-box;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 
@@ -118,8 +135,11 @@
    SIDEBAR TEXT
 ========================================================= */
 
-.admin-navigation .sidebar-link > span {
+.admin-navigation .sidebar-link span {
   color: #ffffff !important;
+
+  font-size: 17px;
+  font-weight: 700;
 }
 
 
@@ -127,20 +147,17 @@
    SIDEBAR ICON
 ========================================================= */
 
-.admin-navigation .sidebar-icon {
-  width: 20px;
+.admin-navigation .sidebar-link .sidebar-icon {
+  color: #ffffff !important;
 
-  min-width: 20px;
+  font-size: 19px;
+  font-weight: normal;
+
+  min-width: 25px;
 
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
-  font-size: 16px;
-
-  color: #ffffff !important;
 }
 
 
@@ -149,14 +166,18 @@
 ========================================================= */
 
 .admin-navigation .sidebar-link:hover {
-  background: #104e50;
+  background: #135255;
 
   color: #ffffff !important;
 
   transform: translateX(2px);
 }
 
-.admin-navigation .sidebar-link:hover > span {
+.admin-navigation .sidebar-link:hover span {
+  color: #ffffff !important;
+}
+
+.admin-navigation .sidebar-link:hover .sidebar-icon {
   color: #ffffff !important;
 }
 
@@ -165,61 +186,40 @@
    ACTIVE PAGE
 ========================================================= */
 
+/*
+   Active background = Gold
+   Active text = WHITE
+*/
+
 .admin-navigation .sidebar-link.active {
-  background: #f5b942;
+  background: #F5B942 !important;
 
-  color: #135255 !important;
+  color: #ffffff !important;
 
-  font-weight: 600;
+  font-weight: 800;
 }
 
+.admin-navigation .sidebar-link.active span {
+  color: #ffffff !important;
 
-/* Active text */
-
-.admin-navigation .sidebar-link.active > span {
-  color: #135255 !important;
+  font-weight: 800;
 }
-
-
-/* Active icon */
 
 .admin-navigation .sidebar-link.active .sidebar-icon {
-  color: #135255 !important;
+  color: #ffffff !important;
 }
 
 
 /* =========================================================
-   SIDEBAR SCROLLBAR
-========================================================= */
-
-.admin-navigation::-webkit-scrollbar {
-  width: 5px;
-}
-
-.admin-navigation::-webkit-scrollbar-track {
-  background: #063b3d;
-}
-
-.admin-navigation::-webkit-scrollbar-thumb {
-  background: #104e50;
-
-  border-radius: 10px;
-}
-
-.admin-navigation::-webkit-scrollbar-thumb:hover {
-  background: #f5b942;
-}
-
-
-/* =========================================================
-   LOGOUT SECTION
+   LOGOUT AREA
 ========================================================= */
 
 .admin-sidebar-bottom {
-  padding: 15px;
+  padding: 15px 12px;
 
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+  flex-shrink: 0;
 }
 
 
@@ -227,119 +227,173 @@
    LOGOUT BUTTON
 ========================================================= */
 
-.admin-logout {
+.admin-sidebar-bottom .admin-logout {
   width: 100%;
 
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 10px;
-
-  padding: 12px;
+  padding: 14px 17px;
 
   border: none;
+  border-radius: 8px;
 
-  border-radius: 7px;
+  background: #135255;
 
-  background: #f5b942;
-
-  color: #135255 !important;
+  color: #ffffff !important;
 
   font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
 
-  font-size: 14px;
-
-  font-weight: 600;
+  text-align: left;
 
   cursor: pointer;
 
-  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  box-sizing: border-box;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 
-/* Logout text */
+/* =========================================================
+   LOGOUT TEXT
+========================================================= */
 
-.admin-logout > span {
-  color: #135255 !important;
+.admin-sidebar-bottom .admin-logout span {
+  color: #ffffff !important;
+
+  font-size: 17px;
+  font-weight: 700;
 }
 
 
-/* Logout icon */
+/* =========================================================
+   LOGOUT ICON
+========================================================= */
 
-.admin-logout .sidebar-icon {
-  color: #135255 !important;
+.admin-sidebar-bottom .admin-logout .sidebar-icon {
+  color: #ffffff !important;
+
+  font-size: 19px;
+
+  min-width: 25px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
-/* Logout hover */
+/* =========================================================
+   LOGOUT HOVER
+========================================================= */
 
-.admin-logout:hover {
-  opacity: 0.9;
+.admin-sidebar-bottom .admin-logout:hover {
+  background: #F5B942;
 
-  transform: translateY(-1px);
+  color: #ffffff !important;
 }
 
+.admin-sidebar-bottom .admin-logout:hover span {
+  color: #ffffff !important;
+}
+
+.admin-sidebar-bottom .admin-logout:hover .sidebar-icon {
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   SIDEBAR SCROLLBAR / SLIDER
+========================================================= */
+
+.admin-navigation {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: #F5B942 #063B3D;
+}
+
+/* Chrome / Edge / Safari */
+
+.admin-navigation::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-navigation::-webkit-scrollbar-track {
+  background: #063B3D;
+  border-radius: 10px;
+}
+
+.admin-navigation::-webkit-scrollbar-thumb {
+  background: #F5B942;
+  border-radius: 10px;
+
+  border: 2px solid #063B3D;
+}
+
+.admin-navigation::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 750px) {
+@media (max-width: 768px) {
 
   .admin-sidebar {
-    width: 210px;
-  }
-
-  .admin-navigation .sidebar-link {
-    padding: 10px 10px;
-
-    gap: 9px;
-
-    font-size: 13px;
-  }
-
-  .admin-logo h2 {
-    font-size: 18px;
-  }
-
-  .admin-logo span {
-    font-size: 12px;
-  }
-
-}
-
-
-@media (max-width: 500px) {
-
-  .admin-sidebar {
-    width: 190px;
-  }
-
-  .admin-navigation {
-    padding: 12px 8px;
-  }
-
-  .admin-navigation .sidebar-link {
-    padding: 9px 8px;
-
-    gap: 7px;
-
-    font-size: 12px;
+    width: 230px;
   }
 
   .admin-logo {
-    padding: 20px 10px;
+    padding: 18px 12px;
+  }
+
+  .admin-logo img {
+    width: 70px;
+    height: 70px;
   }
 
   .admin-logo h2 {
-    font-size: 16px;
+    font-size: 19px;
   }
 
   .admin-logo span {
-    font-size: 11px;
+    font-size: 14px;
   }
 
+  .admin-navigation {
+    padding: 14px 10px;
+  }
+
+  .admin-navigation .sidebar-link {
+    padding: 12px 14px;
+
+    font-size: 15px;
+  }
+
+  .admin-navigation .sidebar-link span {
+    font-size: 15px;
+  }
+
+  .admin-navigation .sidebar-link .sidebar-icon {
+    font-size: 17px;
+  }
+
+  .admin-sidebar-bottom .admin-logout {
+    padding: 12px 14px;
+
+    font-size: 15px;
+  }
+
+  .admin-sidebar-bottom .admin-logout span {
+    font-size: 15px;
+  }
 }

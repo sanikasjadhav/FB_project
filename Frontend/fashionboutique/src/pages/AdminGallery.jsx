@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../components/AdminSidebar";
 import "./AdminGallery.css";
@@ -9,11 +10,12 @@ const AdminGallery = () => {
 
   const [formData, setFormData] = useState({
     title: "",
-    image_url: "",
+    image: null,
     description: "",
   });
 
   const [editingId, setEditingId] = useState(null);
+  const [existingImage, setExistingImage] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -35,9 +37,7 @@ const AdminGallery = () => {
     try {
       setError("");
 
-      const response = await fetch(
-        `${API_URL}/gallery/`
-      );
+      const response = await fetch(`${API_URL}/gallery/`);
 
       const data = await response.json();
 
@@ -51,27 +51,60 @@ const AdminGallery = () => {
 
       if (Array.isArray(data)) {
         setGallery(data);
-      } else if (data.results) {
+      } else if (Array.isArray(data.results)) {
         setGallery(data.results);
       } else {
         setGallery([]);
       }
-
     } catch (err) {
       console.error("Gallery fetch error:", err);
+
       setError("Unable to connect to backend.");
       setGallery([]);
     }
   };
 
   // =====================================================
-  // HANDLE CHANGE
+  // HANDLE TEXT INPUT
   // =====================================================
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  // =====================================================
+  // HANDLE IMAGE SELECTION
+  // =====================================================
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    // Allow common image types
+    if (!file.type.startsWith("image/")) {
+      setError("Please select a valid image file.");
+      e.target.value = "";
+      return;
+    }
+
+    // Optional 5 MB limit
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image size must be less than 5 MB.");
+      e.target.value = "";
+      return;
+    }
+
+    setError("");
+
+    setFormData({
+      ...formData,
+      image: file,
     });
   };
 
@@ -84,14 +117,19 @@ const AdminGallery = () => {
 
     setFormData({
       title: item.title || "",
-      image_url: item.image_url || item.image || "",
+      image: null,
       description: item.description || "",
     });
+
+    setExistingImage(
+      item.image_url ||
+      item.image ||
+      ""
+    );
 
     setMessage("");
     setError("");
 
-    // Scroll to form
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -107,12 +145,22 @@ const AdminGallery = () => {
 
     setFormData({
       title: "",
-      image_url: "",
+      image: null,
       description: "",
     });
 
+    setExistingImage("");
+
     setMessage("");
     setError("");
+
+    // Clear file input
+    const fileInput =
+      document.getElementById("gallery-image");
+
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   // =====================================================
@@ -125,16 +173,40 @@ const AdminGallery = () => {
     setMessage("");
     setError("");
 
-    if (!formData.title || !formData.image_url) {
-      setError(
-        "Please enter title and image URL."
-      );
+    if (!formData.title.trim()) {
+      setError("Please enter image title.");
+      return;
+    }
+
+    // Image is required only when adding
+    if (!editingId && !formData.image) {
+      setError("Please select an image from your device.");
       return;
     }
 
     setLoading(true);
 
     try {
+      const uploadData = new FormData();
+
+      uploadData.append(
+        "title",
+        formData.title
+      );
+
+      uploadData.append(
+        "description",
+        formData.description
+      );
+
+      // Only send image if a new image was selected
+      if (formData.image) {
+        uploadData.append(
+          "image",
+          formData.image
+        );
+      }
+
       let response;
 
       // =================================================
@@ -146,14 +218,7 @@ const AdminGallery = () => {
           `${API_URL}/gallery/${editingId}/`,
           {
             method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title: formData.title,
-              image_url: formData.image_url,
-              description: formData.description,
-            }),
+            body: uploadData,
           }
         );
       }
@@ -167,15 +232,24 @@ const AdminGallery = () => {
           `${API_URL}/gallery/`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
+            body: uploadData,
           }
         );
       }
 
-      const data = await response.json();
+      const contentType =
+        response.headers.get("content-type");
+
+      let data = {};
+
+      if (
+        contentType &&
+        contentType.includes("application/json")
+      ) {
+        data = await response.json();
+      } else {
+        data = await response.text();
+      }
 
       console.log(
         "Gallery save response:",
@@ -183,17 +257,28 @@ const AdminGallery = () => {
       );
 
       if (!response.ok) {
-        setError(
-          data.detail ||
-          JSON.stringify(data) ||
-          "Gallery image could not be saved."
+        console.error(
+          "Gallery save error:",
+          data
         );
+
+        if (typeof data === "object") {
+          setError(
+            data.detail ||
+            JSON.stringify(data)
+          );
+        } else {
+          setError(
+            data ||
+            "Gallery image could not be saved."
+          );
+        }
 
         return;
       }
 
       // =================================================
-      // SUCCESS MESSAGE
+      // SUCCESS
       // =================================================
 
       if (editingId) {
@@ -212,11 +297,19 @@ const AdminGallery = () => {
 
       setFormData({
         title: "",
-        image_url: "",
+        image: null,
         description: "",
       });
 
       setEditingId(null);
+      setExistingImage("");
+
+      const fileInput =
+        document.getElementById("gallery-image");
+
+      if (fileInput) {
+        fileInput.value = "";
+      }
 
       // =================================================
       // REFRESH
@@ -268,7 +361,7 @@ const AdminGallery = () => {
         try {
           data = await response.json();
         } catch {
-          // DELETE may return empty response
+          // Empty DELETE response
         }
 
         console.error(
@@ -287,7 +380,6 @@ const AdminGallery = () => {
         "Gallery image deleted successfully."
       );
 
-      // If deleted item was being edited
       if (editingId === id) {
         cancelEdit();
       }
@@ -313,21 +405,15 @@ const AdminGallery = () => {
   return (
     <div className="admin-gallery-layout">
 
-      {/* =================================================
-          SIDEBAR
-      ================================================= */}
+      {/* SIDEBAR */}
 
       <AdminSidebar />
 
-      {/* =================================================
-          MAIN BODY
-      ================================================= */}
+      {/* MAIN BODY */}
 
       <div className="admin-gallery-body">
 
-        {/* =================================================
-            HEADER
-        ================================================= */}
+        {/* HEADER */}
 
         <div className="gallery-header">
 
@@ -345,9 +431,7 @@ const AdminGallery = () => {
 
         </div>
 
-        {/* =================================================
-            SUCCESS MESSAGE
-        ================================================= */}
+        {/* SUCCESS MESSAGE */}
 
         {message && (
           <div className="gallery-alert success">
@@ -355,9 +439,7 @@ const AdminGallery = () => {
           </div>
         )}
 
-        {/* =================================================
-            ERROR MESSAGE
-        ================================================= */}
+        {/* ERROR MESSAGE */}
 
         {error && (
           <div className="gallery-alert error">
@@ -365,9 +447,7 @@ const AdminGallery = () => {
           </div>
         )}
 
-        {/* =================================================
-            ADD / EDIT GALLERY FORM
-        ================================================= */}
+        {/* ADD / EDIT FORM */}
 
         <div className="gallery-card">
 
@@ -382,7 +462,7 @@ const AdminGallery = () => {
             <p>
               {editingId
                 ? "Update gallery image details"
-                : "Add an image to the website gallery"}
+                : "Select an image from your device"}
             </p>
 
           </div>
@@ -411,22 +491,51 @@ const AdminGallery = () => {
 
             </div>
 
-            {/* IMAGE URL */}
+            {/* IMAGE */}
 
             <div className="gallery-input">
 
               <label>
-                Image URL <span>*</span>
+                Select Image{" "}
+                {!editingId && <span>*</span>}
               </label>
 
               <input
-                type="text"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-                required
+                id="gallery-image"
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
               />
+
+              <small>
+                JPG, JPEG, PNG, WEBP — Maximum 5 MB
+              </small>
+
+              {/* NEW IMAGE NAME */}
+
+              {formData.image && (
+                <div className="selected-image-name">
+                  Selected: {formData.image.name}
+                </div>
+              )}
+
+              {/* EXISTING IMAGE DURING EDIT */}
+
+              {editingId && existingImage && (
+                <div className="existing-image-preview">
+
+                  <p>
+                    Current Image:
+                  </p>
+
+                  <img
+                    src={existingImage}
+                    alt="Current Gallery"
+                  />
+
+                </div>
+              )}
 
             </div>
 
@@ -456,7 +565,6 @@ const AdminGallery = () => {
                 type="submit"
                 disabled={loading}
               >
-
                 {loading
                   ? editingId
                     ? "Updating..."
@@ -464,10 +572,7 @@ const AdminGallery = () => {
                   : editingId
                     ? "Update Image"
                     : "Add Image"}
-
               </button>
-
-              {/* CANCEL EDIT BUTTON */}
 
               {editingId && (
                 <button
@@ -486,9 +591,7 @@ const AdminGallery = () => {
 
         </div>
 
-        {/* =================================================
-            GALLERY RECORDS
-        ================================================= */}
+        {/* GALLERY RECORDS */}
 
         <div className="gallery-card">
 
@@ -504,9 +607,7 @@ const AdminGallery = () => {
 
           </div>
 
-          {/* =================================================
-              GALLERY GRID
-          ================================================= */}
+          {/* GALLERY GRID */}
 
           <div className="gallery-grid">
 
@@ -558,7 +659,7 @@ const AdminGallery = () => {
                       {item.description || "-"}
                     </p>
 
-                    {/* ACTION BUTTONS */}
+                    {/* ACTIONS */}
 
                     <div className="gallery-action-buttons">
 

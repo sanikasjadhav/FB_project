@@ -1,347 +1,547 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Home.css";
+import "./home.css";
 
+const API_URL = "http://127.0.0.1:8000/api";
 
-function Home(){
+function Home() {
+
+  // =====================================================
+  // STATES
+  // =====================================================
+
+  const [studentCount, setStudentCount] = useState(0);
+  const [courseCount, setCourseCount] = useState(0);
+
+  const [gallery, setGallery] = useState([]);
+
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [galleryLoading, setGalleryLoading] = useState(true);
+
+
+  // =====================================================
+  // LOAD HOME DATA
+  // =====================================================
+
+  useEffect(() => {
+
+    fetchHomeData();
+
+  }, []);
+
+
+  const fetchHomeData = async () => {
+  try {
+    setLoadingStats(true);
+    setGalleryLoading(true);
+
+    const [studentsResponse, coursesResponse, galleryResponse] =
+      await Promise.allSettled([
+        fetch(`${API_URL}/students/`),
+        fetch(`${API_URL}/courses/`),
+        fetch(`${API_URL}/gallery/`)
+      ]);
 
-return(
+    // =========================
+    // STUDENTS
+    // =========================
+    if (studentsResponse.status === "fulfilled") {
+      const response = studentsResponse.value;
 
-<div className="home">
+      if (response.ok) {
+        const data = await response.json();
 
+        console.log("Home Students:", data);
 
-{/* HERO */}
+        if (Array.isArray(data)) {
+          setStudentCount(data.length);
+        } else if (Array.isArray(data.results)) {
+          setStudentCount(
+            typeof data.count === "number"
+              ? data.count
+              : data.results.length
+          );
+        }
+      }
+    }
 
-<section className="hero">
+    // =========================
+    // COURSES
+    // =========================
+    if (coursesResponse.status === "fulfilled") {
+      const response = coursesResponse.value;
 
+      if (response.ok) {
+        const data = await response.json();
 
-<div className="hero-left">
+        console.log("Home Courses:", data);
 
+        if (Array.isArray(data)) {
+          setCourseCount(data.length);
+        } else if (Array.isArray(data.results)) {
+          setCourseCount(
+            typeof data.count === "number"
+              ? data.count
+              : data.results.length
+          );
+        }
+      }
+    }
 
-<div className="badge">
-🏆 Trusted Fashion Learning Platform
-</div>
+    // =========================
+    // GALLERY
+    // =========================
+    if (galleryResponse.status === "fulfilled") {
+      const response = galleryResponse.value;
 
+      if (response.ok) {
+        const data = await response.json();
 
+        console.log("Home Gallery:", data);
 
-<h1>
+        if (Array.isArray(data)) {
+          setGallery(data);
+        } else if (Array.isArray(data.results)) {
+          setGallery(data.results);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Home data error:", error);
+  } finally {
+    setLoadingStats(false);
+    setGalleryLoading(false);
+  }
+};
 
-Build Skills That
+  // =====================================================
+  // GALLERY IMAGE URL
+  // =====================================================
 
-<span
-  style={{
-    fontSize: "60px",
-  }}
->
-  Transform Your
-</span>
+  const getImageUrl = (item) => {
 
-Future
+    const image =
+      item.image_url ||
+      item.image;
 
-</h1>
+    if (!image) {
+      return "";
+    }
 
 
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
 
-<p>
+      return image;
 
-Learn Fashion Boutique, Stitching,
-Embroidery, Boutique Management and
-Creative Skills with practical training.
+    }
 
-</p>
 
+    return `http://127.0.0.1:8000${
+      image.startsWith("/")
+        ? ""
+        : "/"
+    }${image}`;
 
+  };
 
-<div className="stats">
 
+  // =====================================================
+  // DISPLAY NUMBER
+  // =====================================================
 
-<div>
-<h2>50+</h2>
-<p>Students</p>
-</div>
+  const displayStudentCount =
+    loadingStats
+      ? "..."
+      : `${studentCount}+`;
 
 
-<div>
-<h2>10+</h2>
-<p>Courses</p>
-</div>
+  const displayCourseCount =
+    loadingStats
+      ? "..."
+      : `${courseCount}+`;
 
-</div>
 
+  return (
 
+    <div className="home">
 
-<Link to="/courses" className="main-btn">
-Explore Courses →
-</Link>
 
+      {/* =================================================
+          HERO
+      ================================================= */}
 
-</div>
+      <section className="hero">
 
 
+        <div className="hero-left">
 
 
+          <div className="badge">
+            🏆 Trusted Fashion Learning Platform
+          </div>
 
-<div className="hero-video">
 
+          <h1>
+            Build Skills That
+            <span>Transform Your</span>
+            Future
+          </h1>
 
-<video autoPlay muted loop playsInline>
-  <source src="/images/video.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
-<div className="video-overlay">
 
-Transforming Lives...
+          <p>
 
-</div>
+            Learn Fashion Boutique, Stitching,
+            Embroidery, Boutique Management and
+            Creative Skills with practical training.
 
+          </p>
 
-</div>
 
+          {/* =================================================
+              DYNAMIC STATISTICS
+          ================================================= */}
 
+          <div className="stats">
 
-</section>
 
+            <div>
 
+              <h2>
+                {displayStudentCount}
+              </h2>
 
+              <p>
+                Students
+              </p>
 
+            </div>
 
 
+            <div>
 
-{/* COURSES */}
+              <h2>
+                {displayCourseCount}
+              </h2>
 
+              <p>
+                Courses
+              </p>
 
-<section className="courses">
+            </div>
 
 
-<h2>
-Popular Courses
-</h2>
+          </div>
 
 
+          <Link
+            to="/courses"
+            className="main-btn"
+          >
+            Explore Courses →
+          </Link>
 
-<div className="course-grid">
 
+        </div>
 
-<div className="course-card">
 
-<img src="/images/bg1.png"/>
+        {/* =================================================
+            VIDEO
+        ================================================= */}
 
-<h3>
-Fashion Boutiue
-</h3>
+        <div className="hero-video">
 
-<p>
-Learn creative designof boutique, styling and fashion illustration.
-</p>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
 
-</div>
+            <source
+              src="/images/fbv.mp4"
+              type="video/mp4"
+            />
 
+            Your browser does not support
+            the video tag.
 
+          </video>
 
+          <div className="video-overlay"></div>
 
+        </div>
 
-<div className="course-card">
 
-<img src="/images/tailor.avif"/>
+      </section>
 
 
-<h3>
-Tailoring Course
-</h3>
+      {/* =================================================
+          COURSES
+      ================================================= */}
 
+      <section className="courses">
 
-<p>
-Master stitching and garment making skills.
-</p>
 
-</div>
+        <h2>
+          Popular Courses
+        </h2>
 
 
+        <div className="course-grid">
 
 
+          <div className="course-card">
 
+            <img
+              src="/images/bg1.png"
+              alt="Fashion Boutique"
+            />
 
-<div className="course-card">
+            <h3>
+              Fashion Boutique
+            </h3>
 
-<img src="/images/emd2.jpg"/>
+            <p>
+              Learn creative design of boutique,
+              styling and fashion illustration.
+            </p>
 
+          </div>
 
-<h3>
-Embroidery
-</h3>
 
+          <div className="course-card">
 
-<p>
-Create beautiful handmade fashion designs.
-</p>
+            <img
+              src="/images/tailor.avif"
+              alt="Tailoring Course"
+            />
 
-</div>
+            <h3>
+              Tailoring Course
+            </h3>
 
+            <p>
+              Master stitching and garment making skills.
+            </p>
 
+          </div>
 
-</div>
 
+          <div className="course-card">
 
-</section>
+            <img
+              src="/images/emd2.jpg"
+              alt="Embroidery"
+            />
 
+            <h3>
+              Embroidery
+            </h3>
 
+            <p>
+              Create beautiful handmade fashion designs.
+            </p>
 
+          </div>
 
 
+        </div>
 
 
+      </section>
 
 
-{/* WHY CHOOSE */}
+      {/* =================================================
+          WHY CHOOSE US
+      ================================================= */}
 
+      <section className="why">
 
-<section className="why">
 
+        <h2>
+          Why Choose Fashion Boutique?
+        </h2>
 
-<h2>
-Why Choose Fashion Boutique?
-</h2>
 
+        <div className="why-grid">
 
 
-<div className="why-grid">
+          <div>
 
+            <h3>
+              👩‍🏫 Expert Trainer
+            </h3>
 
-<div>
+            <p>
+              Learn from experienced designers.
+            </p>
 
-<h3>
-👩‍🏫 Expert Trainer
-</h3>
+          </div>
 
-<p>
-Learn from experienced designers.
-</p>
 
-</div>
+          <div>
 
+            <h3>
+              💻 Online Learning
+            </h3>
 
+            <p>
+              Study anytime anywhere.
+            </p>
 
-<div>
+          </div>
 
-<h3>
-💻 Online Learning
-</h3>
 
-<p>
-Study anytime anywhere.
-</p>
+          <div>
 
-</div>
+            <h3>
+              🏆 Certificate
+            </h3>
 
+            <p>
+              Get course completion certificate.
+            </p>
 
+          </div>
 
-<div>
 
-<h3>
-🏆 Certificate
-</h3>
+          <div>
 
-<p>
-Get course completion certificate.
-</p>
+            <h3>
+              ✂ Practical Training
+            </h3>
 
-</div>
+            <p>
+              Real fashion projects and practice.
+            </p>
 
+          </div>
 
-<div>
 
-<h3>
-✂ Practical Training
-</h3>
+        </div>
 
-<p>
-Real fashion projects and practice.
-</p>
 
-</div>
+      </section>
 
 
+      {/* =================================================
+          STUDENT WORK
+      ================================================= */}
 
-</div>
+      <section className="student-work-new">
 
 
-</section>
+        <h2 className="student-work-title">
+          Student Work
+        </h2>
 
-<section className="gallery-section">
-  <h2 style={{ color: "#07575A" }}>Student Work</h2>
 
-  <div className="gallery-slider">
-    <div className="gallery-track">
+        {galleryLoading ? (
 
-      <div className="gallery-card">
-        <img src="/images/bg1.png" alt="Gallery 1" />
-      </div>
+          <div className="gallery-loading">
+            Loading student work...
+          </div>
 
-      <div className="gallery-card">
-        <img src="/images/bg2.png" alt="Gallery 2" />
-      </div>
+        ) : gallery.length === 0 ? (
 
-      <div className="gallery-card">
-        <img src="/images/bg3.jpg" alt="Gallery 3" />
-      </div>
+          <div className="gallery-empty-home">
+            No student work available yet.
+          </div>
 
-      <div className="gallery-card">
-        <img src="/images/course1.jpg" alt="Gallery 4" />
-      </div>
+        ) : (
 
-      <div className="gallery-card">
-        <img src="/images/emd.jpg" alt="Gallery 5" />
-      </div>
+          <div className="student-work-window">
 
-      {/* Duplicate the images for seamless looping */}
-      <div className="gallery-card">
-        <img src="/images/emd2.jpg" alt="Gallery 1" />
-      </div>
 
-      <div className="gallery-card">
-        <img src="/images/hero.jpg" alt="Gallery 2" />
-      </div>
+            <div className="student-work-moving">
 
-      <div className="gallery-card">
-        <img src="/images/tailor.avif" alt="Gallery 3" />
-      </div>
 
-      <div className="gallery-card">
-        <img src="/images/about.avif" alt="Gallery 4" />
-      </div>
+              {/* FIRST SET */}
+
+              {gallery.map((item) => (
+
+                <div
+                  className="work-card-new"
+                  key={item.id}
+                >
+
+                  <img
+                    src={getImageUrl(item)}
+                    alt={
+                      item.title ||
+                      "Student Work"
+                    }
+                  />
+
+                </div>
+
+              ))}
+
+
+              {/* SECOND SET
+                  For continuous animation */}
+
+              {gallery.map((item) => (
+
+                <div
+                  className="work-card-new"
+                  key={`duplicate-${item.id}`}
+                >
+
+                  <img
+                    src={getImageUrl(item)}
+                    alt={
+                      item.title ||
+                      "Student Work"
+                    }
+                  />
+
+                </div>
+
+              ))}
+
+
+            </div>
+
+          </div>
+
+        )}
+
+
+      </section>
+
+
+      {/* =================================================
+          CTA
+      ================================================= */}
+
+      <section className="cta">
+
+
+        <h2>
+          Start Your Fashion Journey Today
+        </h2>
+
+
+        <p>
+          Join our professional fashion courses.
+        </p>
+
+
+        <Link to="/courses">
+          Join Now
+        </Link>
+
+
+      </section>
+
 
     </div>
-  </div>
-</section>
 
-
-{/* CTA */}
-
-<section className="cta">
-
-
-<h2>
-Start Your Fashion Journey Today
-</h2>
-
-
-<p>
-Join our professional fashion courses.
-</p>
-
-
-<Link>
-Join Now
-</Link>
-
-
-</section>
-
-
-
-</div>
-
-)
+  );
 
 }
 

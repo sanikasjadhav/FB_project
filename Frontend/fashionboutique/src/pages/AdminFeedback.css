@@ -644,3 +644,237 @@
   }
 
 }
+/* =====================================================
+   FEEDBACK HEADER BUTTONS
+===================================================== */
+
+.feedback-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* =====================================================
+   SEARCH FEEDBACK BUTTON
+===================================================== */
+
+.search-feedback-btn {
+  border: none;
+  background: #135255;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-feedback-btn:hover {
+  background: #104e50;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.feedback-search-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.feedback-search-title {
+  margin-bottom: 20px;
+}
+
+.feedback-search-title h2 {
+  margin: 0;
+  color: #063b3d;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.feedback-search-title p {
+  margin: 6px 0 0;
+  color: #777777;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   SEARCH FORM
+===================================================== */
+
+.feedback-search-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.feedback-search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.feedback-search-field label {
+  color: #063b3d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.feedback-search-field input,
+.feedback-search-field select {
+  width: 100%;
+  height: 43px;
+  padding: 0 12px;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.feedback-search-field input:focus,
+.feedback-search-field select:focus {
+  border-color: #135255;
+  box-shadow: 0 0 0 2px rgba(19, 82, 85, 0.1);
+}
+
+
+/* =====================================================
+   SEARCH ACTIONS
+===================================================== */
+
+.feedback-search-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reset-feedback-search-btn,
+.download-feedback-btn {
+  height: 43px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s ease;
+}
+
+
+/* RESET */
+
+.reset-feedback-search-btn {
+  background: #eeeeee;
+  color: #333333;
+}
+
+.reset-feedback-search-btn:hover {
+  background: #dddddd;
+}
+
+
+/* DOWNLOAD */
+
+.download-feedback-btn {
+  background: #f5b942;
+  color: #063b3d;
+}
+
+.download-feedback-btn:hover {
+  background: #e5a82f;
+}
+
+.download-feedback-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   FILTER RESULT
+===================================================== */
+
+.feedback-filter-result {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #eeeeee;
+  color: #666666;
+  font-size: 14px;
+}
+
+.feedback-filter-result strong {
+  color: #063b3d;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .feedback-search-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .feedback-search-actions {
+    grid-column: 1 / -1;
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .feedback-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .feedback-header-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-feedback-btn {
+    width: 100%;
+  }
+
+  .feedback-count {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .feedback-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-search-actions {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reset-feedback-search-btn,
+  .download-feedback-btn {
+    width: 100%;
+  }
+
+}

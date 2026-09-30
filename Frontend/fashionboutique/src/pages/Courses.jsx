@@ -1,55 +1,325 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./courses.css";
 
+const API_URL = "http://127.0.0.1:8000/api";
+
 function Courses() {
-  const courses = [
-  { title: "Fashion Designing", image: "/images/bg1.png", duration: "3 Months", fees: "₹4,999", description: "Learn fashion design from basics.", link: "/courses/fashion" },
-  { title: "Boutique Management", image: "/images/bg2.png", duration: "2 Months", fees: "₹3,999", description: "Start and manage your boutique.", link: "/courses/boutique" },
-  { title: "Embroidery", image: "/images/emd2.jpg", duration: "45 Days", fees: "₹2,999", description: "Master embroidery techniques.", link: "/courses/embroidery" },
-  { title: "Tailoring", image: "/images/tailor.avif", duration: "2 Months", fees: "₹3,499", description: "Professional tailoring course.", link: "/courses/tailoring" },
-  { title: "Blouse Designing", image: "/images/course1.jpg", duration: "1 Month", fees: "₹2,499", description: "Modern blouse cutting and stitching.", link: "/courses/blouse" },
-  { title: "Kids Wear", image: "/images/emd.jpg", duration: "1 Month", fees: "₹2,199", description: "Design and stitch kids' garments.", link: "/courses/kids" },
-  { title: "Aari Work", image: "/images/about.avif", duration: "45 Days", fees: "₹3,299", description: "Traditional Aari embroidery course.", link: "/courses/aari" },
-  { title: "Pattern Making", image: "/images/bg3.jpg", duration: "2 Months", fees: "₹4,299", description: "Create accurate garment patterns.", link: "/courses/pattern" },
-];
+
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+
+  // =====================================================
+  // FETCH COURSES
+  // =====================================================
+
+  const fetchCourses = async () => {
+
+    try {
+
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(
+        `${API_URL}/courses/`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch courses");
+      }
+
+      const data = await response.json();
+
+      console.log(
+        "Courses API response:",
+        data
+      );
+
+
+      // DRF pagination
+      if (Array.isArray(data)) {
+
+        setCourses(data);
+
+      } else if (Array.isArray(data.results)) {
+
+        setCourses(data.results);
+
+      } else {
+
+        setCourses([]);
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Error fetching courses:",
+        error
+      );
+
+      setError(
+        "Unable to load courses."
+      );
+
+      setCourses([]);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+
+  // =====================================================
+  // LOAD COURSES
+  // =====================================================
+
+  useEffect(() => {
+
+    fetchCourses();
+
+  }, []);
+
+
+  // =====================================================
+  // LOADING
+  // =====================================================
+
+  if (loading) {
+
+    return (
+
+      <div className="courses-page">
+
+        <h1>Our Courses</h1>
+
+        <div className="courses-message">
+
+          Loading courses...
+
+        </div>
+
+      </div>
+
+    );
+
+  }
+
+
+  // =====================================================
+  // ERROR
+  // =====================================================
+
+  if (error) {
+
+    return (
+
+      <div className="courses-page">
+
+        <h1>Our Courses</h1>
+
+        <div className="courses-message error">
+
+          {error}
+
+          <br />
+
+          <button
+            onClick={fetchCourses}
+            className="retry-btn"
+          >
+            Try Again
+          </button>
+
+        </div>
+
+      </div>
+
+    );
+
+  }
+
+
+  // =====================================================
+  // PAGE
+  // =====================================================
 
   return (
+
     <div className="courses-page">
-      <h1>Our Courses</h1>
 
-      <div className="course-grid">
-        {courses.map((course, index) => (
-          <div className="course-card" key={index}>
-            <img src={course.image} alt={course.title} />
 
-            <div className="course-content">
-              <h2>{course.title}</h2>
+      {/* =========================
+          PAGE TITLE
+      ========================= */}
 
-              <p className="description">{course.description}</p>
+      <h1>
+        Our Courses
+      </h1>
 
-              <p>
-                <strong>Duration:</strong> {course.duration}
-              </p>
 
-              <p>
-                <strong>Fees:</strong> {course.fees}
-              </p>
+      {/* =========================
+          NO COURSES
+      ========================= */}
 
-              <Link
-                to="/course-details"
-                state={course}
-                className="details-btn"
-              >
-                View Details
-              </Link>
-               
+      {courses.length === 0 ? (
+
+        <div className="courses-message">
+
+          <h2>
+            No Courses Available
+          </h2>
+
+          <p>
+            Please check back later.
+          </p>
+
+        </div>
+
+      ) : (
+
+        <div className="course-grid">
+
+
+          {courses.map((course) => (
+
+            <div
+              className="course-card"
+              key={course.id}
+            >
+
+              <div className="course-content">
+
+
+                {/* CATEGORY */}
+
+                <p className="course-category">
+
+                  {course.category_name ||
+                    course.category?.category_name ||
+                    "Fashion Boutique"}
+
+                </p>
+
+
+                {/* COURSE NAME */}
+
+                <h2>
+
+                  {course.course_name}
+
+                </h2>
+
+
+                {/* DESCRIPTION */}
+
+                <p className="description">
+
+                  {course.description ||
+                    "Learn professional fashion and boutique skills."}
+
+                </p>
+
+
+                {/* DURATION */}
+
+                <p>
+
+                  <strong>
+                    Duration:
+                  </strong>{" "}
+
+                  {course.duration || "N/A"}
+
+                </p>
+
+
+                {/* FEES */}
+
+                <p>
+
+                  <strong>
+                    Fees:
+                  </strong>{" "}
+
+                  ₹
+                  {course.fees
+                    ? Number(course.fees).toLocaleString("en-IN")
+                    : "0"}
+
+                </p>
+
+
+                {/* STATUS */}
+
+                {course.status === "Active" && (
+
+                  <p className="course-available">
+
+                    Available
+
+                  </p>
+
+                )}
+
+
+                {/* =========================
+                    ENROLL NOW
+                ========================= */}
+
+                {course.status === "Active" && (
+
+                  <Link
+                    to="/registration"
+                    state={{
+                      course: course
+                    }}
+                    className="enroll-btn"
+                  >
+
+                    Enroll Now
+
+                  </Link>
+
+                )}
+
+
+                {/* INACTIVE COURSE */}
+
+                {course.status === "Inactive" && (
+
+                  <button
+                    className="enroll-btn disabled"
+                    disabled
+                  >
+
+                    Currently Unavailable
+
+                  </button>
+
+                )}
+
+              </div>
+
             </div>
-          </div>
-        ))}
-      </div>
+
+          ))}
+
+
+        </div>
+
+      )}
+
     </div>
+
   );
+
 }
 
 export default Courses;
